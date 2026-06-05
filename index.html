@@ -811,16 +811,45 @@ function closeViewer() {
 }
 
 // ══════════════════════════════════════════════
-//  SECURITY — disable right-click, dev tools shortcuts, text selection
+//  SECURITY — Smart Protection with Dev Bypass
 // ══════════════════════════════════════════════
-document.addEventListener('contextmenu', e => e.preventDefault());
+let isDevMode = false;
+
+// اضغط على زرار حرف (د) أو (d) في الكيبورد 5 مرات ورا بعض لفتح وضع المطور وإلغاء الحماية فوراً
+let dCount = 0;
 document.addEventListener('keydown', e => {
+  if (e.key.toLowerCase() === 'd' || e.key === 'ي') {
+    dCount++;
+    if (dCount >= 5) {
+      isDevMode = true;
+      alert('وضع المطور نشط الآن - تم إلغاء قفل الحماية بنجاح! يمكنك الفحص والتثبيت.');
+      dCount = 0;
+    }
+  } else {
+    dCount = 0;
+  }
+});
+
+// تفعيل الحماية فقط إذا لم يكن وضع المطور نشطاً
+document.addEventListener('contextmenu', e => {
+  if (!isDevMode) e.preventDefault();
+});
+
+document.addEventListener('keydown', e => {
+  if (isDevMode) return; // سيب كل الاختصارات تشتتغل لو في وضع المطور
+
   if (e.key === 'F12') e.preventDefault();
   if (e.ctrlKey && ['u','s','a','p'].includes(e.key.toLowerCase())) e.preventDefault();
   if (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())) e.preventDefault();
 });
-document.addEventListener('selectstart', e => e.preventDefault());
-document.addEventListener('dragstart', e => e.preventDefault());
+
+document.addEventListener('selectstart', e => {
+  if (!isDevMode) e.preventDefault();
+});
+
+document.addEventListener('dragstart', e => {
+  if (!isDevMode) e.preventDefault();
+});
 </script>
 </body>
 </html>
