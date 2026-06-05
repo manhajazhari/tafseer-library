@@ -6,16 +6,6 @@
 <title>مكتبة التفسير القرآني</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
-<link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/tafseer-library/sw.js')
-        .then(reg => console.log('Service Worker Registered!', reg))
-        .catch(err => console.log('Service Worker Failed!', err));
-    });
-  }
-</script>
 <style>
   :root {
     --gold: #B8860B;
@@ -811,37 +801,16 @@ function closeViewer() {
 }
 
 // ══════════════════════════════════════════════
-//  SECURITY — Smart Protection with Dev Bypass
+//  SECURITY — disable right-click, dev tools shortcuts, text selection
 // ══════════════════════════════════════════════
-let isDevMode = false;
-let dCount = 0;
-
-// لقط الضغطة فوراً قبل أي منع
+document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('keydown', e => {
-  if (e.key.toLowerCase() === 'd' || e.key === 'ي') {
-    dCount++;
-    if (dCount >= 5) {
-      isDevMode = true;
-      alert('وضع المطور نشط الآن - تم إلغاء قفل الحماية بنجاح! يمكنك الفحص والتثبيت.');
-      dCount = 0;
-    }
-  } else {
-    dCount = 0;
-  }
-});
-
-// المنع مش هيشتغل إلا لو وضع المطور مقفول (false)
-document.addEventListener('contextmenu', e => { if (!isDevMode) e.preventDefault(); });
-document.addEventListener('selectstart', e => { if (!isDevMode) e.preventDefault(); });
-document.addEventListener('dragstart', e => { if (!isDevMode) e.preventDefault(); });
-
-document.addEventListener('keydown', e => {
-  if (isDevMode) return; // لو وضع المطور شغال، سيب الزراير براحتها
-
   if (e.key === 'F12') e.preventDefault();
   if (e.ctrlKey && ['u','s','a','p'].includes(e.key.toLowerCase())) e.preventDefault();
   if (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())) e.preventDefault();
 });
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('dragstart', e => e.preventDefault());
 </script>
 </body>
 </html>
