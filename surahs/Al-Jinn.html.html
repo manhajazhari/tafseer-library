@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Surah Al-Jinn — Interactive Learning Portal</title>
+<meta name="description" content="An interactive educational portal for Surah Al-Jinn (Chapter 72) — the Makkan surah in which a group of Jinn listened to the Qur'an and believed, affirming pure Tawheed and the messenger's role. Tafseer, Tadabbur, flashcards, vocabulary, and exercises for young learners." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+</script>
+<style>
+  :root{
+    --bg:#f7f3ea;
+    --bg-2:#fbf8f1;
+    --paper:#ffffff;
+    --ink:#1f2330;
+    --ink-soft:#4a5063;
+    --muted:#8a8f9e;
+    --line:#e5dccb;
+    --gold:#b08833;
+    --gold-2:#d4a84a;
+    --teal:#0f6b6b;
+    --teal-soft:#e6f1f1;
+    --rose:#b04646;
+    --rose-soft:#fbe9e7;
+    --green:#2f7d4f;
+    --green-soft:#e6f4ec;
+    --indigo:#3b3f8c;
+    --indigo-soft:#ecedfb;
+    --shadow: 0 10px 30px -12px rgba(60,40,10,.18);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden;width:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 10% -10%, #fff7e0 0%, transparent 60%),
+      radial-gradient(900px 600px at 110% 20%, #eaf6f3 0%, transparent 60%),
+      var(--bg);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    max-width:100vw;
+  }
+  body[dir="rtl"]{
+    font-family:'Amiri','Inter',system-ui,sans-serif;
+  }
+  .arabic{font-family:'Amiri',serif; direction:rtl;}
+  .display{font-family:'Playfair Display',serif;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;
+    border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.6);
+    backdrop-filter: blur(8px);
+    position:sticky;top:0;z-index:20;
+    flex-wrap:wrap;gap:12px;
+    max-width:100vw;
+    overflow:hidden;
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .crest{
+    width:46px;height:46px;border-radius:14px;
+    background:linear-gradient(135deg,var(--teal) 0%,#1a9e9e 100%);
+    display:grid;place-items:center;color:#fff;font-weight:800;
+    box-shadow:var(--shadow);
+  }
+  .brand h1{margin:0;font-size:18px;letter-spacing:.2px}
+  .brand p{margin:0;color:var(--muted);font-size:12px}
+  .meta{display:flex;gap:10px;align-items:center;color:var(--ink-soft);font-size:13px;flex-wrap:wrap}
+  .pill{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff}
+
+  /* Language Toggle */
+  .lang-toggle{
+    cursor:pointer;
+    padding:8px 16px;
+    border-radius:999px;
+    border:2px solid var(--gold);
+    background:linear-gradient(135deg,#fffaf0,#fff);
+    color:var(--gold);
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;gap:8px;
+    transition:all .3s ease;
+    user-select:none;
+  }
+  .lang-toggle:hover{
+    background:linear-gradient(135deg,var(--gold),var(--gold-2));
+    color:#fff;
+    box-shadow:0 4px 14px rgba(176,136,51,.35);
+  }
+  .lang-toggle .globe{font-size:18px}
+
+  /* ===== Tabs ===== */
+  .wrap{max-width:1280px;margin:24px auto;padding:0 22px;overflow-x:hidden;width:100%;}
+  .tabs{
+    display:flex;flex-wrap:wrap;gap:8px;
+    background:#fff;padding:8px;border-radius:16px;border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .tab{
+    flex:1 1 auto;min-width:110px;
+    padding:12px 14px;border-radius:12px;cursor:pointer;
+    text-align:center;font-weight:600;color:var(--ink-soft);
+    border:1px solid transparent;
+    transition:all .25s ease;user-select:none;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:13px;
+  }
+  .tab .ic{font-size:18px}
+  .tab:hover{background:#faf6ee;color:var(--ink)}
+  .tab.active{
+    background:linear-gradient(135deg,#1f2330,#2a3144);
+    color:#fff;box-shadow:0 8px 18px -8px rgba(31,35,48,.45);
+  }
+
+  .panel{display:none;animation:fade .35s ease both;margin-top:22px}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);
+    max-width:100%;overflow-x:auto;
+  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  h2.section{font-family:'Playfair Display',serif;font-size:28px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 18px}
+
+  /* ===== Intro / Hero ===== */
+  .hero{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:22px;
+    max-width:100%;overflow:hidden;
+  }
+  @media(max-width:900px){.hero{grid-template-columns:1fr}}
+  .hero-card{
+    background:
+      radial-gradient(600px 300px at 100% 0%, #e0f0ff 0%, transparent 60%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    border:1px solid var(--line);border-radius:var(--radius);padding:28px;
+    box-shadow:var(--shadow);
+  }
+  .kicker{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:12px;letter-spacing:.6px}
+  .hero h2{font-family:'Playfair Display',serif;font-size:38px;margin:14px 0 6px;line-height:1.1}
+  .hero p.lead{font-size:15px;color:var(--ink-soft);line-height:1.7}
+  .quick-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .fact{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .fact .lbl{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .fact .val{font-weight:700;margin-top:4px}
+
+  .side-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow);
+    max-height:600px;overflow-y:auto;
+    max-width:100%;overflow-x:hidden;
+    word-wrap:break-word;
+  }
+  .side-card .arabic{font-size:26px;line-height:2.2;text-align:center;color:#2a2f44}
+  .bismillah{font-size:30px;text-align:center;color:var(--gold);margin-bottom:10px}
+
+  /* scrollbar for side-card */
+  .side-card::-webkit-scrollbar{width:6px}
+  .side-card::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  /* ===== Flashcards ===== */
+  .deck-controls{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+  .btn{
+    cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:10px 16px;border-radius:10px;font-weight:600;transition:all .2s;
+    display:inline-flex;align-items:center;gap:8px;font-size:14px;
+    font-family:inherit;
+  }
+  .btn:hover{background:#faf6ee;border-color:var(--gold)}
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn.primary:hover{background:#2a3144}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#fff;border-color:transparent}
+  .btn.teal-btn{background:linear-gradient(135deg,var(--teal),#1a9e9e);color:#fff;border-color:transparent}
+  .btn.teal-btn:hover{box-shadow:0 4px 16px rgba(15,107,107,.35)}
+  .btn.whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border-color:transparent}
+  .btn.whatsapp:hover{box-shadow:0 4px 16px rgba(37,211,102,.4)}
+  .btn.pdf-btn{background:linear-gradient(135deg,var(--rose),#d85050);color:#fff;border-color:transparent}
+  .btn.pdf-btn:hover{box-shadow:0 4px 16px rgba(176,70,70,.35)}
+
+  .deck{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:18px;
+  }
+  .flip{
+    perspective:1400px;height:360px;cursor:pointer;
+  }
+  .flip-inner{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .flip.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;border-radius:var(--radius);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid var(--line);box-shadow:var(--shadow);
+    padding:18px;display:flex;flex-direction:column;
+  }
+  .face.front{
+    background:
+      radial-gradient(400px 200px at 100% 0%, #e0f0ff 0%, transparent 70%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    align-items:center;justify-content:space-between;
+  }
+  .face.back{
+    background:#fffdf8;
+    transform:rotateY(180deg);
+    overflow-y:auto;
+  }
+  .ayah-num{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-weight:800;display:grid;place-items:center;
+    box-shadow:var(--shadow);font-size:14px;
+  }
+  .ayah-ar{
+    font-family:'Amiri',serif;direction:rtl;
+    font-size:26px;line-height:2;text-align:center;color:#2a2f44;
+    flex:1;display:flex;align-items:center;justify-content:center;padding:0 6px;
+  }
+  .flip-hint{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .back h4{margin:0 0 4px;font-family:'Playfair Display',serif;font-size:16px;color:var(--teal)}
+  .back .trans{font-size:13px;color:var(--ink-soft);line-height:1.6;font-style:italic;margin:0 0 10px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+  .back .tafsir{font-size:13px;color:var(--ink);line-height:1.6;margin:0 0 10px}
+  .words{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .word{
+    background:var(--teal-soft);color:var(--teal);
+    padding:4px 8px;border-radius:8px;font-size:12px;font-weight:600;
+    display:inline-flex;flex-direction:column;align-items:center;gap:2px;
+  }
+  .word .ar{font-family:'Amiri',serif;font-size:14px}
+  .word .en{font-size:10px;color:var(--ink-soft);font-weight:500}
+
+  /* ===== Story timeline ===== */
+  .story-list{display:grid;gap:14px}
+  .story-item{
+    display:grid;grid-template-columns:60px 1fr;gap:16px;
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow);transition:all .25s;
+  }
+  .story-item:hover{transform:translateY(-2px);border-color:var(--teal)}
+  .step-no{
+    width:48px;height:48px;border-radius:14px;background:var(--indigo-soft);color:var(--indigo);
+    display:grid;place-items:center;font-weight:800;font-size:20px;
+  }
+  .story-item h3{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:20px}
+  .story-item p{margin:0;color:var(--ink-soft);line-height:1.7;font-size:14px}
+  .badge-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .badge{font-size:11px;padding:4px 10px;border-radius:999px;background:#f3eee2;color:var(--ink-soft);font-weight:600}
+
+  /* ===== Characters ===== */
+  .char-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .char-card h3{margin:6px 0 4px;font-family:'Playfair Display',serif}
+  .char-emoji{font-size:36px}
+  .char-card .role{color:var(--teal);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .char-card p{color:var(--ink-soft);font-size:13px;line-height:1.6}
+
+  /* ===== Lessons (Tadabbur) ===== */
+  .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .lesson{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .lesson::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--teal),#1a9e9e)}
+  body[dir="rtl"] .lesson::before{left:auto;right:0}
+  .lesson .ic{font-size:28px;margin-bottom:8px}
+  .lesson h4{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:18px}
+  .lesson p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+  /* ===== Vocabulary ===== */
+  .vocab-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow)}
+  .vocab-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:500px}
+  .vocab-table th, .vocab-table td{padding:14px 16px;text-align:start;border-bottom:1px solid var(--line)}
+  .vocab-table th{background:#faf6ee;font-weight:700;font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.5px}
+  .vocab-table tr:last-child td{border-bottom:none}
+  .vocab-table tr:hover{background:#fbf8f1}
+  .vocab-ar{font-family:'Amiri',serif;font-size:22px;color:#2a2f44;direction:rtl;text-align:right}
+  .vocab-tl-col{font-style:italic;color:var(--ink-soft);font-size:14px;white-space:nowrap}
+  body[dir="rtl"] .vocab-tl-col{display:none}
+
+  /* ===== Exercises ===== */
+  .quiz-section{margin-bottom:22px}
+  .quiz-section h3{font-family:'Playfair Display',serif;margin:0 0 4px}
+  .quiz-section .desc{color:var(--muted);margin:0 0 14px;font-size:13px}
+
+  .mcq{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .mcq .q{font-weight:700;margin:0 0 12px;font-size:15px}
+  .mcq .opts{display:grid;gap:8px}
+  .opt{
+    padding:12px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;
+    transition:all .2s;background:#fff;font-size:14px;
+  }
+  .opt:hover{background:#faf6ee;border-color:var(--gold)}
+  .opt.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600}
+  .opt.wrong{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);font-weight:600}
+  .feedback{margin-top:10px;font-size:13px;color:var(--ink-soft);display:none}
+  .feedback.show{display:block}
+
+  /* Matching */
+  .match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:100%}
+  @media(max-width:700px){.match-wrap{grid-template-columns:1fr}}
+  .match-col h4{margin:0 0 8px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .match-item{
+    padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:14px;
+    user-select:none;
+  }
+  .match-item:hover{border-color:var(--gold)}
+  .match-item.selected{background:var(--teal-soft);border-color:var(--teal);color:var(--teal);font-weight:600}
+  .match-item.matched{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600;cursor:default;pointer-events:none}
+  .match-item.error{background:var(--rose-soft);border-color:var(--rose)}
+  .match-ar{font-family:'Amiri',serif;font-size:20px;direction:rtl;text-align:right}
+
+  /* Order */
+  .order-list{display:grid;gap:8px;margin-bottom:12px}
+  .order-item{
+    padding:14px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    cursor:grab;font-size:14px;display:flex;align-items:center;gap:12px;
+    transition:all .2s;
+  }
+  .order-item:hover{border-color:var(--gold)}
+  .order-item.dragging{opacity:.5}
+  .order-handle{color:var(--muted);font-size:18px}
+
+  /* Fill blanks */
+  .fill-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .fill-q{font-size:15px;line-height:1.9;margin-bottom:10px}
+  .fill-q input{
+    border:none;border-bottom:2px dashed var(--gold);background:transparent;
+    padding:4px 8px;font-size:15px;width:140px;text-align:center;font-family:inherit;
+    color:var(--ink);outline:none;
+  }
+  .fill-q input:focus{border-color:var(--teal)}
+  .fill-q input.correct{color:var(--green);border-color:var(--green);border-style:solid}
+  .fill-q input.wrong{color:var(--rose);border-color:var(--rose);border-style:solid}
+
+  /* Score */
+  .score-bar{
+    position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);
+    padding:14px 22px;display:flex;justify-content:space-between;align-items:center;
+    margin:30px -24px -24px;border-radius:0 0 var(--radius) var(--radius);
+    flex-wrap:wrap;gap:10px;
+  }
+  .score-bar .lbl{color:var(--muted);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+  .score-bar .v{font-size:24px;font-weight:800;color:var(--teal)}
+
+  /* ===== Mudhakkirah Tab ===== */
+  .mudhakkirah-section{margin-bottom:28px}
+  .mudhakkirah-section h3{
+    font-family:'Playfair Display','Amiri',serif;
+    font-size:22px;margin:0 0 6px;
+    color:var(--teal);
+    display:flex;align-items:center;gap:10px;
+  }
+  .mudhakkirah-section h3 .num-badge{
+    width:32px;height:32px;border-radius:10px;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-size:14px;font-weight:800;
+    display:grid;place-items:center;flex-shrink:0;
+  }
+  .mudhakkirah-question{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;box-shadow:var(--shadow);margin-bottom:14px;
+    position:relative;overflow:hidden;
+  }
+  .mudhakkirah-question::before{
+    content:"";position:absolute;top:0;right:0;bottom:0;width:5px;
+    background:linear-gradient(180deg,var(--teal),#1a9e9e);
+  }
+  body:not([dir="rtl"]) .mudhakkirah-question::before{right:auto;left:0}
+  .mudhakkirah-question label{
+    display:block;font-weight:700;font-size:15px;margin-bottom:10px;
+    color:var(--ink);line-height:1.6;
+  }
+  .mudhakkirah-question label .q-icon{margin-inline-end:8px;font-size:18px}
+  .mudhakkirah-question textarea{
+    width:100%;min-height:120px;
+    border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-size:14px;font-family:'Amiri','Inter',serif;
+    color:var(--ink);background:#faf9f6;
+    outline:none;resize:vertical;line-height:1.8;
+    direction:rtl;text-align:right;
+  }
+  .mudhakkirah-question textarea:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(15,107,107,.12);
+  }
+  .mudhakkirah-question textarea::placeholder{
+    color:var(--muted);font-style:italic;
+  }
+
+  /* ===== Export Bar ===== */
+  .export-bar{
+    display:flex;gap:12px;align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#f0f7ff,#f0f4eb);
+    border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-top:24px;
+    flex-wrap:wrap;
+  }
+  .export-bar .export-title{
+    font-weight:700;font-size:14px;color:var(--ink);
+    margin-inline-end:auto;display:flex;align-items:center;gap:8px;
+  }
+
+  /* Footer */
+  .footer{
+    text-align:center;color:var(--muted);font-size:12px;padding:30px 0 20px;
+  }
+
+  /* Scrollbar */
+  .face.back::-webkit-scrollbar{width:6px}
+  .face.back::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;right:auto;transform:translateX(-50%);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:10px;
+    font-size:14px;font-weight:600;opacity:0;transition:all .3s;
+    box-shadow:var(--shadow);z-index:50;pointer-events:none;
+    max-width:90vw;text-align:center;
+    direction:ltr;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+  .toast.success{background:var(--green)}
+  .toast.error{background:var(--rose)}
+
+  /* PDF Generation hidden container */
+  #pdfContainer{
+    position:fixed;left:-9999px;top:0;width:800px;
+    background:#fff;color:#1f2330;font-family:'Inter','Amiri',sans-serif;
+    padding:40px;
+    z-index:-9999;
+    opacity:0;
+    pointer-events:none;
+  }
+  #pdfContainer h1{font-size:22px;margin:0 0 4px;text-align:center}
+  #pdfContainer h2{font-size:18px;margin:20px 0 8px;color:var(--teal);border-bottom:2px solid var(--teal);padding-bottom:4px}
+  #pdfContainer h3{font-size:15px;margin:14px 0 4px;color:var(--gold)}
+  #pdfContainer p{font-size:13px;line-height:1.7;margin:4px 0}
+  #pdfContainer .pdf-meta{text-align:center;color:#8a8f9e;font-size:12px;margin-bottom:16px}
+  #pdfContainer .pdf-section{margin-bottom:16px;page-break-inside:avoid}
+  #pdfContainer .pdf-qa{background:#faf9f6;border:1px solid #e5dccb;border-radius:8px;padding:12px;margin:8px 0}
+  #pdfContainer .pdf-qa label{font-weight:700;display:block;margin-bottom:4px;font-size:13px}
+  #pdfContainer .pdf-qa .answer{font-size:13px;color:#4a5063;white-space:pre-wrap;min-height:20px}
+  #pdfContainer .arabic-block{font-family:'Amiri',serif;direction:rtl;text-align:center;font-size:20px;line-height:2.2;color:#2a2f44;margin:10px 0}
+  #pdfContainer table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+  #pdfContainer th,#pdfContainer td{border:1px solid #e5dccb;padding:8px;text-align:left}
+  #pdfContainer th{background:#faf6ee;font-weight:700}
+
+  /* Responsive refinements */
+  @media(max-width:600px){
+    .topbar{padding:14px 12px}
+    .brand h1{font-size:15px}
+    .wrap{padding:0 10px}
+    .tab{min-width:80px;font-size:12px;padding:10px 6px}
+    .hero h2{font-size:24px}
+    .hero-card{padding:18px}
+    .side-card{padding:14px}
+    .side-card .arabic{font-size:20px;line-height:2}
+    .export-bar{padding:14px}
+    .card{padding:16px}
+    .score-bar{margin:20px -16px -16px;padding:12px 14px}
+    .flip{height:320px}
+    .ayah-ar{font-size:22px;line-height:1.8}
+    .story-item{grid-template-columns:48px 1fr;gap:10px;padding:14px}
+    .mcq{padding:14px}
+    .fill-card{padding:14px}
+    .lesson{padding:16px}
+    .mudhakkirah-question{padding:16px}
+    .match-item{padding:10px}
+    .bismillah{font-size:22px}
+    .vocab-table th,.vocab-table td{padding:10px 8px;font-size:12px}
+    .vocab-ar{font-size:18px}
+  }
+
+  /* ===== Premium Unified Responsive Design ===== */
+  img, video, iframe, canvas, svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media(max-width: 768px) {
+    .topbar {
+      padding: 14px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .brand {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .meta {
+      width: 100%;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .lang-toggle {
+      margin-inline-start: auto;
+    }
+
+    .tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+      padding: 6px;
+    }
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .tab {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      padding: 10px 14px;
+    }
+
+    .side-card {
+      max-height: 400px;
+    }
+  }
+
+@media (max-width: 900px){
+  .topbar{padding:12px 14px;gap:8px}
+  .brand h1{font-size:15px}
+  .brand p{font-size:11px}
+  .pill{padding:4px 8px;font-size:11px}
+  .container, .wrap, main{padding-left:14px !important;padding-right:14px !important}
+  .tabs{gap:6px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+  .tabs::-webkit-scrollbar{height:0}
+  .tab{flex:0 0 auto;font-size:13px;padding:8px 12px}
+  .hero{display:block !important}
+  .hero-card, .side-card{width:100% !important;max-width:100% !important;margin-bottom:14px}
+  .quick-facts{grid-template-columns:repeat(2,1fr) !important;gap:8px}
+  .grid-3, .lesson-grid, .deck{grid-template-columns:1fr !important;gap:14px}
+  .vocab-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .vocab-table{min-width:520px;font-size:13px}
+  .match-wrap{grid-template-columns:1fr !important;gap:10px}
+  .export-bar{flex-direction:column;align-items:stretch}
+  .btn{font-size:14px;padding:10px 12px}
+  h2.section{font-size:20px}
+  .lead{font-size:15px;line-height:1.7}
+  .arabic{font-size:18px !important;line-height:2 !important}
+  .ayah-ar{font-size:22px !important}
+}
+@media (max-width: 600px){
+  .topbar{padding:10px 10px}
+  .brand{gap:8px}
+  .crest{width:38px;height:38px;border-radius:10px}
+  .tab .ic{font-size:15px}
+  .quick-facts{grid-template-columns:1fr !important}
+  .flip{min-height:340px}
+}
+@media (min-width:901px) and (max-width:1100px){
+  .grid-3, .lesson-grid{grid-template-columns:repeat(2,1fr) !important}
+}
+
+/* === Mushaf flipbook === */
+.mushaf-intro-hero{grid-template-columns:minmax(280px,1.15fr) minmax(360px,.85fr);align-items:start;} .mushaf-book{max-width:560px;margin-left:auto;margin-right:auto;}
+.mushaf-side-card{max-height:none!important;overflow:visible!important;padding:0!important;background:transparent!important;border:none!important;box-shadow:none!important;}
+.mushaf-book{position:relative;background:linear-gradient(180deg,#fbf6e8,#f4ecd6);
+  border:1px solid var(--line);border-radius:14px;padding:10px;
+  box-shadow:var(--shadow);overflow:hidden;user-select:none;-webkit-user-select:none;}
+.mushaf-stage{position:relative;perspective:2400px;min-height:690px;height:min(72vh,760px);max-height:760px;display:block;}
+.mushaf-page{position:absolute;inset:0;box-sizing:border-box;background:
+  radial-gradient(120% 60% at 50% 0%, #fffbe9 0%, #faf2dc 60%, #f1e6c4 100%);
+  border:1px solid #d8c89a;border-radius:10px;
+  padding:14px 16px 18px;overflow:hidden;direction:rtl;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transition:transform .65s cubic-bezier(.4,.05,.2,1), box-shadow .65s ease;
+  will-change:transform;cursor:grab;touch-action:pan-y;
+  transform-origin:right center;
+  box-shadow:inset 0 0 40px rgba(160,120,60,.10), 0 6px 14px -8px rgba(0,0,0,.18);}
+.mushaf-page.dragging{transition:none;cursor:grabbing;}
+.mushaf-page.is-top{z-index:5;}
+.mushaf-page.is-under{z-index:1;}
+.mushaf-page.is-hidden{visibility:hidden;}
+.mushaf-page.flipped{transform:rotateY(-180deg);box-shadow:-22px 0 50px -10px rgba(0,0,0,.35);}
+.mushaf-frame{height:100%;box-sizing:border-box;border:1px solid #cdb87a;border-radius:6px;
+  padding:10px 14px 14px;position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0));
+  display:flex;flex-direction:column;}
+.mushaf-frame::before, .mushaf-frame::after{
+  content:'';position:absolute;left:6px;right:6px;height:6px;
+  border-top:2px solid #b89a4a;border-bottom:1px solid #b89a4a;pointer-events:none;}
+.mushaf-frame::before{top:-2px;} .mushaf-frame::after{bottom:-2px;}
+.mushaf-head{text-align:center;font-family:'Amiri',serif;color:var(--gold);
+  font-size:13px;line-height:1.2;margin-bottom:5px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #d8c89a;padding-bottom:4px;flex:0 0 auto;}
+.mushaf-head .surah-name{font-weight:700;color:var(--teal);font-size:15px;}
+.mushaf-head .juz{color:#8a7a4f;font-size:11px;}
+.mushaf-bismillah{font-family:'Amiri',serif;text-align:center;
+  font-size:clamp(22px,2.1vw,27px);color:#1a1a1a;
+  margin:6px 0 14px;padding-bottom:14px;line-height:1.5;flex:0 0 auto;
+  border-bottom:1px solid #b89a4a;position:relative;}
+.mushaf-text{flex:1 1 auto;min-height:0;font-family:'Amiri',serif;
+  font-size:22px;line-height:1.92;color:#111;text-align:justify;
+  text-align-last:center;direction:rtl;letter-spacing:0;
+  overflow-y:scroll;overflow-x:hidden;padding:0 10px 20px 2px;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:#c8a84a #f3e6c0;}
+.mushaf-text::-webkit-scrollbar{width:10px;-webkit-appearance:none;}
+.mushaf-text::-webkit-scrollbar-track{background:#f3e6c0;border-radius:6px;}
+.mushaf-text::-webkit-scrollbar-thumb{background:#c8a84a;border-radius:6px;border:2px solid #f3e6c0;}
+.mushaf-text::-webkit-scrollbar-thumb:hover{background:#a07830;}
+.mushaf-text .ayah{display:inline;}
+.mushaf-text .ayah-end{display:inline-block;margin:0 3px;
+  font-family:'Amiri',serif;font-size:.78em;color:var(--gold);
+  background:transparent;position:relative;vertical-align:middle;}
+.mushaf-text .ayah-end::before{content:'\06DD';color:var(--gold);font-size:1.4em;}
+.mushaf-text .ayah-end span{position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);font-size:.55em;color:#7a5a16;font-weight:700;}
+.mushaf-foot{text-align:center;margin-top:4px;padding-top:4px;
+  border-top:1px solid #d8c89a;font-family:'Amiri',serif;
+  font-size:12px;line-height:1.2;color:#8a7a4f;font-weight:700;letter-spacing:0;flex:0 0 auto;}
+.mushaf-controls{display:flex;justify-content:center;gap:10px;margin-top:10px;}
+.mushaf-controls button{background:var(--teal);color:#fff;border:none;
+  width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:18px;
+  box-shadow:0 4px 10px -4px rgba(15,107,107,.5);transition:transform .2s;}
+.mushaf-controls button:hover{transform:translateY(-2px);}
+.mushaf-controls button:disabled{background:#bbb;cursor:not-allowed;
+  box-shadow:none;transform:none;}
+.mushaf-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.mushaf-counter{font-size:13px;color:var(--teal);font-weight:700;}
+@media(max-width:900px){
+  .mushaf-intro-hero{grid-template-columns:1fr;}
+}
+@media (max-width:600px){
+  .mushaf-stage{min-height:620px;height:620px;max-height:620px;}
+  .mushaf-book{padding:8px;}
+  .mushaf-page{padding:9px 10px 13px;}
+  .mushaf-frame{padding:8px 10px 12px;}
+  .mushaf-head{font-size:12px;margin-bottom:4px;padding-bottom:4px;}
+  .mushaf-head .surah-name{font-size:14px;}
+  .mushaf-bismillah{font-size:22px;margin:4px 0 10px;padding-bottom:10px;}
+  .mushaf-text{font-size:20px;line-height:1.86;padding-bottom:16px;}
+  .mushaf-foot{font-size:11px;margin-top:3px;padding-top:3px;}
+}
+.mushaf-page[data-page="1"] .mushaf-foot{margin-top:14px;}
+.mushaf-text .ayah{transition:background-color .15s ease, font-weight .15s ease;border-radius:3px;padding:0 2px;}
+.mushaf-text .ayah:hover{background:#b3e5fc;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="crest arabic">م</div>
+    <div>
+      <h1 data-i18n="brand-title">Surah Al-Jinn · Interactive Portal</h1>
+      <p data-i18n="brand-sub">The Jinn · Tafseer & Tadabbur for Young Learners</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="pill" data-i18n="pill-chapter">Chapter 72</span>
+    <span class="pill" data-i18n="pill-verses">28 Verses</span>
+    <span class="pill" data-i18n="pill-period">Makkiyyah</span>
+    <div class="lang-toggle" id="langToggle" title="Switch language">
+      <span class="globe">🌐</span>
+      <span id="langLabel">العربية</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="intro"><span class="ic">📜</span> <span data-i18n="tab-intro">Introduction</span></div>
+    <div class="tab" data-tab="ayat"><span class="ic">🃏</span> <span data-i18n="tab-ayat">Ayat Flashcards</span></div>
+    <div class="tab" data-tab="story"><span class="ic">📖</span> <span data-i18n="tab-story">The Story</span></div>
+    <div class="tab" data-tab="characters"><span class="ic">👥</span> <span data-i18n="tab-chars">Surah Landmarks</span></div>
+    <div class="tab" data-tab="vocab"><span class="ic">🔤</span> <span data-i18n="tab-vocab">Vocabulary</span></div>
+    <div class="tab" data-tab="lessons"><span class="ic">💡</span> <span data-i18n="tab-lessons">Lessons</span></div>
+    <div class="tab" data-tab="exercises"><span class="ic">🧠</span> <span data-i18n="tab-exercises">Exercises</span></div>
+    <div class="tab" data-tab="mudhakkirah"><span class="ic">📝</span> <span data-i18n="tab-mudh">My Reflection Journal</span></div>
+  </div>
+
+  <!-- ============ INTRO ============ -->
+  <section class="panel active" id="panel-intro">
+    <div class="hero mushaf-intro-hero">
+      <div class="hero-card">
+        <span class="kicker" data-i18n="kicker">SURAH AL-JINN · ٱلْجِنّ</span>
+        <h2 data-i18n="hero-title">The Jinn — Witnesses to the Qur'an</h2>
+        <p class="lead" data-i18n="hero-lead">
+          Surah Al-Jinn is a Makkan surah of 28 verses, revealed after the journey of
+          Ta'if when the Prophet ﷺ recited the Qur'an at Nakhlah and a party of Jinn
+          listened, were stunned by its truth, and returned to their people calling
+          them to faith. The surah affirms pure Tawheed, exposes the foolishness of
+          ascribing a consort or a child to Allah, refutes the pagans' refuge in the
+          Jinn, narrates how the heavens are now guarded by shooting stars, and ends
+          by reminding the Prophet ﷺ that he owns neither harm nor guidance — only
+          the conveyance of the message — and that Allah alone knows the unseen.
+        </p>
+        <div class="quick-facts">
+          <div class="fact"><div class="lbl" data-i18n="fact-revealed">Revealed in</div><div class="val" data-i18n="fact-revealed-val">Makkah</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-order">Order of Revelation</div><div class="val" data-i18n="fact-order-val">40th</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-verses">Verses</div><div class="val" data-i18n="fact-verses-val">28 Ayat</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-theme">Theme</div><div class="val" data-i18n="fact-theme-val">The Jinn's Belief in the Qur'an & Pure Tawheed</div></div>
+        </div>
+      </div>
+      <div class="side-card mushaf-side-card">
+        <div class="mushaf-book" id="mushafBook" aria-label="سورة الجن — مصحف المدينة">
+          <div class="mushaf-stage" id="mushafStage"></div>
+          <div class="mushaf-controls">
+            <button id="mushafPrev" aria-label="السابق" title="الصفحة السابقة">›</button>
+            <button id="mushafNext" aria-label="التالي" title="الصفحة التالية">‹</button>
+          </div>
+          <div class="mushaf-hint">
+            <span data-i18n="mushaf-hint">اسحب الصفحة من اليسار لتقليبها — Drag from the left to flip</span>
+            <span class="mushaf-counter"><span id="mushafIdx">١</span> / <span id="mushafTotal">?</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AYAT FLASHCARDS ============ -->
+  <section class="panel" id="panel-ayat">
+    <h2 class="section" data-i18n="section-ayat">Ayat Flashcards</h2>
+    <p class="sub" data-i18n="sub-ayat">Tap any card to flip — see translation, tafseer, and word-by-word meanings.</p>
+    <div class="deck-controls">
+      <button class="btn" id="flipAll"><span data-i18n="btn-flipall">🔄 Flip All</span></button>
+      <button class="btn" id="resetCards"><span data-i18n="btn-reset-cards">↺ Reset</span></button>
+    </div>
+    <div class="deck" id="deck"></div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section class="panel" id="panel-story">
+    <h2 class="section" data-i18n="section-story">The Story · The Surah of the Call</h2>
+    <p class="sub" data-i18n="sub-story">How Al-Qalam was revealed, its place as the second revelation, and its great defense of the Prophet ﷺ.</p>
+    <div class="story-list" id="storyList"></div>
+  </section>
+
+  <!-- ============ CHARACTERS ============ -->
+  <section class="panel" id="panel-characters">
+    <h2 class="section" data-i18n="section-chars">Surah Landmarks</h2>
+    <p class="sub" data-i18n="sub-chars">The major scenes, people, and themes of Surah Al-Qalam.</p>
+    <div class="grid-3" id="charList"></div>
+  </section>
+
+  <!-- ============ VOCABULARY ============ -->
+  <section class="panel" id="panel-vocab">
+    <h2 class="section" data-i18n="section-vocab">Word-by-Word Glossary</h2>
+    <p class="sub" data-i18n="sub-vocab">Every key Quranic word explained — root, meaning, and context.</p>
+    <div class="vocab-table-wrap">
+    <table class="vocab-table">
+      <thead>
+        <tr>
+          <th data-i18n="th-word">Word</th>
+          <th class="vocab-tl-col" data-i18n="th-translit">Transliteration</th>
+          <th data-i18n="th-meaning">Meaning</th>
+          <th data-i18n="th-notes">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="panel" id="panel-lessons">
+    <h2 class="section" data-i18n="section-lessons">Lessons for Modern Youth</h2>
+    <p class="sub" data-i18n="sub-lessons">Timeless principles drawn from the Surah of the Pen.</p>
+    <div class="lesson-grid" id="lessonGrid"></div>
+  </section>
+
+  <!-- ============ EXERCISES ============ -->
+  <section class="panel" id="panel-exercises">
+    <div class="card">
+    <h2 class="section" data-i18n="section-exercises">Deep Practice</h2>
+    <p class="sub" data-i18n="sub-exercises">Multiple-choice, matching, fill-in-the-blank, and chronological ordering.</p>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-mcq-title">① Comprehension — Multiple Choice</h3>
+      <p class="desc" data-i18n="quiz-mcq-desc">Choose the most accurate answer based on the Surah and its tafseer.</p>
+      <div id="mcqContainer"></div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-match-title">② Word Matching</h3>
+      <p class="desc" data-i18n="quiz-match-desc">Tap an Arabic word, then tap its English meaning.</p>
+      <div class="card">
+        <div class="match-wrap">
+          <div class="match-col">
+            <h4 data-i18n="match-arabic">Arabic</h4>
+            <div id="matchAr"></div>
+          </div>
+          <div class="match-col">
+            <h4 data-i18n="match-english">English</h4>
+            <div id="matchEn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-fill-title">③ Fill in the Blanks</h3>
+      <p class="desc" data-i18n="quiz-fill-desc">Complete the verses with the correct word.</p>
+      <div id="fillContainer"></div>
+      <button class="btn primary" id="checkFill"><span data-i18n="btn-check-answers">Check Answers</span></button>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-order-title">④ Order the Verses</h3>
+      <p class="desc" data-i18n="quiz-order-desc">Drag the verse summaries into the correct order.</p>
+      <div class="card">
+        <div class="order-list" id="orderList"></div>
+        <button class="btn primary" id="checkOrder"><span data-i18n="btn-check-order">Check Order</span></button>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <div>
+        <div class="lbl" data-i18n="score-label">Your Score</div>
+        <div class="v"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+      </div>
+      <button class="btn gold" id="resetQuiz"><span data-i18n="btn-reset-quiz">↺ Reset All</span></button>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============ MUDHAKKIRAH ============ -->
+  <section class="panel" id="panel-mudhakkirah">
+    <h2 class="section" data-i18n="mudh-title" style="font-family:'Amiri','Playfair Display',serif;">📝 مذكرة تدبري للقرآن</h2>
+    <p class="sub" data-i18n="mudh-sub" style="font-family:'Amiri',serif;font-size:15px;">تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.</p>
+
+    <div class="mudhakkirah-question" style="margin-bottom:22px;">
+      <label><span class="q-icon">👤</span> <span data-i18n="student-label">Student Name:</span></label>
+      <input type="text" id="studentName" data-placeholder-en="Enter your name..." data-placeholder-ar="اكتب اسمك هنا..." placeholder="Enter your name..."
+        style="width:100%;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:16px;font-family:'Amiri','Inter',serif;color:var(--ink);background:#faf9f6;outline:none;direction:rtl;text-align:right;" />
+    </div>
+
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-1">١</span> <span data-i18n="mudh-h1">أولاً: المحور العام (الفهم والتدبر)</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">📖</span> <span data-i18n="mudh-q1-label">ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</span></label>
+        <textarea id="mudh-q1" data-placeholder-ar="اكتب خلاصة الآيات بأسلوبك الخاص هنا..." data-placeholder-en="Write a summary of the verses in your own words..." placeholder="اكتب خلاصة الآيات بأسلوبك الخاص هنا..."></textarea>
+      </div>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">💡</span> <span data-i18n="mudh-q2-label">ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</span></label>
+        <textarea id="mudh-q2" data-placeholder-ar="اكتب أهم درس وكيف ستطبقه..." data-placeholder-en="Write the most important lesson and how you will apply it..." placeholder="اكتب أهم درس وكيف ستطبقه..."></textarea>
+      </div>
+    </div>
+
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-2">٢</span> <span data-i18n="mudh-h2">ثانياً: المحور الوجداني والشخصي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">❤️</span> <span data-i18n="mudh-q3-label">هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</span></label>
+        <textarea id="mudh-q3" data-placeholder-ar="اكتب عن الآية التي أثرت فيك ولماذا..." data-placeholder-en="Write about the verse that touched you and why..." placeholder="اكتب عن الآية التي أثرت فيك ولماذا..."></textarea>
+      </div>
+    </div>
+
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-3">٣</span> <span data-i18n="mudh-h3">ثالثاً: المحور التطبيقي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">🎯</span> <span data-i18n="mudh-q4-label">حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</span></label>
+        <textarea id="mudh-q4" data-placeholder-ar="اكتب هدفك العملي أو عهدك مع نفسك..." data-placeholder-en="Write your practical goal or commitment to yourself..." placeholder="اكتب هدفك العملي أو عهدك مع نفسك..."></textarea>
+      </div>
+    </div>
+
+    <div class="export-bar">
+      <div class="export-title">
+        <span>📤</span>
+        <span data-i18n="export-title">Share Your Work</span>
+      </div>
+      <button class="btn whatsapp" id="btnWhatsApp">
+        <span style="font-size:20px">💬</span>
+        <span data-i18n="btn-whatsapp">Send to my Teacher</span>
+      </button>
+      <button class="btn pdf-btn" id="btnPDF">
+        <span style="font-size:20px">📄</span>
+        <span data-i18n="btn-pdf">Download PDF</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="footer" data-i18n="footer">Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="pdfContainer"></div>
+
+<script>
+window.__MUSHAF_SURA_NAME_AR = "سورة الجن";
+window.__MUSHAF_JUZ_LABEL    = "الجزء التاسع والعشرون";
+window.__MUSHAF_BISMILLAH    = true;
+window.__MUSHAF_AYAT = [
+"قُلْ أُوحِىَ إِلَىَّ أَنَّهُ ٱسْتَمَعَ نَفَرٌۭ مِّنَ ٱلْجِنِّ فَقَالُوٓا۟ إِنَّا سَمِعْنَا قُرْءَانًا عَجَبًۭا","يَهْدِىٓ إِلَى ٱلرُّشْدِ فَـَٔامَنَّا بِهِۦ ۖ وَلَن نُّشْرِكَ بِرَبِّنَآ أَحَدًۭا","وَأَنَّهُۥ تَعَٰلَىٰ جَدُّ رَبِّنَا مَا ٱتَّخَذَ صَٰحِبَةًۭ وَلَا وَلَدًۭا","وَأَنَّهُۥ كَانَ يَقُولُ سَفِيهُنَا عَلَى ٱللَّهِ شَطَطًۭا","وَأَنَّا ظَنَنَّآ أَن لَّن تَقُولَ ٱلْإِنسُ وَٱلْجِنُّ عَلَى ٱللَّهِ كَذِبًۭا",
+"وَأَنَّهُۥ كَانَ رِجَالٌۭ مِّنَ ٱلْإِنسِ يَعُوذُونَ بِرِجَالٍۢ مِّنَ ٱلْجِنِّ فَزَادُوهُمْ رَهَقًۭا","وَأَنَّهُمْ ظَنُّوا۟ كَمَا ظَنَنتُمْ أَن لَّن يَبْعَثَ ٱللَّهُ أَحَدًۭا","وَأَنَّا لَمَسْنَا ٱلسَّمَآءَ فَوَجَدْنَٰهَا مُلِئَتْ حَرَسًۭا شَدِيدًۭا وَشُهُبًۭا","وَأَنَّا كُنَّا نَقْعُدُ مِنْهَا مَقَٰعِدَ لِلسَّمْعِ ۖ فَمَن يَسْتَمِعِ ٱلْـَٔانَ يَجِدْ لَهُۥ شِهَابًۭا رَّصَدًۭا","وَأَنَّا لَا نَدْرِىٓ أَشَرٌّ أُرِيدَ بِمَن فِى ٱلْأَرْضِ أَمْ أَرَادَ بِهِمْ رَبُّهُمْ رَشَدًۭا",
+"وَأَنَّا مِنَّا ٱلصَّٰلِحُونَ وَمِنَّا دُونَ ذَٰلِكَ ۖ كُنَّا طَرَآئِقَ قِدَدًۭا","وَأَنَّا ظَنَنَّآ أَن لَّن نُّعْجِزَ ٱللَّهَ فِى ٱلْأَرْضِ وَلَن نُّعْجِزَهُۥ هَرَبًۭا","وَأَنَّا لَمَّا سَمِعْنَا ٱلْهُدَىٰٓ ءَامَنَّا بِهِۦ ۖ فَمَن يُؤْمِنۢ بِرَبِّهِۦ فَلَا يَخَافُ بَخْسًۭا وَلَا رَهَقًۭا","وَأَنَّا مِنَّا ٱلْمُسْلِمُونَ وَمِنَّا ٱلْقَٰسِطُونَ ۖ فَمَنْ أَسْلَمَ فَأُو۟لَٰٓئِكَ تَحَرَّوْا۟ رَشَدًۭا","وَأَمَّا ٱلْقَٰسِطُونَ فَكَانُوا۟ لِجَهَنَّمَ حَطَبًۭا",
+"وَأَلَّوِ ٱسْتَقَٰمُوا۟ عَلَى ٱلطَّرِيقَةِ لَأَسْقَيْنَٰهُم مَّآءً غَدَقًۭا","لِّنَفْتِنَهُمْ فِيهِ ۚ وَمَن يُعْرِضْ عَن ذِكْرِ رَبِّهِۦ يَسْلُكْهُ عَذَابًۭا صَعَدًۭا","وَأَنَّ ٱلْمَسَٰجِدَ لِلَّهِ فَلَا تَدْعُوا۟ مَعَ ٱللَّهِ أَحَدًۭا","وَأَنَّهُۥ لَمَّا قَامَ عَبْدُ ٱللَّهِ يَدْعُوهُ كَادُوا۟ يَكُونُونَ عَلَيْهِ لِبَدًۭا","قُلْ إِنَّمَآ أَدْعُوا۟ رَبِّى وَلَآ أُشْرِكُ بِهِۦٓ أَحَدًۭا",
+"قُلْ إِنِّى لَآ أَمْلِكُ لَكُمْ ضَرًّۭا وَلَا رَشَدًۭا","قُلْ إِنِّى لَن يُجِيرَنِى مِنَ ٱللَّهِ أَحَدٌۭ وَلَنْ أَجِدَ مِن دُونِهِۦ مُلْتَحَدًا","إِلَّا بَلَٰغًۭا مِّنَ ٱللَّهِ وَرِسَٰلَٰتِهِۦ ۚ وَمَن يَعْصِ ٱللَّهَ وَرَسُولَهُۥ فَإِنَّ لَهُۥ نَارَ جَهَنَّمَ خَٰلِدِينَ فِيهَآ أَبَدًا","حَتَّىٰٓ إِذَا رَأَوْا۟ مَا يُوعَدُونَ فَسَيَعْلَمُونَ مَنْ أَضْعَفُ نَاصِرًۭا وَأَقَلُّ عَدَدًۭا","قُلْ إِنْ أَدْرِىٓ أَقَرِيبٌۭ مَّا تُوعَدُونَ أَمْ يَجْعَلُ لَهُۥ رَبِّىٓ أَمَدًۭا",
+"عَٰلِمُ ٱلْغَيْبِ فَلَا يُظْهِرُ عَلَىٰ غَيْبِهِۦٓ أَحَدًا","إِلَّا مَنِ ٱرْتَضَىٰ مِن رَّسُولٍۢ فَإِنَّهُۥ يَسْلُكُ مِن بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِۦ رَصَدًۭا","لِّيَعْلَمَ أَن قَدْ أَبْلَغُوا۟ رِسَٰلَٰتِ رَبِّهِمْ وَأَحَاطَ بِكُلِّ شَىْءٍۢ عَدَدًۢا"
+];
+</script>
+
+<script>
+/* ============= LANGUAGE DATA ============= */
+let currentLang = 'en';
+
+const I18N = {
+  'brand-title':       { en: 'Surah Al-Jinn · Interactive Portal',   ar: 'سورة الجن · بوابة تعليمية تفاعلية' },
+  'brand-sub':         { en: 'Al-Jinn · The Jinn — Tafseer & Tadabbur for Young Learners', ar: 'الجن · إيمان نفرٍ من الجن بالقرآن — تفسير وتدبر للناشئة' },
+  'pill-chapter':      { en: 'Chapter 72',    ar: 'السورة ٧٢' },
+  'pill-verses':       { en: '28 Verses',     ar: '٢٨ آية' },
+  'pill-period':       { en: 'Makkiyyah',     ar: 'مكّيّة' },
+  'student-label':     { en: 'Student Name:',  ar: 'اسم الطالب:' },
+  'tab-intro':         { en: 'Introduction',   ar: 'المقدمة' },
+  'tab-ayat':          { en: 'Ayat Flashcards', ar: 'بطاقات الآيات' },
+  'tab-story':         { en: 'The Story',      ar: 'القصة' },
+  'tab-chars':         { en: 'Landmarks of the Surah', ar: 'معالم السورة' },
+  'tab-vocab':         { en: 'Vocabulary',     ar: 'المفردات' },
+  'tab-lessons':       { en: 'Lessons',        ar: 'الدروس' },
+  'tab-exercises':     { en: 'Exercises',      ar: 'التمارين' },
+  'tab-mudh':          { en: 'My Reflection Journal', ar: 'مذكرة تدبري' },
+  'kicker':            { en: 'SURAH AL-JINN · ٱلْجِنّ', ar: 'سورة الجن · ٱلْجِنّ' },
+  'hero-title':        { en: 'The Jinn — Witnesses to the Qur\'an', ar: 'الجن — شهودٌ على القرآن' },
+  'hero-lead':         { en: 'Surah Al-Jinn is a Makkan surah of 28 verses. After the journey to Ta\'if, the Prophet ﷺ recited the Qur\'an at Nakhlah and a party of Jinn listened in secret. They were stunned by its truth, believed, and returned to their people as callers to Allah. The surah affirms pure Tawheed, rejects the false claim that Allah has a consort or a child, exposes the foolishness of the pagans who took refuge in the Jinn, narrates how the heavens are now guarded by shooting stars, and ends by declaring that the Prophet ﷺ owns no harm or guidance — only conveyance — and that Allah alone knows the unseen.', ar: 'سورة الجن مكّيّة في ثمانٍ وعشرين آية. بعد رجوعه ﷺ من الطائف، قرأ القرآن بنخلة فاستمع نفرٌ من الجن، فأدهشتهم الحقيقة فآمنوا، ثم رجعوا إلى قومهم دعاةً إلى الله. تُقرّر السورة التوحيد الخالص، وتنفي عن الله الصاحبة والولد، وتفضح حماقة المشركين الذين استعاذوا بالجن، وتُخبر أن السماء قد مُلئت حرَساً شديداً وشهباً، وتختم بأن النبي ﷺ لا يملك ضرّاً ولا رشداً، وأن الله وحده عالم الغيب.' },
+  'fact-revealed':     { en: 'Revealed in',       ar: 'مكان النزول' },
+  'fact-revealed-val': { en: 'Makkah',            ar: 'مكة المكرمة' },
+  'fact-order':        { en: 'Order of Revelation', ar: 'ترتيب النزول' },
+  'fact-order-val':    { en: '40th',              ar: 'الأربعون' },
+  'fact-verses':       { en: 'Verses',             ar: 'الآيات' },
+  'fact-verses-val':   { en: '28 Ayat',            ar: '٢٨ آية' },
+  'fact-theme':        { en: 'Theme',              ar: 'الموضوع' },
+  'fact-theme-val':    { en: 'The Jinn\'s Belief in the Qur\'an & Pure Tawheed', ar: 'إيمان الجن بالقرآن وتوحيد الله الخالص' },
+  'section-ayat':      { en: 'Ayat Flashcards',    ar: 'بطاقات الآيات' },
+  'sub-ayat':          { en: 'Tap any card to flip — see translation, tafseer, and word-by-word meanings.', ar: 'اضغط على أي بطاقة لقلبها — شاهد الشرح والتفسير ومعاني الكلمات.' },
+  'btn-flipall':       { en: '🔄 Flip All',        ar: '🔄 اقلب الكل' },
+  'btn-reset-cards':   { en: '↺ Reset',            ar: '↺ إعادة ضبط' },
+  'section-story':     { en: 'The Story · The Surah of the Jinn', ar: 'القصة · سورة الجن' },
+  'sub-story':         { en: 'How Surah Al-Jinn was revealed, the night at Nakhlah, and the Jinn who returned to their people as believers.', ar: 'كيف نزلت سورة الجن، وليلة نخلة، والجنُّ الذين رجعوا إلى قومهم مؤمنين.' },
+  'section-chars':     { en: 'Landmarks of the Surah', ar: 'معالم السورة' },
+  'sub-chars':         { en: 'The major scenes, people, and themes of Surah Al-Jinn.', ar: 'المشاهد الكبرى والشخصيات والمحاور التي ترسو عليها السورة.' },
+  'section-vocab':     { en: 'Word-by-Word Glossary', ar: 'معجم الكلمات' },
+  'sub-vocab':         { en: 'Every key Quranic word explained — root, meaning, and context.', ar: 'شرح كل كلمة قرآنية مهمة — الجذر والمعنى والسياق.' },
+  'th-word':           { en: 'Word',            ar: 'الكلمة' },
+  'th-translit':       { en: 'Transliteration', ar: 'النطق' },
+  'th-meaning':        { en: 'Meaning',         ar: 'المعنى' },
+  'th-notes':          { en: 'Notes',           ar: 'ملاحظات' },
+  'section-lessons':   { en: 'Lessons for Modern Youth', ar: 'دروس للشباب المعاصر' },
+  'sub-lessons':       { en: 'Timeless principles drawn from the Surah of the Jinn.', ar: 'مبادئ خالدة من سورة الجن.' },
+  'section-exercises': { en: 'Deep Practice',   ar: 'تمارين تطبيقية' },
+  'sub-exercises':     { en: 'Multiple-choice, matching, fill-in-the-blank, and ordering.', ar: 'اختيار من متعدد، مطابقة، ملء الفراغات، وترتيب.' },
+  'quiz-mcq-title':    { en: '① Comprehension — Multiple Choice', ar: '① الفهم — اختيار من متعدد' },
+  'quiz-mcq-desc':     { en: 'Choose the most accurate answer based on the Surah and its tafseer.', ar: 'اختر الإجابة الأدق بناءً على السورة وتفسيرها.' },
+  'quiz-match-title':  { en: '② Word Matching',  ar: '② مطابقة الكلمات' },
+  'quiz-match-desc':   { en: 'Tap an Arabic word, then tap its English meaning.', ar: 'اضغط على الكلمة العربية ثم اضغط على معناها.' },
+  'match-arabic':      { en: 'Arabic',           ar: 'عربي' },
+  'match-english':     { en: 'English',          ar: 'المعنى' },
+  'quiz-fill-title':   { en: '③ Fill in the Blanks', ar: '③ أكمل الفراغات' },
+  'quiz-fill-desc':    { en: 'Complete the verses with the correct word.', ar: 'أكمل الآيات بالكلمة الصحيحة.' },
+  'btn-check-answers': { en: 'Check Answers',     ar: 'تحقق من الإجابات' },
+  'quiz-order-title':  { en: '④ Order the Verses', ar: '④ رتّب الآيات' },
+  'quiz-order-desc':   { en: 'Drag the verse summaries into the correct order.', ar: 'اسحب ملخصات الآيات ورتّبها ترتيباً صحيحاً.' },
+  'btn-check-order':   { en: 'Check Order',       ar: 'تحقق من الترتيب' },
+  'score-label':       { en: 'Your Score',        ar: 'درجتك' },
+  'btn-reset-quiz':    { en: '↺ Reset All',       ar: '↺ إعادة ضبط الكل' },
+  'export-title':      { en: 'Share Your Work',   ar: 'شارك عملك' },
+  'btn-whatsapp':      { en: 'Send to my Teacher', ar: 'أرسل للمعلم' },
+  'btn-pdf':           { en: 'Download PDF',      ar: 'تحميل PDF' },
+  'footer':            { en: 'Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.', ar: 'تَمَّ بِتَوْفِيقٍ مِنَ اللهِ وِفْقَ مَرَاجِعِ المُفَسِّرِينَ مِنْ عُلَمَاءِ أهْلِ السُّنَّةِ، وَالْحَمْدُ للهِ رَبِّ العَالَمِينَ.' },
+  'mudh-title':        { en: '📝 Quran Reflection Journal', ar: '📝 مذكرة تدبري للقرآن' },
+  'mudh-sub':          { en: 'Written reflections that help the student understand the verses and apply them in daily life.', ar: 'تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.' },
+  'mudh-num-1':        { en: '1', ar: '١' },
+  'mudh-num-2':        { en: '2', ar: '٢' },
+  'mudh-num-3':        { en: '3', ar: '٣' },
+  'mudh-h1':           { en: 'First: General Axis (Understanding & Reflection)', ar: 'أولاً: المحور العام (الفهم والتدبر)' },
+  'mudh-h2':           { en: 'Second: Emotional & Personal Axis', ar: 'ثانياً: المحور الوجداني والشخصي' },
+  'mudh-h3':           { en: 'Third: Practical Axis', ar: 'ثالثاً: المحور التطبيقي' },
+  'mudh-q1-label':     { en: 'What is the summary of the verses in your own simple words?', ar: 'ما خلاصة الآيات في رأيك بأسلوبك البسيط؟' },
+  'mudh-q2-label':     { en: 'What is the most important lesson from the verses, and how will you apply it in your daily life?', ar: 'ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟' },
+  'mudh-q3-label':     { en: 'Is there a particular verse that touched your heart or affected you deeply, and why?', ar: 'هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟' },
+  'mudh-q4-label':     { en: 'Set a small practical goal or commitment to yourself to apply the verses.', ar: 'حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.' },
+};
+
+/* ============= CONTENT DATA ============= */
+const AYAT = [
+  { n:1, ar:"قُلْ أُوحِىَ إِلَىَّ أَنَّهُ ٱسْتَمَعَ نَفَرٌۭ مِّنَ ٱلْجِنِّ فَقَالُوٓا۟ إِنَّا سَمِعْنَا قُرْءَانًا عَجَبًۭا",
+    tr:{ en:"Say: 'It has been revealed to me that a party of the Jinn listened (to the Qur'an) and said: Indeed we have heard a wonderful recitation.'", ar:"قل يا محمد: أوحى الله إليّ أنه استمع جماعةٌ من الجن إلى قراءتي، فقالوا: إنا سمعنا قرآناً عجيباً في فصاحته وبلاغته." },
+    tafsir:{ en:"Al-Baghawi: revealed at Nakhlah on the Prophet's return from Ta'if. He recited Fajr; a party of Jinn from Nasibeen passed by, listened, were stunned, and went back as believers. 'Ajaban' — wondrous in its eloquence, meaning, and effect on hearts.", ar:"قال البغوي: نزلت بنخلة عند رجوع النبي ﷺ من الطائف. كان يصلي الفجر، فمرّ نفرٌ من جن نصيبين فاستمعوا فدُهشوا فرجعوا مؤمنين. «عجباً» — بديعاً في فصاحته ومعناه وأثره في القلوب." },
+    words:[ {ar:"أُوحِىَ", tl:"Uuhiya", en:{en:"It has been revealed",ar:"أُوحي"}}, {ar:"نَفَرٌۭ", tl:"Nafarun", en:{en:"A party / small group",ar:"جماعة بين الثلاثة والعشرة"}}, {ar:"ٱلْجِنِّ", tl:"Al-jinni", en:{en:"The Jinn",ar:"الجن"}}, {ar:"قُرْءَانًا عَجَبًۭا", tl:"Qur'aanan ajaban", en:{en:"A wonderful recitation",ar:"قرآناً عجيباً بديعاً"}} ] },
+
+  { n:2, ar:"يَهْدِىٓ إِلَى ٱلرُّشْدِ فَـَٔامَنَّا بِهِۦ ۖ وَلَن نُّشْرِكَ بِرَبِّنَآ أَحَدًۭا",
+    tr:{ en:"'It guides to right conduct, so we have believed in it, and we will never associate anyone with our Lord.'", ar:"يهدي إلى الصواب والرشاد، فآمنّا به، ولن نُشرك بربنا أحداً من خلقه." },
+    tafsir:{ en:"Al-Qurtubi: 'ar-rushd' is the right path in belief and conduct. The immediate response of the Jinn was a firm covenant of Tawheed — a believer's first sentence is always 'no shirk'.", ar:"قال القرطبي: «الرشد» الصواب في الاعتقاد والسلوك. كان الردُّ المباشر للجن عهداً ثابتاً بالتوحيد — وأول كلمة المؤمن دائماً «لا شرك»." },
+    words:[ {ar:"يَهْدِىٓ", tl:"Yahdee", en:{en:"It guides",ar:"يدلّ ويرشد"}}, {ar:"ٱلرُّشْدِ", tl:"Ar-rushdi", en:{en:"Right conduct / guidance",ar:"الصواب والهدى"}}, {ar:"نُّشْرِكَ", tl:"Nushrika", en:{en:"We associate (partners)",ar:"نجعل شريكاً"}} ] },
+
+  { n:3, ar:"وَأَنَّهُۥ تَعَٰلَىٰ جَدُّ رَبِّنَا مَا ٱتَّخَذَ صَٰحِبَةًۭ وَلَا وَلَدًۭا",
+    tr:{ en:"'And exalted is the majesty of our Lord — He has taken no consort, nor any son.'", ar:"وأنه تعالى عظمة ربنا وجلاله، لم يتّخذ زوجةً ولا ولداً." },
+    tafsir:{ en:"Al-Baghawi: 'jaddu rabbinaa' — the majesty and grandeur of our Lord. The Jinn explicitly reject the pagan and Christian claim that Allah has a consort or a child — pure Tawheed from the lips of beings made of fire.", ar:"قال البغوي: «جدُّ ربنا» — عظمة ربنا وجلاله. ينفي الجنُّ صراحةً ادعاء المشركين والنصارى أن لله صاحبةً أو ولداً — توحيدٌ خالصٌ على ألسنة مخلوقاتٍ من نار." },
+    words:[ {ar:"جَدُّ", tl:"Jaddu", en:{en:"Majesty / grandeur",ar:"عظمة وجلال"}}, {ar:"صَٰحِبَةًۭ", tl:"Saahibatan", en:{en:"A consort / wife",ar:"زوجة"}}, {ar:"وَلَدًۭا", tl:"Waladan", en:{en:"A son / child",ar:"ولداً"}} ] },
+
+  { n:4, ar:"وَأَنَّهُۥ كَانَ يَقُولُ سَفِيهُنَا عَلَى ٱللَّهِ شَطَطًۭا",
+    tr:{ en:"'And our foolish one used to speak about Allah extravagant falsehood.'", ar:"وأنه كان يقول جاهلنا — يعني إبليس — على الله قولاً جائراً بعيداً عن الحق." },
+    tafsir:{ en:"Al-Razi: 'safeehunaa' is Iblis or every misguided leader among the Jinn who taught them shirk. 'Shatataa' — extreme transgression in speech. The Jinn now disown that ideology.", ar:"قال الرازي: «سفيهنا» إبليس أو كل زعيمٍ ضالٍّ من الجن علّمهم الشرك. «شططاً» — تجاوزاً شديداً في القول. والجنُّ يتبرّؤون الآن من ذلك الفكر." },
+    words:[ {ar:"سَفِيهُنَا", tl:"Safeehunaa", en:{en:"Our foolish one",ar:"جاهلنا — إبليس"}}, {ar:"شَطَطًۭا", tl:"Shatataa", en:{en:"Extravagant falsehood / transgression",ar:"قولاً جائراً متجاوزاً للحد"}} ] },
+
+  { n:5, ar:"وَأَنَّا ظَنَنَّآ أَن لَّن تَقُولَ ٱلْإِنسُ وَٱلْجِنُّ عَلَى ٱللَّهِ كَذِبًۭا",
+    tr:{ en:"'And indeed we thought that humans and Jinn would never speak a lie against Allah.'", ar:"وأنا كنا نظنّ أن الإنس والجن لن يكذبوا على الله بنسبة الصاحبة والولد إليه." },
+    tafsir:{ en:"Al-Qurtubi: the Jinn confess their old naivety — they assumed no creature would dare invent against Allah. Discovering the Qur'an's correction was a turning point in their belief.", ar:"قال القرطبي: يعترف الجنُّ بسذاجتهم السابقة — ظنّوا أن لا مخلوق يجرؤ على الافتراء على الله. كان اكتشاف تصحيح القرآن نقطة تحوّلٍ في إيمانهم." },
+    words:[ {ar:"ظَنَنَّآ", tl:"Zanannaa", en:{en:"We thought / supposed",ar:"ظننّا"}}, {ar:"ٱلْإِنسُ", tl:"Al-insu", en:{en:"Humankind",ar:"الإنس"}}, {ar:"كَذِبًۭا", tl:"Kadhiban", en:{en:"A lie",ar:"كذباً"}} ] },
+
+  { n:6, ar:"وَأَنَّهُۥ كَانَ رِجَالٌۭ مِّنَ ٱلْإِنسِ يَعُوذُونَ بِرِجَالٍۢ مِّنَ ٱلْجِنِّ فَزَادُوهُمْ رَهَقًۭا",
+    tr:{ en:"'And indeed there were men from humankind who used to take refuge in men from the Jinn — so they increased them in burden (and arrogance).'", ar:"وأنه كان أناسٌ من الإنس يستجيرون بأناسٍ من الجن في الجاهلية، فزادوهم إثماً وطغياناً." },
+    tafsir:{ en:"Al-Baghawi: in pre-Islamic Arabia, travelers passing a frightening valley would say 'I take refuge in the master of this valley from the foolish of his people'. The Jinn boasted: 'we now rule over the humans!' — this only increased the humans in fear and the Jinn in rebellion. Both lost.", ar:"قال البغوي: في الجاهلية كان المسافر إذا نزل وادياً موحشاً قال: «أعوذ بسيد هذا الوادي من سفهاء قومه». فيفخر الجنُّ: «الآن سُدنا الإنس!» فيزدادون فزعاً، وتزداد الجنُّ طغياناً. وكلاهما خاسر." },
+    words:[ {ar:"يَعُوذُونَ", tl:"Ya'uudhuuna", en:{en:"They take refuge",ar:"يستجيرون"}}, {ar:"رِجَالٍۢ", tl:"Rijaalin", en:{en:"Men",ar:"رجال"}}, {ar:"رَهَقًۭا", tl:"Rahaqaa", en:{en:"Burden / oppression / sin",ar:"إثماً وطغياناً"}} ] },
+
+  { n:7, ar:"وَأَنَّهُمْ ظَنُّوا۟ كَمَا ظَنَنتُمْ أَن لَّن يَبْعَثَ ٱللَّهُ أَحَدًۭا",
+    tr:{ en:"'And they thought, as you thought, that Allah would never raise anyone (as a messenger — or for Resurrection).'", ar:"وأن كفّار الإنس ظنّوا كما ظننتم أيها الجن أن الله لن يبعث أحداً رسولاً، أو أنه لن يبعث الموتى." },
+    tafsir:{ en:"Two readings: (a) Allah will not send another messenger after Isa; (b) Allah will not resurrect the dead. The Jinn now confess this denial was wrong — the Messenger ﷺ has come.", ar:"قراءتان: (أ) أن الله لن يبعث رسولاً بعد عيسى؛ (ب) أن الله لن يبعث الموتى. يعترف الجنُّ الآن أن هذا الإنكار خطأ — فقد جاء الرسول ﷺ." },
+    words:[ {ar:"ظَنُّوا۟", tl:"Zannuu", en:{en:"They thought",ar:"ظنّوا"}}, {ar:"يَبْعَثَ", tl:"Yab'atha", en:{en:"Raise / send / resurrect",ar:"يبعث رسولاً أو يحيي الموتى"}} ] },
+
+  { n:8, ar:"وَأَنَّا لَمَسْنَا ٱلسَّمَآءَ فَوَجَدْنَٰهَا مُلِئَتْ حَرَسًۭا شَدِيدًۭا وَشُهُبًۭا",
+    tr:{ en:"'And we sought to touch the sky and found it filled with mighty guards and flaming meteors.'", ar:"وأنا طلبنا خبر السماء كعادتنا فوجدناها قد مُلئت بحرسٍ شديد من الملائكة وشهبٍ محرقة." },
+    tafsir:{ en:"Al-Qurtubi: before the Prophet's mission, Jinn could eavesdrop on the lowest heaven. With his ﷺ coming, the sky was sealed: 'haras shadeed' (mighty angelic guards) and 'shuhub' (shooting stars). The unseen channel was shut to protect the revelation.", ar:"قال القرطبي: قبل بعثة النبي ﷺ كان الجنُّ يسترقون السمع من السماء الدنيا. ومع بعثته ﷺ خُتمت السماء: «حرسٌ شديد» من الملائكة، و«شهب» من النجوم. أُغلقت قناة الغيب لحماية الوحي." },
+    words:[ {ar:"لَمَسْنَا", tl:"Lamasnaa", en:{en:"We sought / touched",ar:"طلبنا خبرها"}}, {ar:"حَرَسًۭا", tl:"Harasaa", en:{en:"Guards (of angels)",ar:"حرساً من الملائكة"}}, {ar:"شُهُبًۭا", tl:"Shuhuban", en:{en:"Flaming meteors",ar:"نجوماً محرقة"}} ] },
+
+  { n:9, ar:"وَأَنَّا كُنَّا نَقْعُدُ مِنْهَا مَقَٰعِدَ لِلسَّمْعِ ۖ فَمَن يَسْتَمِعِ ٱلْـَٔانَ يَجِدْ لَهُۥ شِهَابًۭا رَّصَدًۭا",
+    tr:{ en:"'And we used to sit in stations to listen — but whoever tries to listen now finds a flame in wait for him.'", ar:"وأنا كنا نجلس في مواضع من السماء نسترق السمع، فمن يحاول الاستماع الآن يجد له شهاباً يَرصده ويحرقه." },
+    tafsir:{ en:"The change is sealed. 'Shihaaban rasada' — a meteor positioned in ambush for any eavesdropper. The unseen now belongs to revelation, not to whispering Jinn — and that is a mercy to humans.", ar:"التغيير محكم. «شهاباً رصداً» — شهابٌ موضوعٌ في الكمين لكل مسترقٍ للسمع. فالغيب الآن للوحي، لا لهمسات الجن — وذلك رحمةٌ بالإنس." },
+    words:[ {ar:"نَقْعُدُ", tl:"Naq'udu", en:{en:"We used to sit",ar:"كنا نجلس"}}, {ar:"مَقَٰعِدَ", tl:"Maqaa'ida", en:{en:"Stations / seats",ar:"مواضع للجلوس"}}, {ar:"شِهَابًۭا رَّصَدًۭا", tl:"Shihaaban rasadan", en:{en:"A flame in wait / ambush",ar:"شهاباً مُرصداً"}} ] },
+
+  { n:10, ar:"وَأَنَّا لَا نَدْرِىٓ أَشَرٌّ أُرِيدَ بِمَن فِى ٱلْأَرْضِ أَمْ أَرَادَ بِهِمْ رَبُّهُمْ رَشَدًۭا",
+    tr:{ en:"'And we do not know whether evil is intended for those on earth, or their Lord intends for them right guidance.'", ar:"وأنا لا نعلم — حين رأينا حراسة السماء — أشرٌّ يُراد بأهل الأرض أم خيرٌ ورشاد." },
+    tafsir:{ en:"Al-Razi: a moment of beautiful humility. The Jinn admit they do not know the unseen — the very secret the pagans imagined them to possess. Only Allah knows the outcome of His decrees.", ar:"قال الرازي: لحظةُ تواضعٍ جميلة. يعترف الجنُّ بأنهم لا يعلمون الغيب — السرّ ذاته الذي ظنّ المشركون أنه عندهم. لا يعلم عاقبة قضاء الله إلا الله." },
+    words:[ {ar:"نَدْرِىٓ", tl:"Nadrii", en:{en:"We know",ar:"نعلم"}}, {ar:"أَشَرٌّ", tl:"Asharrun", en:{en:"Evil?",ar:"أشرّ؟"}}, {ar:"رَشَدًۭا", tl:"Rashadaa", en:{en:"Right guidance",ar:"خيراً ورشاداً"}} ] },
+
+  { n:11, ar:"وَأَنَّا مِنَّا ٱلصَّٰلِحُونَ وَمِنَّا دُونَ ذَٰلِكَ ۖ كُنَّا طَرَآئِقَ قِدَدًۭا",
+    tr:{ en:"'And among us are the righteous, and among us are others below that — we are paths divided.'", ar:"وأنا منا الصالحون المؤمنون، ومنا دون ذلك من الكفار والفسّاق — كنا فرقاً مختلفة الأهواء." },
+    tafsir:{ en:"Al-Baghawi: the Jinn confess they are not one people but many — believers, disbelievers, righteous, sinful — just like humans. The verse silences anyone who treats them as a monolith.", ar:"قال البغوي: يعترف الجنُّ أنهم ليسوا أمةً واحدة بل فرقاً — مؤمنون، كفّار، صالحون، فسّاق — كالإنس تماماً. تُسكت الآية من يعاملهم ككتلةٍ واحدة." },
+    words:[ {ar:"ٱلصَّٰلِحُونَ", tl:"As-saalihuuna", en:{en:"The righteous",ar:"الصالحون"}}, {ar:"طَرَآئِقَ", tl:"Taraa'iqa", en:{en:"Paths / sects",ar:"فرقاً ومذاهب"}}, {ar:"قِدَدًۭا", tl:"Qidadaa", en:{en:"Diverse / divided",ar:"مختلفة الأهواء"}} ] },
+
+  { n:12, ar:"وَأَنَّا ظَنَنَّآ أَن لَّن نُّعْجِزَ ٱللَّهَ فِى ٱلْأَرْضِ وَلَن نُّعْجِزَهُۥ هَرَبًۭا",
+    tr:{ en:"'And we have realized that we can never thwart Allah on earth, nor can we escape Him by flight.'", ar:"وأنا أيقنّا أننا لن نُفلت الله في الأرض ولن نسبقه بالهرب في السماء." },
+    tafsir:{ en:"At-Tahrir wa at-Tanwir: 'thann' here means certain conviction. The Jinn — known for speed and stealth — confess that no flight can outrun Allah's power. A creature aware of its limits is closer to faith.", ar:"قال صاحب التحرير والتنوير: «الظن» هنا اليقين. يعترف الجنُّ — المعروفون بالسرعة والاختفاء — أن لا هرب يُفلت من قدرة الله. والمخلوق الواعي بحدوده أقرب إلى الإيمان." },
+    words:[ {ar:"نُّعْجِزَ", tl:"Nu'jiza", en:{en:"Thwart / outpace",ar:"نُفلت ونسبق"}}, {ar:"هَرَبًۭا", tl:"Haraban", en:{en:"By flight",ar:"بالهرب"}} ] },
+
+  { n:13, ar:"وَأَنَّا لَمَّا سَمِعْنَا ٱلْهُدَىٰٓ ءَامَنَّا بِهِۦ ۖ فَمَن يُؤْمِنۢ بِرَبِّهِۦ فَلَا يَخَافُ بَخْسًۭا وَلَا رَهَقًۭا",
+    tr:{ en:"'And when we heard the Guidance, we believed in it — and whoever believes in his Lord shall fear neither loss (of reward) nor injustice.'", ar:"وأنا لمّا سمعنا القرآن الهادي آمنّا به، فمن يؤمن بربه فلا يخاف نقصاً في حسناته ولا ظلماً بزيادةٍ في سيّئاته." },
+    tafsir:{ en:"Al-Qurtubi: 'bakhs' is the diminishing of one's good deeds; 'rahaq' is being burdened with another's sin. The believer's reward is safe both ways — full pay, no injustice.", ar:"قال القرطبي: «البخس» نقصُ الحسنات؛ و«الرهق» تحميل المؤمن سيّئات غيره. أجر المؤمن مأمونٌ من الجهتين — وفاءٌ بلا ظلم." },
+    words:[ {ar:"ٱلْهُدَىٰٓ", tl:"Al-hudaa", en:{en:"The Guidance (Qur'an)",ar:"الهدى — القرآن"}}, {ar:"بَخْسًۭا", tl:"Bakhsaa", en:{en:"Loss / diminution (of reward)",ar:"نقصاً في الحسنات"}}, {ar:"رَهَقًۭا", tl:"Rahaqaa", en:{en:"Injustice / burden",ar:"ظلماً وتحميل سيّئات"}} ] },
+
+  { n:14, ar:"وَأَنَّا مِنَّا ٱلْمُسْلِمُونَ وَمِنَّا ٱلْقَٰسِطُونَ ۖ فَمَنْ أَسْلَمَ فَأُو۟لَٰٓئِكَ تَحَرَّوْا۟ رَشَدًۭا",
+    tr:{ en:"'And among us are those who submit (Muslims), and among us are the unjust deviators — those who submit have sought right guidance.'", ar:"وأنا منا المسلمون المنقادون لأمر الله، ومنا الجائرون عن الحق — فمن أسلم فأولئك توخّوا طريق الرشاد." },
+    tafsir:{ en:"Al-Baghawi: 'qaasit' from q-s-t when used without prefix means the unjust (different from 'muqsit' — the just). The verse divides the Jinn into two camps and praises the submitters as 'truth-seekers'.", ar:"قال البغوي: «القاسط» من «قسط» مجرّداً يعني الجائر (بخلاف «المُقسط» — العادل). تُقسّم الآية الجنَّ إلى فريقين، وتمدح المسلمين بـ«طُلّاب الرشاد»." },
+    words:[ {ar:"ٱلْمُسْلِمُونَ", tl:"Al-muslimuuna", en:{en:"Those who submit",ar:"المنقادون لأمر الله"}}, {ar:"ٱلْقَٰسِطُونَ", tl:"Al-qaasituuna", en:{en:"The unjust deviators",ar:"الجائرون عن الحق"}}, {ar:"تَحَرَّوْا۟", tl:"Taharraw", en:{en:"Sought / aimed for",ar:"توخّوا وقصدوا"}} ] },
+
+  { n:15, ar:"وَأَمَّا ٱلْقَٰسِطُونَ فَكَانُوا۟ لِجَهَنَّمَ حَطَبًۭا",
+    tr:{ en:"'But as for the unjust deviators — they are firewood for Hell.'", ar:"وأما الجائرون عن الحق فيكونون وقوداً لجهنم تُسعَّر بهم." },
+    tafsir:{ en:"A short and terrifying verdict. Even creatures of fire are not safe from the Fire when they deviate. The 'qaasit' becomes 'hatab' — fuel — for the very element he was made from.", ar:"حكمٌ قصيرٌ مرعب. حتى مخلوقات النار لا تنجو من النار إذا انحرفت. يصبح «القاسط» «حطباً» — وقوداً للعنصر ذاته الذي خُلق منه." },
+    words:[ {ar:"حَطَبًۭا", tl:"Hatabaa", en:{en:"Firewood / fuel",ar:"وقوداً"}} ] },
+
+  { n:16, ar:"وَأَلَّوِ ٱسْتَقَٰمُوا۟ عَلَى ٱلطَّرِيقَةِ لَأَسْقَيْنَٰهُم مَّآءً غَدَقًۭا",
+    tr:{ en:"And had they remained steadfast on the Way, We would surely have given them water in abundance —", ar:"ولو استقام كفّار الإنس والجن على طريق الإسلام لأعطيناهم رزقاً واسعاً ومالاً كثيراً." },
+    tafsir:{ en:"Al-Qurtubi: a divine principle — istiqaamah on the path of truth opens the doors of rizq. Water is the metaphor of abundance: rain, crops, wealth, ease. Faith is not a barrier to prosperity; it is its key.", ar:"قال القرطبي: قاعدةٌ ربّانيّة — الاستقامة على الحق تفتح أبواب الرزق. والماء هنا كنايةٌ عن السَّعة: المطر، الزرع، المال، الرخاء. الإيمان ليس عائقاً للرخاء؛ بل مفتاحه." },
+    words:[ {ar:"ٱسْتَقَٰمُوا۟", tl:"Istaqaamuu", en:{en:"They remained steadfast",ar:"ثبتوا واستقاموا"}}, {ar:"ٱلطَّرِيقَةِ", tl:"At-tareeqati", en:{en:"The Way (of Islam)",ar:"طريقة الإسلام"}}, {ar:"مَّآءً غَدَقًۭا", tl:"Maa'an ghadaqaa", en:{en:"Water in abundance",ar:"ماءً كثيراً ورزقاً واسعاً"}} ] },
+
+  { n:17, ar:"لِّنَفْتِنَهُمْ فِيهِ ۚ وَمَن يُعْرِضْ عَن ذِكْرِ رَبِّهِۦ يَسْلُكْهُ عَذَابًۭا صَعَدًۭا",
+    tr:{ en:"That We might test them by it. And whoever turns away from the remembrance of his Lord, He will drive him into a rising punishment.", ar:"لنختبرهم بالنعمة كيف يشكرون. ومن يُعرض عن القرآن ذكر ربه يُدخله الله عذاباً شديداً متصاعداً." },
+    tafsir:{ en:"Al-Razi: the same blessing that follows istiqaamah is also a test — gratitude or arrogance? 'Adhaaban sa'ada' is a punishment that climbs, growing harder day by day on the heedless heart.", ar:"قال الرازي: النعمة التي تتبع الاستقامة اختبار — شكرٌ أم كِبر؟ و«عذاباً صعداً» عذابٌ يتصاعد، يشتدُّ يوماً بعد يوم على القلب الغافل." },
+    words:[ {ar:"لِّنَفْتِنَهُمْ", tl:"Linaftinahum", en:{en:"That We may test them",ar:"لنختبرهم"}}, {ar:"يُعْرِضْ", tl:"Yu'rid", en:{en:"Turns away",ar:"يُعرض ويتولّى"}}, {ar:"عَذَابًۭا صَعَدًۭا", tl:"Adhaaban sa'adaa", en:{en:"A rising / climbing punishment",ar:"عذاباً شديداً متصاعداً"}} ] },
+
+  { n:18, ar:"وَأَنَّ ٱلْمَسَٰجِدَ لِلَّهِ فَلَا تَدْعُوا۟ مَعَ ٱللَّهِ أَحَدًۭا",
+    tr:{ en:"And the mosques belong to Allah, so do not invoke anyone alongside Allah.", ar:"وأن المساجد خالصةٌ لله، فلا تعبدوا فيها أو في غيرها أحداً مع الله." },
+    tafsir:{ en:"Al-Baghawi: a pillar verse of pure worship. The mosques are Allah's exclusive property — no shirk in word, no shirk in du'a, no shirk in intention. The Jinn's testimony ends on the same note it began: 'we will never associate anyone with our Lord.'", ar:"قال البغوي: آيةٌ أصلٌ في إخلاص العبادة. المساجد ملكٌ خالص لله — لا شرك في قول، ولا شرك في دعاء، ولا شرك في نيّة. وتختم شهادة الجن بما بدأت: «ولن نشرك بربنا أحداً»." },
+    words:[ {ar:"ٱلْمَسَٰجِدَ", tl:"Al-masaajida", en:{en:"The mosques / places of prostration",ar:"المساجد"}}, {ar:"تَدْعُوا۟", tl:"Tad'uu", en:{en:"Invoke / call upon",ar:"تعبدوا وتدعوا"}} ] },
+
+  { n:19, ar:"وَأَنَّهُۥ لَمَّا قَامَ عَبْدُ ٱللَّهِ يَدْعُوهُ كَادُوا۟ يَكُونُونَ عَلَيْهِ لِبَدًۭا",
+    tr:{ en:"And when the slave of Allah stood up calling upon Him, they almost crowded upon him in throngs.", ar:"وأنه لمّا قام محمد ﷺ عبد الله يدعو ربه في صلاته بنخلة، كاد الجنُّ يتراكمون عليه ازدحاماً من شدة إصغائهم للقرآن." },
+    tafsir:{ en:"Al-Qurtubi: 'abdullaah' is the Prophet ﷺ — the highest title is 'slave of Allah'. 'Libada' is layer upon layer; the Jinn pressed in to hear the Qur'an. Some scholars say it refers to the disbelievers of Quraysh crowding to obstruct him. Both meanings exalt the message.", ar:"قال القرطبي: «عبد الله» هو النبي ﷺ — وأشرف الألقاب «عبد الله». و«لِبَدا» تراكمٌ بعضه على بعض؛ ازدحم الجنُّ ليسمعوا القرآن. وقيل: الكفّار من قريش ازدحموا لصدّه. وكلا المعنيين يُعلي شأن الرسالة." },
+    words:[ {ar:"عَبْدُ ٱللَّهِ", tl:"Abdullaah", en:{en:"The slave of Allah (Muhammad ﷺ)",ar:"عبد الله — النبي ﷺ"}}, {ar:"يَدْعُوهُ", tl:"Yad'uuhu", en:{en:"Calling upon Him",ar:"يدعو ربه"}}, {ar:"لِبَدًۭا", tl:"Libadaa", en:{en:"Crowded throngs / layers",ar:"متراكمين بعضهم على بعض"}} ] },
+
+  { n:20, ar:"قُلْ إِنَّمَآ أَدْعُوا۟ رَبِّى وَلَآ أُشْرِكُ بِهِۦٓ أَحَدًۭا",
+    tr:{ en:"Say: 'I only call upon my Lord, and I do not associate anyone with Him.'", ar:"قل يا محمد: إنما أعبد وأدعو ربي وحده، ولا أُشرك به أحداً." },
+    tafsir:{ en:"The Prophet's ﷺ personal creed in one sentence — exclusive call to Allah, exclusive rejection of partners. The mission is not 'a god' but 'my Lord, alone'.", ar:"عقيدة النبي ﷺ الشخصيّة في جملةٍ واحدة — دعوةٌ خالصة لله، ورفضٌ خالصٌ للشركاء. الرسالة ليست «إلهاً» بل «ربي وحده»." },
+    words:[ {ar:"أَدْعُوا۟", tl:"Ad'uu", en:{en:"I call upon",ar:"أعبد وأدعو"}}, {ar:"أُشْرِكُ", tl:"Ushriku", en:{en:"I associate",ar:"أجعل شريكاً"}} ] },
+
+  { n:21, ar:"قُلْ إِنِّى لَآ أَمْلِكُ لَكُمْ ضَرًّۭا وَلَا رَشَدًۭا",
+    tr:{ en:"Say: 'I have no power to bring harm or guidance to you.'", ar:"قل: إني لا أملك لكم أن أضرّكم ولا أن أُرشدكم — كل ذلك بيد الله." },
+    tafsir:{ en:"Al-Baghawi: even the Prophet ﷺ, the highest of creation, owns no harm or guidance for anyone. He is a messenger, not a deity. Every door of shirk through the prophets is closed here.", ar:"قال البغوي: حتى النبي ﷺ — أشرف الخلق — لا يملك ضرّاً ولا رشداً لأحد. هو رسول، لا إله. ويُغلق هنا كل بابٍ للشرك بالأنبياء." },
+    words:[ {ar:"أَمْلِكُ", tl:"Amliku", en:{en:"I have power over",ar:"أقدر على"}}, {ar:"ضَرًّۭا", tl:"Darran", en:{en:"Harm",ar:"ضرراً"}}, {ar:"رَشَدًۭا", tl:"Rashadaa", en:{en:"Guidance / right way",ar:"هدى ورشاداً"}} ] },
+
+  { n:22, ar:"قُلْ إِنِّى لَن يُجِيرَنِى مِنَ ٱللَّهِ أَحَدٌۭ وَلَنْ أَجِدَ مِن دُونِهِۦ مُلْتَحَدًا",
+    tr:{ en:"Say: 'Indeed none can protect me from Allah, nor can I find any refuge besides Him.'", ar:"قل: لن يحميني من عذاب الله أحدٌ إن عصيته، ولن أجد ملجأً غيره أهرب إليه." },
+    tafsir:{ en:"The fear of the Prophet ﷺ himself: if he ever disobeyed, nothing would protect him. The first one to bow before Allah's command is the Prophet — that is why his message has weight.", ar:"خوف النبي ﷺ نفسه: لو عصى لن يحميه شيء. أوّل من يخضع لأمر الله هو النبي — ولذلك لرسالته ثقل." },
+    words:[ {ar:"يُجِيرَنِى", tl:"Yujeeranii", en:{en:"Protect me / shelter me",ar:"يحميني"}}, {ar:"مُلْتَحَدًا", tl:"Multahadaa", en:{en:"A refuge / shelter",ar:"ملجأً"}} ] },
+
+  { n:23, ar:"إِلَّا بَلَٰغًۭا مِّنَ ٱللَّهِ وَرِسَٰلَٰتِهِۦ ۚ وَمَن يَعْصِ ٱللَّهَ وَرَسُولَهُۥ فَإِنَّ لَهُۥ نَارَ جَهَنَّمَ خَٰلِدِينَ فِيهَآ أَبَدًا",
+    tr:{ en:"'Except (my duty is) the conveying from Allah and His messages.' And whoever disobeys Allah and His Messenger — for him is the Fire of Hell, abiding therein forever.", ar:"لكن أملك تبليغ ما أرسلني الله به. ومن يعصِ الله ورسوله فإن له نار جهنم خالدين فيها أبداً." },
+    tafsir:{ en:"Al-Razi: the Prophet's ﷺ entire function is 'balaagh' — clear conveyance. Disobedience to him is disobedience to Allah, and the punishment is eternal Fire. Da'wah is mercy; ignoring it is calamity.", ar:"قال الرازي: وظيفة النبي ﷺ كلها «البلاغ» — التبليغ الواضح. ومعصيته معصيةُ الله، وعقوبتها نارٌ خالدة. الدعوة رحمة؛ وتجاهلها مصيبة." },
+    words:[ {ar:"بَلَٰغًۭا", tl:"Balaaghaa", en:{en:"Conveyance / delivery",ar:"تبليغاً"}}, {ar:"يَعْصِ", tl:"Ya'si", en:{en:"Disobeys",ar:"يخالف ويعصي"}}, {ar:"خَٰلِدِينَ", tl:"Khaalideena", en:{en:"Abiding eternally",ar:"مقيمين دائماً"}} ] },
+
+  { n:24, ar:"حَتَّىٰٓ إِذَا رَأَوْا۟ مَا يُوعَدُونَ فَسَيَعْلَمُونَ مَنْ أَضْعَفُ نَاصِرًۭا وَأَقَلُّ عَدَدًۭا",
+    tr:{ en:"Until, when they see what they are promised, they will know who is weakest in helpers and fewest in number.", ar:"حتى إذا شاهد الكفّار يوم القيامة العذاب الذي وُعدوا به، عرفوا حينئذٍ من هو أضعف ناصراً وأقلّ عدداً — هم أم المؤمنون." },
+    tafsir:{ en:"The pagans of Makkah used to mock the Muslims' small numbers. The verse answers: wait until the appointed Day — then you will see who is truly few and weak. The score is settled at the destination, not on the road.", ar:"كان مشركو مكة يسخرون من قلة عدد المسلمين. والآية تجيب: انتظروا اليوم الموعود — حينئذٍ تعلمون من هو الأقل والأضعف حقاً. ويُحسم الحساب عند الوصول، لا في الطريق." },
+    words:[ {ar:"يُوعَدُونَ", tl:"Yuu'aduuna", en:{en:"They are promised",ar:"يُوعدون"}}, {ar:"نَاصِرًۭا", tl:"Naasiraa", en:{en:"Helper",ar:"ناصراً"}}, {ar:"عَدَدًۭا", tl:"Adadaa", en:{en:"In number",ar:"عدداً"}} ] },
+
+  { n:25, ar:"قُلْ إِنْ أَدْرِىٓ أَقَرِيبٌۭ مَّا تُوعَدُونَ أَمْ يَجْعَلُ لَهُۥ رَبِّىٓ أَمَدًۭا",
+    tr:{ en:"Say: 'I do not know whether what you are promised is near, or whether my Lord has set for it a distant term.'", ar:"قل: لا أعلم أقريبٌ ما تُوعدون من العذاب أم بعيد المدى." },
+    tafsir:{ en:"Even the Prophet ﷺ does not know the timing of the Hour or the punishment. The unseen of time belongs to Allah alone. Whoever claims a date is lying.", ar:"حتى النبي ﷺ لا يعلم وقت الساعة ولا وقت العذاب. غيب الزمن لله وحده. وكل من يحدّد تاريخاً فهو كاذب." },
+    words:[ {ar:"أَدْرِىٓ", tl:"Adrii", en:{en:"I know",ar:"أعلم"}}, {ar:"أَقَرِيبٌۭ", tl:"Aqareebun", en:{en:"Is it near?",ar:"أهو قريب؟"}}, {ar:"أَمَدًۭا", tl:"Amadaa", en:{en:"A long term / appointed time",ar:"مدّة طويلة"}} ] },
+
+  { n:26, ar:"عَٰلِمُ ٱلْغَيْبِ فَلَا يُظْهِرُ عَلَىٰ غَيْبِهِۦٓ أَحَدًا",
+    tr:{ en:"He is the Knower of the Unseen, and He reveals His unseen to no one —", ar:"الله هو عالم الغيب وحده، فلا يُطلع على غيبه أحداً من خلقه." },
+    tafsir:{ en:"Al-Qurtubi: an absolute statement — Allah alone owns the unseen. Fortune-tellers, sorcerers, astrologers, palm-readers, all are exposed. The Qur'an forbids anyone but Allah to claim the keys of the unseen.", ar:"قال القرطبي: تقريرٌ مطلق — الله وحده يملك الغيب. ويُكشف الكهنة والسحرة والمنجّمون وقارئو الكف. ويُحرّم القرآن على أحد سوى الله أن يدّعي مفاتيح الغيب." },
+    words:[ {ar:"عَٰلِمُ ٱلْغَيْبِ", tl:"Aalimu al-ghaybi", en:{en:"Knower of the unseen",ar:"عالم الغيب"}}, {ar:"يُظْهِرُ", tl:"Yuzhiru", en:{en:"He reveals / makes apparent",ar:"يُطلع ويكشف"}} ] },
+
+  { n:27, ar:"إِلَّا مَنِ ٱرْتَضَىٰ مِن رَّسُولٍۢ فَإِنَّهُۥ يَسْلُكُ مِن بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِۦ رَصَدًۭا",
+    tr:{ en:"Except a messenger whom He has chosen — then indeed He sends before him and behind him a guard,", ar:"إلا مَن اصطفاه من رسلٍ يطلعهم على بعض غيبه — فإنه يُسيّر بين يديه ومن خلفه ملائكةً يحرسون الوحي من تدخّل الشياطين." },
+    tafsir:{ en:"Al-Baghawi: the exception is the messengers. Allah may disclose to them a portion of the unseen as a sign — then surrounds the revelation with angelic guards to keep Satan from injecting any falsehood. The Qur'an is sealed in transit and on arrival.", ar:"قال البغوي: الاستثناء للرسل. قد يُطلعهم الله على شيءٍ من الغيب آيةً لهم — ثم يحيط الوحي بحرسٍ من الملائكة يمنع الشيطان من إدخال أي زائفٍ فيه. القرآن مختومٌ في الطريق وعند الوصول." },
+    words:[ {ar:"ٱرْتَضَىٰ", tl:"Irtadaa", en:{en:"He chose / was pleased with",ar:"اصطفى وارتضى"}}, {ar:"رَّسُولٍۢ", tl:"Rasuulin", en:{en:"A messenger",ar:"رسولاً"}}, {ar:"رَصَدًۭا", tl:"Rasadaa", en:{en:"A guard / watcher",ar:"ملائكةً يحرسون"}} ] },
+
+  { n:28, ar:"لِّيَعْلَمَ أَن قَدْ أَبْلَغُوا۟ رِسَٰلَٰتِ رَبِّهِمْ وَأَحَاطَ بِكُلِّ شَىْءٍۢ عَدَدًۭا",
+    tr:{ en:"That He may know that they have indeed delivered the messages of their Lord — and He encompasses all that is with them and has numbered every thing.", ar:"ليعلم النبي ﷺ أن جبريل والملائكة قد بلّغوا رسالات الله كاملةً، وأن الله قد أحاط بكل شيء علماً، وأحصى كل شيء عدداً." },
+    tafsir:{ en:"Al-Razi: the closing seal of the surah. The chain of revelation is verified, the angelic guards confirm full delivery, and Allah Himself encompasses every detail by number. Nothing is missing, nothing is added. The Qur'an reaches us exactly as it was sent.", ar:"قال الرازي: ختام السورة. تُتحقّق سلسلة الوحي، ويُشهد الحرس من الملائكة بكمال البلاغ، ويُحيط الله ذاته بكل تفصيلٍ عدداً. لا نقص، ولا زيادة. يصلنا القرآن كما أُنزل تماماً." },
+    words:[ {ar:"أَبْلَغُوا۟", tl:"Ablaghuu", en:{en:"They have delivered",ar:"بلّغوا"}}, {ar:"رِسَٰلَٰتِ", tl:"Risaalaati", en:{en:"Messages",ar:"رسالات"}}, {ar:"أَحَاطَ", tl:"Ahaata", en:{en:"He encompasses",ar:"أحاط علماً"}}, {ar:"عَدَدًۭا", tl:"Adadaa", en:{en:"By number",ar:"عدداً"}} ] },
+
+];
+
+const STORY = [
+  {t:{en:"After Ta'if — The Night at Nakhlah",ar:"بعد الطائف — ليلة نخلة"}, d:{en:"After the Prophet ﷺ returned heartbroken from Ta'if, where its people stoned him, he stopped at the valley of Nakhlah and stood in the night praying Fajr, reciting the Qur'an. A party of Jinn from Nasibeen, passing through, heard the recitation — and were stunned. Their hearts were captured by the Book in a single night. Surah Al-Jinn is the divine report of that meeting.",ar:"بعد عودته ﷺ مكلوماً من الطائف حيث رماه أهلها بالحجارة، نزل بوادي نخلة وقام في الليل يصلي الفجر يقرأ القرآن. مرّ نفرٌ من جن نصيبين، فاستمعوا للقراءة — فدُهشوا. سُبيت قلوبهم بالكتاب في ليلةٍ واحدة. وسورة الجن هي البلاغ الإلهي لذلك اللقاء."}, tags:{en:["Makkah","Nakhlah","Return from Ta'if"], ar:["مكة","نخلة","الرجوع من الطائف"]}},
+  {t:{en:"The Name: Al-Jinn",ar:"اسمها: الجن"}, d:{en:"The surah takes its name from the very first verse: 'a party of the Jinn listened…'. It is the only Quranic chapter whose entire narrative is told from the mouths of the Jinn themselves — twelve verses in their own voice (1–14), then Allah's commentary, then the Prophet's ﷺ creed (20–23), then the verdict on the unseen.",ar:"أخذت السورة اسمها من أول آيةٍ منها: «استمع نفرٌ من الجن…». وهي السورة الوحيدة في القرآن التي تُروى حكايتها كاملةً من ألسنة الجنّ أنفسهم — اثنتا عشرة آية بصوتهم (١–١٤)، ثم تعليق الله، ثم عقيدة النبي ﷺ (٢٠–٢٣)، ثم الحكم في الغيب."}, tags:{en:["Al-Jinn","Name","First-Person Witness"], ar:["الجن","الاسم","شهادة المتكلم"]}},
+  {t:{en:"'Indeed We Have Heard a Wonderful Qur'an'",ar:"«إنّا سمعنا قرآناً عجباً»"}, d:{en:"Verses 1–2 open with the Jinn's testimony: 'a wonderful recitation that guides to right conduct — so we believed in it, and we will never associate anyone with our Lord.' The first sentence of their faith is Tawheed; the second is rejection of shirk. There is no other foundation.",ar:"تفتتح الآيات ١–٢ بشهادة الجن: «قرآناً عجباً يهدي إلى الرشد — فآمنّا به، ولن نشرك بربنا أحداً». أول جملة من إيمانهم توحيد؛ وثانيتها رفض الشرك. لا أساس آخر."}, tags:{en:["Tawheed","Faith","First Words"], ar:["توحيد","إيمان","أول الكلمات"]}},
+  {t:{en:"Refutation of Consort and Child",ar:"نفي الصاحبة والولد"}, d:{en:"Verses 3–5 are a powerful refutation of every false doctrine that ascribes a wife or a son to Allah. The Jinn — beings of fire — testify: 'Exalted is the majesty of our Lord — He has taken no consort, nor any son.' Their old fool (Iblis or a misguiding leader) had taught them otherwise; the Qur'an cured them in one verse.",ar:"الآيات ٣–٥ ردٌّ قويٌّ على كل عقيدةٍ تنسب لله زوجةً أو ولداً. يشهد الجنُّ — مخلوقات النار: «وأنه تعالى جدُّ ربنا ما اتّخذ صاحبةً ولا ولداً». كان سفيههم القديم (إبليس أو زعيمٌ مضلّ) قد علّمهم خلاف ذلك؛ فشفاهم القرآن في آية."}, tags:{en:["Pure Tawheed","Against Trinity","No Son"], ar:["التوحيد الخالص","ضد التثليث","لا ولد"]}},
+  {t:{en:"The Pagans Who Took Refuge in the Jinn",ar:"المشركون الذين استعاذوا بالجن"}, d:{en:"Verse 6 exposes a Jaahili habit: travelers entering a frightful valley would say 'I take refuge in the master of this valley from the foolish of his people.' The Jinn would hear, swell with pride, and increase the humans in fear and themselves in arrogance — both sides ruined. Take refuge in Allah alone.",ar:"تكشف الآية ٦ عن عادةٍ جاهلية: كان المسافر إذا نزل وادياً موحشاً قال «أعوذ بسيد هذا الوادي من سفهاء قومه». فيسمعها الجنُّ فيفخرون، فيزداد الإنس فزعاً وتزداد الجنُّ كبراً — وكلاهما خاسر. فاستعذ بالله وحده."}, tags:{en:["Shirk in Refuge","Jaahiliyyah","Astaghfirullah"], ar:["شرك الاستعاذة","الجاهلية","أستعيذ بالله"]}},
+  {t:{en:"The Sky Sealed by Shooting Stars",ar:"إحكام السماء بالشهب"}, d:{en:"Verses 8–9 narrate the moment the Jinn discovered the heavens had been newly fortified: 'mighty guards and flaming meteors'. They used to take stations to eavesdrop on the angels and pass scraps to the soothsayers. With the Prophet's ﷺ coming, the channel was sealed. The age of fortune-telling ended.",ar:"تروي الآيات ٨–٩ لحظة اكتشاف الجنّ تحصين السماء حديثاً: «حرساً شديداً وشهباً». كانوا يتّخذون مواضع يسترقون السمع من الملائكة وينقلون الكلمات إلى الكهنة. ومع بعثة النبي ﷺ خُتمت القناة. وانتهى عصر الكهانة."}, tags:{en:["Guarded Sky","End of Soothsaying","Shihab"], ar:["تحصين السماء","نهاية الكهانة","شهاب"]}},
+  {t:{en:"The Prophet's Creed and the Knower of the Unseen",ar:"عقيدة النبي ﷺ وعالم الغيب"}, d:{en:"Verses 20–28 close the surah with the personal creed of the Prophet ﷺ: 'I only call upon my Lord — I have no power to bring you harm or guidance — none can protect me from Allah — my duty is only to convey.' Then the absolute verdict: only Allah knows the unseen, except a messenger He chooses, around whom He places angelic guards. The Qur'an is sealed in transit and on arrival.",ar:"تختم الآيات ٢٠–٢٨ السورة بعقيدة النبي ﷺ الشخصية: «إنما أدعو ربي — لا أملك لكم ضرّاً ولا رشداً — لن يُجيرني من الله أحد — إنما عليّ البلاغ». ثم الحكم المطلق: لا يعلم الغيب إلا الله، إلا رسولاً اصطفاه يحرسه بملائكة. والقرآن مختومٌ في الطريق وعند الوصول."}, tags:{en:["Prophet's Creed","Knower of Unseen","Balaagh"], ar:["عقيدة النبي","عالم الغيب","البلاغ"]}},
+];
+
+const CHARS = [
+  {e:"👥", role:{en:"The Party of Jinn — Witnesses to the Qur'an",ar:"نفرٌ من الجن — شهودٌ على القرآن"}, name:{en:"From Nasibeen — Listened, Believed, and Returned as Callers",ar:"من نصيبين — استمعوا، آمنوا، ورجعوا دعاة"}, d:{en:"Verses 1–15: a party of Jinn passed by Nakhlah while the Prophet ﷺ recited Fajr. They were stunned by the Qur'an, embraced faith in a single sitting, returned to their people, and spoke fifteen verses of pure Tawheed. The Qur'an proved itself to a different species before all of Quraysh.",ar:"الآيات ١–١٥: مرّ نفرٌ من الجن بنخلة بينما كان النبي ﷺ يصلي الفجر. أدهشهم القرآن، فدخلوا الإيمان في مجلسٍ واحد، ورجعوا إلى قومهم، فتكلّموا بخمس عشرة آيةً من التوحيد الخالص. أثبت القرآن نفسه لجنسٍ آخر قبل كل قريش."}},
+  {e:"🕌", role:{en:"The Prophet ﷺ — 'Abdullah' Who Stood in Prayer",ar:"النبي ﷺ — «عبد الله» القائم في الصلاة"}, name:{en:"The Highest Title: 'Slave of Allah'",ar:"أشرف الألقاب: «عبد الله»"}, d:{en:"Verse 19: 'And when the slave of Allah stood up calling upon Him…' The highest title given to the Prophet ﷺ in the Qur'an is 'abdullaah' — slave of Allah. In the moment the Jinn crowded to hear him, he was not 'the king of Arabs', not 'the genius', but 'the slave of his Lord'. The Qur'an's reverence flows from that word.",ar:"الآية ١٩: «وأنه لمّا قام عبد الله يدعوه…». أعلى لقبٍ في القرآن للنبي ﷺ هو «عبد الله». في لحظة ازدحام الجن لسماعه، لم يكن «ملك العرب»، ولا «العبقري»، بل «عبد ربه». ومن هذه الكلمة يفيض هيبة القرآن."}},
+  {e:"😈", role:{en:"The 'Safeeh' — The Foolish One Among the Jinn",ar:"السفيه — جاهل الجن"}, name:{en:"Iblis (or Any Misguiding Leader) Who Taught Them Shirk",ar:"إبليس (أو كل زعيمٍ مضلّ) الذي علّمهم الشرك"}, d:{en:"Verse 4: the Jinn confess: 'our foolish one used to speak about Allah extravagant falsehood.' Every misguided people has a 'safeeh' — a charismatic teacher who normalized shirk. The first step of the Jinn's tawbah was to name and disown him.",ar:"الآية ٤: يعترف الجن: «وأنه كان يقول سفيهنا على الله شططاً». لكل قومٍ ضالٍّ «سفيهٌ» — معلّمٌ مؤثّر طبّع الشرك. وأول خطوةٍ في توبة الجن كان تسميته والبراءة منه."}},
+  {e:"🌌", role:{en:"The Eavesdroppers of the Sky",ar:"مسترقو السمع من السماء"}, name:{en:"The Jinn Who Used to Carry Scraps to Soothsayers",ar:"الجنُّ الذين كانوا ينقلون الكلمات إلى الكهنة"}, d:{en:"Verses 8–9: a confession of the old job that ended with the Prophet's ﷺ mission. They used to sit in stations to listen to the angels, then drop fragments into the ears of the kuhhaan — now any eavesdropper is met by a flame in ambush. The age of fortune-telling has closed.",ar:"الآيات ٨–٩: اعترافٌ بالوظيفة القديمة التي انتهت ببعثة النبي ﷺ. كانوا يجلسون في مواضع يسمعون الملائكة، ثم يلقون الكلمات في آذان الكهنة — والآن يُلاقى كل مسترقٍ بشهابٍ في الكمين. وانتهى عصر الكهانة."}},
+  {e:"💫", role:{en:"The 'Haras Shadeed' and 'Shuhub'",ar:"«الحرس الشديد» و«الشهب»"}, name:{en:"The Angelic Guards and Shooting Stars",ar:"الحرس الملائكي والنجوم المحرقة"}, d:{en:"Verse 8: the heavens were 'filled with mighty guards and flaming meteors'. The shooting stars children see at night are part of the Qur'an's protection system — a visible sign of an invisible mercy: the revelation reached us pure.",ar:"الآية ٨: مُلئت السماء «حرساً شديداً وشهباً». والشهب التي يراها الأطفال ليلاً جزءٌ من منظومة حماية القرآن — علامةٌ مرئيّة لرحمةٍ غير مرئيّة: وصل إلينا الوحي نقياً."}},
+  {e:"🤲", role:{en:"The Masaajid — Exclusive Property of Allah",ar:"المساجد — ملكٌ خالص لله"}, name:{en:"'And the Mosques Belong to Allah — Do Not Invoke Anyone With Him'",ar:"«وأن المساجد لله فلا تدعوا مع الله أحداً»"}, d:{en:"Verse 18: a pillar verse of every masjid. The mosques are reserved for Allah alone — no shrines, no graves invoked, no intermediaries, no shared worship. The Jinn's testimony to Tawheed closes with this rule for humans.",ar:"الآية ١٨: آيةٌ أصلٌ في كل مسجد. المساجد لله وحده — لا أضرحة، لا قبور تُدعى، لا وسطاء، لا عبادة مشتركة. وتُختم شهادة الجن للتوحيد بهذه القاعدة للإنس."}},
+  {e:"🛡️", role:{en:"The Angelic Guard Around the Messengers",ar:"الحرس الملائكي حول الرسل"}, name:{en:"'Before Him and Behind Him a Guard'",ar:"«مِن بين يديه ومن خلفه رصداً»"}, d:{en:"Verses 26–28: only a chosen messenger may glimpse a portion of the unseen — and even then, angels are placed before and behind him to keep Satan from injecting anything false into the revelation. Allah encompasses every detail by number. The Qur'an you read today is exact.",ar:"الآيات ٢٦–٢٨: لا يُطلع على الغيب إلا رسولٌ مصطفى — ومع ذلك توضع ملائكةٌ من بين يديه ومن خلفه لتمنع الشيطان من إدخال زائفٍ في الوحي. أحاط الله بكل تفصيلٍ عدداً. والقرآن الذي تقرؤه اليوم محكمٌ تماماً."}},
+];
+
+const VOCAB = [
+  {ar:"أُوحِىَ", tl:"Uuhiya", m:{en:"It has been revealed",ar:"أُوحي"}, n:{en:"Passive of w-h-y — revealed (to the Prophet).",ar:"مبني للمجهول من «وحى» — أُوحي إلى النبي."}},
+  {ar:"نَفَرٌۭ", tl:"Nafarun", m:{en:"A party / small group",ar:"جماعة بين الثلاثة والعشرة"}, n:{en:"A group between three and ten.",ar:"جماعةٌ بين الثلاثة والعشرة."}},
+  {ar:"ٱلْجِنِّ", tl:"Al-jinni", m:{en:"The Jinn",ar:"الجن"}, n:{en:"From j-n-n — hidden. The Jinn are the unseen race of fire.",ar:"من جذر «جنّ» — الخفاء. الجنّ جنسٌ خفيٌّ من نار."}},
+  {ar:"قُرْءَانًا عَجَبًۭا", tl:"Qur'aanan ajaban", m:{en:"A wonderful recitation",ar:"قرآناً عجيباً بديعاً"}, n:{en:"Wondrous in eloquence, meaning, and effect on hearts.",ar:"بديعٌ في الفصاحة والمعنى والأثر في القلوب."}},
+  {ar:"يَهْدِىٓ", tl:"Yahdee", m:{en:"It guides",ar:"يدلّ ويرشد"}, n:{en:"Leads to the right path.",ar:"يدلّ على الصراط المستقيم."}},
+  {ar:"ٱلرُّشْدِ", tl:"Ar-rushdi", m:{en:"Right conduct / guidance",ar:"الصواب والهدى"}, n:{en:"Right conduct in belief and action.",ar:"الصواب في الاعتقاد والعمل."}},
+  {ar:"نُّشْرِكَ", tl:"Nushrika", m:{en:"We associate (partners)",ar:"نجعل شريكاً"}, n:{en:"To set up a partner with Allah — the gravest sin.",ar:"جعل شريكٍ مع الله — أعظم الذنوب."}},
+  {ar:"جَدُّ", tl:"Jaddu", m:{en:"Majesty / grandeur",ar:"عظمة وجلال"}, n:{en:"The majesty and grandeur of Allah.",ar:"عظمة الله وجلاله."}},
+  {ar:"صَٰحِبَةًۭ", tl:"Saahibatan", m:{en:"A consort / wife",ar:"زوجة"}, n:{en:"A wife — definitively denied of Allah.",ar:"زوجة — يُنفى ذلك عن الله قطعاً."}},
+  {ar:"وَلَدًۭا", tl:"Waladan", m:{en:"A son / child",ar:"ولداً"}, n:{en:"A child — denied of Allah; refutes Trinity and pagan myths.",ar:"ولداً — يُنفى عن الله؛ وفيه ردٌّ على التثليث والأساطير الوثنية."}},
+  {ar:"سَفِيهُنَا", tl:"Safeehunaa", m:{en:"Our foolish one",ar:"جاهلنا — إبليس"}, n:{en:"The foolish one among them — Iblis or a misguiding leader.",ar:"الجاهل فيهم — إبليس أو زعيمٌ مضلّ."}},
+  {ar:"شَطَطًۭا", tl:"Shatataa", m:{en:"Extravagant falsehood / transgression",ar:"قولاً جائراً متجاوزاً للحد"}, n:{en:"Extreme transgression in speech against Allah.",ar:"تجاوزٌ شديد في القول على الله."}},
+  {ar:"ظَنَنَّآ", tl:"Zanannaa", m:{en:"We thought / supposed",ar:"ظننّا"}, n:{en:"We thought — sometimes naive supposition.",ar:"ظننّا — يحتمل السذاجة."}},
+  {ar:"ٱلْإِنسُ", tl:"Al-insu", m:{en:"Humankind",ar:"الإنس"}, n:{en:"Humankind — paired with Jinn throughout the surah.",ar:"الإنس — يُقرَن بالجن في السورة كلها."}},
+  {ar:"كَذِبًۭا", tl:"Kadhiban", m:{en:"A lie",ar:"كذباً"}, n:{en:"A lie — especially the lie of attributing a child to Allah.",ar:"كذباً — خاصةً كذب نسبة الولد إلى الله."}},
+  {ar:"يَعُوذُونَ", tl:"Ya'uudhuuna", m:{en:"They take refuge",ar:"يستجيرون"}, n:{en:"To seek protection — exclusively for Allah.",ar:"طلب الحماية — لا تكون إلا بالله."}},
+  {ar:"رِجَالٍۢ", tl:"Rijaalin", m:{en:"Men",ar:"رجال"}, n:{en:"Men — used for both humans and Jinn in this verse.",ar:"رجال — تُستعمل للإنس والجن في هذه الآية."}},
+  {ar:"رَهَقًۭا", tl:"Rahaqaa", m:{en:"Burden / oppression / sin",ar:"إثماً وطغياناً"}, n:{en:"Burden of sin and arrogance.",ar:"حمل الإثم والطغيان."}},
+  {ar:"ظَنُّوا۟", tl:"Zannuu", m:{en:"They thought",ar:"ظنّوا"}, n:{en:"They thought — referring to the deniers' wrong assumption.",ar:"ظنّوا — ظنّ المنكرين الخاطئ."}},
+  {ar:"يَبْعَثَ", tl:"Yab'atha", m:{en:"Raise / send / resurrect",ar:"يبعث رسولاً أو يحيي الموتى"}, n:{en:"Two meanings: send a messenger / resurrect the dead.",ar:"معنيان: يرسل رسولاً / يحيي الموتى."}},
+  {ar:"لَمَسْنَا", tl:"Lamasnaa", m:{en:"We sought / touched",ar:"طلبنا خبرها"}, n:{en:"Lit. 'touched' — figurative for seeking news.",ar:"حرفياً «لمس» — كنايةً عن طلب الخبر."}},
+  {ar:"حَرَسًۭا", tl:"Harasaa", m:{en:"Guards (of angels)",ar:"حرساً من الملائكة"}, n:{en:"Guards — angels stationed to protect the heavens.",ar:"حرس — ملائكةٌ موكلون بحماية السماء."}},
+  {ar:"شُهُبًۭا", tl:"Shuhuban", m:{en:"Flaming meteors",ar:"نجوماً محرقة"}, n:{en:"Flaming meteors — shooting stars that burn eavesdroppers.",ar:"شهبٌ محرقة — نجومٌ تحرق مسترقي السمع."}},
+  {ar:"نَقْعُدُ", tl:"Naq'udu", m:{en:"We used to sit",ar:"كنا نجلس"}, n:{en:"Stationing oneself — for the purpose of eavesdropping.",ar:"الجلوس في مرصدٍ — لاسترقاق السمع."}},
+  {ar:"مَقَٰعِدَ", tl:"Maqaa'ida", m:{en:"Stations / seats",ar:"مواضع للجلوس"}, n:{en:"Seats / stations near the lowest heaven.",ar:"مواضع جلوسٍ قرب السماء الدنيا."}},
+  {ar:"شِهَابًۭا رَّصَدًۭا", tl:"Shihaaban rasadan", m:{en:"A flame in wait / ambush",ar:"شهاباً مُرصداً"}, n:{en:"A meteor lying in ambush for any new eavesdropper.",ar:"شهابٌ في كمينٍ لكل مسترقٍ جديد."}},
+  {ar:"نَدْرِىٓ", tl:"Nadrii", m:{en:"We know",ar:"نعلم"}, n:{en:"We know — used here in negation: we do NOT know.",ar:"نعلم — تأتي هنا في النفي: لا نعلم."}},
+  {ar:"أَشَرٌّ", tl:"Asharrun", m:{en:"Evil?",ar:"أشرّ؟"}, n:{en:"Interrogative: 'is evil intended?'",ar:"استفهام: «أشرٌّ يُراد؟»"}},
+  {ar:"رَشَدًۭا", tl:"Rashadaa", m:{en:"Right guidance",ar:"خيراً ورشاداً"}, n:{en:"Right guidance — the opposite of harm.",ar:"الرشاد — ضدّ الشرّ."}},
+  {ar:"ٱلصَّٰلِحُونَ", tl:"As-saalihuuna", m:{en:"The righteous",ar:"الصالحون"}, n:{en:"The righteous — believers among Jinn and humans alike.",ar:"الصالحون — المؤمنون من الجن والإنس."}},
+  {ar:"طَرَآئِقَ", tl:"Taraa'iqa", m:{en:"Paths / sects",ar:"فرقاً ومذاهب"}, n:{en:"Paths / sects — multiple denominations.",ar:"طرقٌ ومذاهبُ مختلفة."}},
+  {ar:"قِدَدًۭا", tl:"Qidadaa", m:{en:"Diverse / divided",ar:"مختلفة الأهواء"}, n:{en:"Cut into pieces — diverse, divided.",ar:"مقطّعةٌ متفرّقة — مختلفة."}},
+  {ar:"نُّعْجِزَ", tl:"Nu'jiza", m:{en:"Thwart / outpace",ar:"نُفلت ونسبق"}, n:{en:"To incapacitate / escape from.",ar:"الإفلات والتفلّت."}},
+  {ar:"هَرَبًۭا", tl:"Haraban", m:{en:"By flight",ar:"بالهرب"}, n:{en:"By flight — fleeing into the heavens.",ar:"بالهرب — الفرار في السماء."}},
+  {ar:"ٱلْهُدَىٰٓ", tl:"Al-hudaa", m:{en:"The Guidance (Qur'an)",ar:"الهدى — القرآن"}, n:{en:"The Guidance — one of the Qur'an's names.",ar:"الهدى — اسمٌ من أسماء القرآن."}},
+  {ar:"بَخْسًۭا", tl:"Bakhsaa", m:{en:"Loss / diminution (of reward)",ar:"نقصاً في الحسنات"}, n:{en:"Diminution of good deeds.",ar:"نقصٌ في الحسنات."}},
+  {ar:"ٱلْمُسْلِمُونَ", tl:"Al-muslimuuna", m:{en:"Those who submit",ar:"المنقادون لأمر الله"}, n:{en:"Those who submit fully to Allah.",ar:"المنقادون لأمر الله بالكلّيّة."}},
+  {ar:"ٱلْقَٰسِطُونَ", tl:"Al-qaasituuna", m:{en:"The unjust deviators",ar:"الجائرون عن الحق"}, n:{en:"From q-s-t (without prefix) — unjust deviators.",ar:"من «قسط» (مجرّداً) — الجائرون."}},
+  {ar:"تَحَرَّوْا۟", tl:"Taharraw", m:{en:"Sought / aimed for",ar:"توخّوا وقصدوا"}, n:{en:"Sought with deliberate intent.",ar:"قصدوا واجتهدوا في طلب الشيء."}},
+  {ar:"حَطَبًۭا", tl:"Hatabaa", m:{en:"Firewood / fuel",ar:"وقوداً"}, n:{en:"Firewood — fuel of Hell.",ar:"حطباً — وقود جهنم."}},
+  {ar:"ٱسْتَقَٰمُوا۟", tl:"Istaqaamuu", m:{en:"They remained steadfast",ar:"ثبتوا واستقاموا"}, n:{en:"Steadfastness on the straight path.",ar:"الثبات على الصراط المستقيم."}},
+  {ar:"ٱلطَّرِيقَةِ", tl:"At-tareeqati", m:{en:"The Way (of Islam)",ar:"طريقة الإسلام"}, n:{en:"The Way of Islam.",ar:"طريقة الإسلام."}},
+  {ar:"مَّآءً غَدَقًۭا", tl:"Maa'an ghadaqaa", m:{en:"Water in abundance",ar:"ماءً كثيراً ورزقاً واسعاً"}, n:{en:"Abundant water — metaphor for ample sustenance.",ar:"ماءً كثيراً — كنايةً عن سَعة الرزق."}},
+  {ar:"لِّنَفْتِنَهُمْ", tl:"Linaftinahum", m:{en:"That We may test them",ar:"لنختبرهم"}, n:{en:"That We may test them — every blessing is a test.",ar:"لنختبرهم — كل نعمةٍ ابتلاء."}},
+  {ar:"يُعْرِضْ", tl:"Yu'rid", m:{en:"Turns away",ar:"يُعرض ويتولّى"}, n:{en:"Turns away from the remembrance.",ar:"يُعرض عن الذكر."}},
+  {ar:"عَذَابًۭا صَعَدًۭا", tl:"Adhaaban sa'adaa", m:{en:"A rising / climbing punishment",ar:"عذاباً شديداً متصاعداً"}, n:{en:"A climbing punishment — grows harder by the day.",ar:"عذابٌ يتصاعد — يشتدُّ يوماً بعد يوم."}},
+  {ar:"ٱلْمَسَٰجِدَ", tl:"Al-masaajida", m:{en:"The mosques / places of prostration",ar:"المساجد"}, n:{en:"The places of prostration — Allah's exclusive property.",ar:"مواضع السجود — ملكٌ خالص لله."}},
+  {ar:"تَدْعُوا۟", tl:"Tad'uu", m:{en:"Invoke / call upon",ar:"تعبدوا وتدعوا"}, n:{en:"To call upon in worship.",ar:"دعاء العبادة."}},
+  {ar:"عَبْدُ ٱللَّهِ", tl:"Abdullaah", m:{en:"The slave of Allah (Muhammad ﷺ)",ar:"عبد الله — النبي ﷺ"}, n:{en:"The highest title of the Prophet ﷺ — 'slave of Allah'.",ar:"أشرف ألقاب النبي ﷺ — «عبد الله»."}},
+  {ar:"يَدْعُوهُ", tl:"Yad'uuhu", m:{en:"Calling upon Him",ar:"يدعو ربه"}, n:{en:"Calling upon his Lord in prayer.",ar:"يدعو ربه في الصلاة."}},
+  {ar:"لِبَدًۭا", tl:"Libadaa", m:{en:"Crowded throngs / layers",ar:"متراكمين بعضهم على بعض"}, n:{en:"Layer upon layer — crowded throngs.",ar:"تراكمٌ بعضهم فوق بعض."}},
+  {ar:"أَدْعُوا۟", tl:"Ad'uu", m:{en:"I call upon",ar:"أعبد وأدعو"}, n:{en:"I call upon — exclusively my Lord.",ar:"أدعو — ربي وحده."}},
+  {ar:"أُشْرِكُ", tl:"Ushriku", m:{en:"I associate",ar:"أجعل شريكاً"}, n:{en:"I associate — categorically rejected.",ar:"أُشرك — مرفوضٌ قطعاً."}},
+  {ar:"أَمْلِكُ", tl:"Amliku", m:{en:"I have power over",ar:"أقدر على"}, n:{en:"I have the power — used in negation: I do NOT have.",ar:"أملك — في النفي: لا أملك."}},
+  {ar:"ضَرًّۭا", tl:"Darran", m:{en:"Harm",ar:"ضرراً"}, n:{en:"Harm — outside any creature's power without Allah.",ar:"الضرر — خارج قدرة أي مخلوقٍ من دون الله."}},
+  {ar:"يُجِيرَنِى", tl:"Yujeeranii", m:{en:"Protect me / shelter me",ar:"يحميني"}, n:{en:"To grant protection / refuge.",ar:"منح الحماية والملجأ."}},
+  {ar:"مُلْتَحَدًا", tl:"Multahadaa", m:{en:"A refuge / shelter",ar:"ملجأً"}, n:{en:"A refuge / place to turn aside to.",ar:"ملجأٌ يُنحى إليه."}},
+  {ar:"بَلَٰغًۭا", tl:"Balaaghaa", m:{en:"Conveyance / delivery",ar:"تبليغاً"}, n:{en:"The conveyance of the message — the Prophet's only duty.",ar:"تبليغ الرسالة — وظيفة النبي الوحيدة."}},
+  {ar:"يَعْصِ", tl:"Ya'si", m:{en:"Disobeys",ar:"يخالف ويعصي"}, n:{en:"To disobey Allah or His Messenger.",ar:"معصية الله أو رسوله."}},
+  {ar:"خَٰلِدِينَ", tl:"Khaalideena", m:{en:"Abiding eternally",ar:"مقيمين دائماً"}, n:{en:"Eternally abiding — the dwelling never ends.",ar:"الإقامة الأبديّة."}},
+  {ar:"يُوعَدُونَ", tl:"Yuu'aduuna", m:{en:"They are promised",ar:"يُوعدون"}, n:{en:"They are promised — the punishment is appointed.",ar:"موعودون — العقوبة محدّدة."}},
+  {ar:"نَاصِرًۭا", tl:"Naasiraa", m:{en:"Helper",ar:"ناصراً"}, n:{en:"Helper — supporter.",ar:"المعين والنصير."}},
+  {ar:"عَدَدًۭا", tl:"Adadaa", m:{en:"In number / by number",ar:"عدداً"}, n:{en:"By number — counted precisely.",ar:"إحصاءً دقيقاً."}},
+  {ar:"أَدْرِىٓ", tl:"Adrii", m:{en:"I know",ar:"أعلم"}, n:{en:"I know — used in negation by the Prophet ﷺ.",ar:"أدري — يستعملها النبي ﷺ في النفي."}},
+  {ar:"أَقَرِيبٌۭ", tl:"Aqareebun", m:{en:"Is it near?",ar:"أهو قريب؟"}, n:{en:"Is it near? — interrogative about the timing.",ar:"استفهامٌ عن الوقت."}},
+  {ar:"أَمَدًۭا", tl:"Amadaa", m:{en:"A long term / appointed time",ar:"مدّة طويلة"}, n:{en:"A long, set term.",ar:"مدّةٌ طويلة محدّدة."}},
+  {ar:"عَٰلِمُ ٱلْغَيْبِ", tl:"Aalimu al-ghaybi", m:{en:"Knower of the unseen",ar:"عالم الغيب"}, n:{en:"Knower of the unseen — Allah's exclusive attribute.",ar:"عالم الغيب — صفةٌ خاصةٌ بالله."}},
+  {ar:"يُظْهِرُ", tl:"Yuzhiru", m:{en:"He reveals / makes apparent",ar:"يُطلع ويكشف"}, n:{en:"Reveals — Allah alone decides what unseen to disclose.",ar:"يكشف — والله وحده يقرّر ما يُطلع عليه من الغيب."}},
+  {ar:"ٱرْتَضَىٰ", tl:"Irtadaa", m:{en:"He chose / was pleased with",ar:"اصطفى وارتضى"}, n:{en:"He chose with pleasure — the rank of the messengers.",ar:"الاصطفاء بالرضا — منزلة الرسل."}},
+  {ar:"رَّسُولٍۢ", tl:"Rasuulin", m:{en:"A messenger",ar:"رسولاً"}, n:{en:"A messenger — exception to the unseen rule.",ar:"رسول — استثناءٌ من قاعدة الغيب."}},
+  {ar:"رَصَدًۭا", tl:"Rasadaa", m:{en:"A guard / watcher",ar:"ملائكةً يحرسون"}, n:{en:"A watching guard — angels around the revelation.",ar:"حرسٌ مراقب — ملائكةٌ حول الوحي."}},
+  {ar:"أَبْلَغُوا۟", tl:"Ablaghuu", m:{en:"They have delivered",ar:"بلّغوا"}, n:{en:"They have delivered fully — the angelic messengers did their duty.",ar:"بلّغوا الرسالة كاملة — أدّى الرسل الملائكة واجبهم."}},
+  {ar:"رِسَٰلَٰتِ", tl:"Risaalaati", m:{en:"Messages",ar:"رسالات"}, n:{en:"Messages — plural; many revelations through one chain.",ar:"رسالات — جمع؛ وحياتٌ متعدّدة عبر سلسلةٍ واحدة."}},
+  {ar:"أَحَاطَ", tl:"Ahaata", m:{en:"He encompasses",ar:"أحاط علماً"}, n:{en:"Allah encompasses everything with His knowledge.",ar:"أحاط الله بكل شيءٍ علماً."}},
+];
+
+const LESSONS = [
+  {ic:"📖", t:{en:"The Qur'an Is 'Ajaban — Wonderful — Even to Beings Other Than Us",ar:"القرآن «عجبٌ» — حتى لمخلوقاتٍ غيرنا"}, d:{en:"The Jinn — beings of fire who lived before humans — described the Qur'an as 'wonderful'. If a different species was stopped in its tracks by one recitation, what excuse does the heart of a Muslim youth have for being unmoved?",ar:"وصف الجنُّ — مخلوقات النار الأقدم من الإنس — القرآنَ بـ«العجب». فإن كان جنسٌ آخر يتوقّف عند تلاوةٍ واحدة، فما عذر قلب الشاب المسلم في برودته؟"}},
+  {ic:"☝️", t:{en:"Tawheed Is the First Word, Not the Last",ar:"التوحيد أول كلمة، لا آخرها"}, d:{en:"The Jinn's very first declaration was: 'we will never associate anyone with our Lord.' Faith does not begin with 'I love Allah' — it begins with 'I worship none but Him.' Master the 'la' (no) before the 'illa' (except).",ar:"كان أول إعلانٍ للجن: «ولن نشرك بربنا أحداً». الإيمان لا يبدأ بـ«أحب الله» — بل بـ«لا أعبد إلا إياه». أتقن «لا» قبل «إلا»."}},
+  {ic:"🚫", t:{en:"Allah Has Neither Consort Nor Child — Pure Tawheed",ar:"لا صاحبة ولا ولد — التوحيد الخالص"}, d:{en:"The Jinn's testimony refutes every claim that Allah has a wife, a daughter, or a son. Every culture that mixes the divine with the human must yield to this single verse: 'exalted is the majesty of our Lord.'",ar:"تردّ شهادة الجن كل ادعاءٍ بأن لله زوجةً أو ابنةً أو ولداً. كل ثقافةٍ خلطت الإلهي بالبشري ترضخ لآيةٍ واحدة: «تعالى جدُّ ربنا»."}},
+  {ic:"🛡️", t:{en:"Take Refuge in Allah Alone — Never in Created Beings",ar:"استعذ بالله وحده — لا بمخلوقٍ"}, d:{en:"The pagans took refuge in the Jinn and the Jinn grew arrogant — both were ruined. The believer's only refuge is Allah: 'I seek refuge in Allah from Satan the rejected.' Outsource your fear to no creature.",ar:"استعاذ المشركون بالجن فتكبّر الجنُّ — فهلك الفريقان. وملجأ المؤمن الوحيد هو الله: «أعوذ بالله من الشيطان الرجيم». لا تُفوّض خوفك لأي مخلوق."}},
+  {ic:"🌌", t:{en:"The Sky Is Sealed — Soothsayers and Fortune-Tellers Are Liars",ar:"السماء محكمة — والكهنة والمنجّمون كاذبون"}, d:{en:"After the Prophet's ﷺ mission, the heavens were sealed with mighty angelic guards and shooting stars. Whoever today claims to know your future — through cards, stars, palms, or coffee — is either fooled or a fooler. Allah alone owns the unseen.",ar:"بعد بعثة النبي ﷺ خُتمت السماء بحرسٍ شديد من الملائكة وشهب. ومن يدّعي اليوم معرفة مستقبلك — بالورق، أو النجوم، أو الكف، أو القهوة — فهو إما مخدوعٌ أو خادع. الله وحده يملك الغيب."}},
+  {ic:"🕌", t:{en:"The Mosques Belong to Allah — Worship No One Beside Him",ar:"المساجد لله — لا تعبد فيها أحداً سواه"}, d:{en:"'And the mosques belong to Allah, so do not invoke anyone alongside Him.' The masjid is purified ground; bring nothing into your prayer but Tawheed. No grave, no shaykh, no intermediary — only your Lord.",ar:"«وأن المساجد لله فلا تدعوا مع الله أحداً». المسجد أرضٌ مطهّرة؛ لا تأت إلى صلاتك بشيءٍ غير التوحيد. لا قبر، ولا شيخ، ولا وسيط — ربك وحده."}},
+  {ic:"📣", t:{en:"The Prophet ﷺ Owns No Harm or Guidance — Only Conveyance",ar:"النبي ﷺ لا يملك ضرّاً ولا رشداً — إنما البلاغ"}, d:{en:"Even the highest of creation says: 'I have no power to bring you harm or guidance — my duty is only to convey from Allah.' If the Prophet ﷺ does not own this, no shaykh, saint, or scholar does. Faith goes to Allah; respect goes to His messengers.",ar:"حتى أشرف الخلق يقول: «لا أملك لكم ضرّاً ولا رشداً — إنما عليّ البلاغ من الله». فإن لم يكن للنبي ﷺ هذا، فليس لأي شيخٍ، أو وليٍّ، أو عالم. والإيمان لله؛ والاحترام لرسله."}},
+  {ic:"🤲", t:{en:"Istiqaamah Opens the Doors of Rizq",ar:"الاستقامة تفتح أبواب الرزق"}, d:{en:"'And had they remained steadfast on the Way, We would surely have given them water in abundance.' Steadiness on the straight path is not poverty — it is the divine channel for blessing. Your du'a, your prayer, your honesty are the bills paid in advance for sustenance.",ar:"«وأن لو استقاموا على الطريقة لأسقيناهم ماءً غدقاً». الثبات على الصراط ليس فقراً — بل القناة الإلهية للبركة. دعاؤك، وصلاتك، وصدقك فواتيرٌ تُدفع مسبقاً للرزق."}},
+];
+
+const MCQ = [
+  {q:{en:"How many verses does Surah Al-Jinn contain?",ar:"كم عدد آيات سورة الجن؟"}, o:{en:["18","28","38","48"],ar:["١٨","٢٨","٣٨","٤٨"]}, a:1, ex:{en:"Surah Al-Jinn consists of 28 verses, all revealed in Makkah.",ar:"سورة الجن ٢٨ آية، نزلت كلها بمكة."}},
+  {q:{en:"Where was Surah Al-Jinn revealed in relation to the Prophet's journey?",ar:"أين نزلت سورة الجن من رحلة النبي ﷺ؟"}, o:{en:["After Badr","At Nakhlah on the return from Ta'if","After Hudaybiyyah","In Madinah"],ar:["بعد بدر","في نخلة عند الرجوع من الطائف","بعد الحديبية","في المدينة"]}, a:1, ex:{en:"It was revealed when the Prophet ﷺ recited Fajr at Nakhlah on his return from Ta'if; a party of Jinn from Nasibeen listened and believed.",ar:"نزلت حين كان النبي ﷺ يصلي الفجر بنخلة عائداً من الطائف، فاستمع نفرٌ من جن نصيبين وآمنوا."}},
+  {q:{en:"What did the Jinn say about the Qur'an when they first heard it?",ar:"بماذا وصف الجنُّ القرآن أول ما سمعوه؟"}, o:{en:["A familiar speech","A wonderful recitation that guides to right conduct","A poem","A history book"],ar:["كلامٌ مألوف","قرآناً عجباً يهدي إلى الرشد","شعراً","كتاب تاريخ"]}, a:1, ex:{en:"'Indeed we have heard a wonderful recitation that guides to right conduct, so we believed in it' (verses 1–2).",ar:"«إنا سمعنا قرآناً عجباً · يهدي إلى الرشد فآمنّا به» (الآيتان ١–٢)."}},
+  {q:{en:"What did the Jinn deny about Allah in verse 3?",ar:"ماذا نفى الجنُّ عن الله في الآية ٣؟"}, o:{en:["His mercy","That He has taken a consort or a son","His knowledge","His power"],ar:["رحمته","أنه اتّخذ صاحبةً أو ولداً","علمه","قدرته"]}, a:1, ex:{en:"'Exalted is the majesty of our Lord — He has taken no consort, nor any son' — pure Tawheed from the lips of the Jinn.",ar:"«تعالى جدُّ ربنا ما اتّخذ صاحبةً ولا ولداً» — توحيدٌ خالصٌ على ألسنة الجن."}},
+  {q:{en:"Why did the heavens become filled with 'mighty guards and flaming meteors'?",ar:"لماذا مُلئت السماء «حرساً شديداً وشهباً»؟"}, o:{en:["To decorate the sky","To stop the Jinn from eavesdropping on revelation after the Prophet's mission","To frighten the birds","Without a clear reason"],ar:["لتزيين السماء","لمنع الجن من استراق السمع بعد بعثة النبي ﷺ","لإفزاع الطيور","بلا سببٍ واضح"]}, a:1, ex:{en:"With the Prophet's ﷺ mission, the heavens were sealed to protect the revelation; the eavesdropping Jinn could no longer carry scraps to the soothsayers.",ar:"مع بعثة النبي ﷺ، خُتمت السماء حمايةً للوحي؛ فلم يعد الجنُّ يسترقون السمع وينقلون للكهنة."}},
+  {q:{en:"What does the Prophet ﷺ declare in verse 21?",ar:"بماذا يصرّح النبي ﷺ في الآية ٢١؟"}, o:{en:["He owns the keys of Paradise","'I have no power to bring you harm or guidance'","He knows the unseen","He intercedes for whoever asks"],ar:["يملك مفاتيح الجنة","«لا أملك لكم ضرّاً ولا رشداً»","يعلم الغيب","يشفع لكل من سأل"]}, a:1, ex:{en:"'I have no power to bring harm or guidance to you' — closing every door to shirk through the prophets themselves.",ar:"«إني لا أملك لكم ضرّاً ولا رشداً» — تُغلق كل أبواب الشرك بالأنبياء أنفسهم."}},
+  {q:{en:"Who alone knows the unseen, according to verse 26?",ar:"من الذي يعلم الغيب وحده بحسب الآية ٢٦؟"}, o:{en:["The angels","Allah alone — except a messenger He has chosen",  "The prophets and saints","Some elite scholars"],ar:["الملائكة","الله وحده — إلا رسولاً ارتضى","الأنبياء والأولياء","بعض العلماء"]}, a:1, ex:{en:"'He is the Knower of the unseen, and He reveals His unseen to no one — except a messenger He has chosen.' Fortune-tellers and soothsayers are categorically refuted.",ar:"«عالم الغيب فلا يُظهر على غيبه أحداً · إلا من ارتضى من رسول». ويُردّ على الكهنة والمنجّمين قطعاً."}},
+];
+
+const MATCH = [
+  {ar:"نَفَرٌۭ", tl:"Nafarun", en:{en:"A party / small group",ar:"جماعة بين الثلاثة والعشرة"}},
+  {ar:"ٱلرُّشْدِ", tl:"Ar-rushdi", en:{en:"Right conduct / guidance",ar:"الصواب والهدى"}},
+  {ar:"صَٰحِبَةًۭ", tl:"Saahibatan", en:{en:"A consort / wife",ar:"زوجة"}},
+  {ar:"شَطَطًۭا", tl:"Shatataa", en:{en:"Extravagant falsehood",ar:"قولاً جائراً متجاوزاً للحد"}},
+  {ar:"شُهُبًۭا", tl:"Shuhuban", en:{en:"Flaming meteors",ar:"نجوماً محرقة"}},
+  {ar:"ٱلْقَٰسِطُونَ", tl:"Al-qaasituuna", en:{en:"The unjust deviators",ar:"الجائرون عن الحق"}},
+  {ar:"عَبْدُ ٱللَّهِ", tl:"Abdullaah", en:{en:"The slave of Allah (the Prophet ﷺ)",ar:"عبد الله — النبي ﷺ"}},
+  {ar:"مُلْتَحَدًا", tl:"Multahadaa", en:{en:"A refuge / shelter",ar:"ملجأً"}},
+];
+
+const FILL = [
+  {parts:["إِنَّا سَمِعْنَا قُرْءَانًا ",""], a:"عَجَبًۭا"},
+  {parts:["وَلَن نُّشْرِكَ بِرَبِّنَآ ",""], a:"أَحَدًۭا"},
+  {parts:["مَا ٱتَّخَذَ صَٰحِبَةًۭ وَلَا ",""], a:"وَلَدًۭا"},
+  {parts:["وَأَنَّ ٱلْمَسَٰجِدَ ","فَلَا تَدْعُوا۟ مَعَ ٱللَّهِ أَحَدًۭا"], a:"لِلَّهِ"},
+  {parts:["قُلْ إِنَّمَآ أَدْعُوا۟ "," وَلَآ أُشْرِكُ بِهِۦٓ أَحَدًۭا"], a:"رَبِّى"},
+  {parts:["عَٰلِمُ ٱلْغَيْبِ فَلَا يُظْهِرُ عَلَىٰ غَيْبِهِۦٓ ",""], a:"أَحَدًا"},
+];
+
+const ORDER_EN = [
+  "Opening: 'A party of the Jinn listened — and said: indeed we have heard a wonderful recitation.'",
+  "They believed at once: 'It guides to right conduct — we will never associate anyone with our Lord.'",
+  "Pure Tawheed: 'Exalted is the majesty of our Lord — He has taken no consort, nor any son.'",
+  "Confession: 'Our foolish one used to speak about Allah extravagant falsehood.'",
+  "Exposure of shirk: 'Men from humankind used to take refuge in men from the Jinn — and were only increased in burden.'",
+  "The sky sealed: 'We sought to touch the sky and found it filled with mighty guards and flaming meteors.'",
+  "Self-knowledge of the Jinn: 'Among us are the righteous and among us are others — we are paths divided.'",
+  "Faith and justice: 'Among us are Muslims and among us are unjust deviators — and the deviators are firewood for Hell.'",
+  "The blessing of istiqaamah: 'Had they remained on the Way, We would have given them water in abundance.'",
+  "Pillar verse: 'The mosques belong to Allah — so do not invoke anyone alongside Him.'",
+  "The Prophet's ﷺ creed: 'I only call upon my Lord — I have no power over harm or guidance — my duty is only conveyance.'",
+  "Closing: only Allah knows the unseen — except a messenger He chose, guarded before and behind by angels.",
+];
+
+const ORDER_AR = [
+  "الافتتاح: «استمع نفرٌ من الجن — فقالوا: إنا سمعنا قرآناً عجباً».",
+  "آمنوا في الحال: «يهدي إلى الرشد — ولن نشرك بربنا أحداً».",
+  "توحيدٌ خالص: «تعالى جدُّ ربنا — ما اتّخذ صاحبةً ولا ولداً».",
+  "اعتراف: «وأنه كان يقول سفيهنا على الله شططاً».",
+  "كشف الشرك: «كان رجالٌ من الإنس يعوذون برجالٍ من الجن — فزادوهم رهقاً».",
+  "إحكام السماء: «وأنا لمسنا السماء فوجدناها مُلئت حرساً شديداً وشهباً».",
+  "اعترافٌ بالاختلاف: «منا الصالحون ومنا دون ذلك — كنا طرائق قِددا».",
+  "إيمانٌ وعدل: «منا المسلمون ومنا القاسطون — والقاسطون لجهنم حطبا».",
+  "بركة الاستقامة: «لو استقاموا على الطريقة لأسقيناهم ماءً غدقاً».",
+  "آيةٌ أصل: «وأن المساجد لله — فلا تدعوا مع الله أحداً».",
+  "عقيدة النبي ﷺ: «إنما أدعو ربي — لا أملك لكم ضرّاً ولا رشداً — إنما عليّ البلاغ».",
+  "الخاتمة: لا يعلم الغيب إلا الله — إلا رسولاً ارتضى، يحرسه ملائكةٌ من بين يديه ومن خلفه.",
+];
+
+function getOrder(){ return currentLang === 'ar' ? ORDER_AR : ORDER_EN; }
+
+/* ============= CHIME ============= */
+let AC;
+function chime(type){
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    const now = AC.currentTime;
+    if(type==='ok'){
+      o.frequency.setValueAtTime(660, now);
+      o.frequency.exponentialRampToValueAtTime(990, now+.15);
+    } else if(type==='err'){
+      o.frequency.setValueAtTime(220, now);
+      o.frequency.exponentialRampToValueAtTime(140, now+.2);
+    } else {
+      o.frequency.setValueAtTime(520, now);
+      o.frequency.exponentialRampToValueAtTime(720, now+.08);
+    }
+    g.gain.setValueAtTime(.12, now);
+    g.gain.exponentialRampToValueAtTime(.001, now+.25);
+    o.start(now); o.stop(now+.3);
+  }catch(e){}
+}
+
+/* ============= TABS ============= */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* ============= TOAST ============= */
+const toastEl = document.getElementById('toast');
+function toast(msg, kind=''){
+  toastEl.textContent = msg;
+  toastEl.className = 'toast show '+kind;
+  setTimeout(()=>toastEl.className='toast '+kind, 1800);
+}
+
+/* ============= RENDER FUNCTIONS ============= */
+function renderFlashcards(){
+  const deck = document.getElementById('deck');
+  deck.innerHTML = '';
+  AYAT.forEach(a=>{
+    const L = currentLang;
+    const card = document.createElement('div');
+    card.className = 'flip';
+    card.innerHTML = `
+      <div class="flip-inner">
+        <div class="face front">
+          <div class="ayah-num">${a.n}</div>
+          <div class="ayah-ar">${a.ar}</div>
+          <div class="flip-hint">${L==='ar'?'اضغط للقلب ↻':'Tap to flip ↻'}</div>
+        </div>
+        <div class="face back">
+          <h4>${L==='ar'?'الآية '+a.n+' · الشرح':'Ayah '+a.n+' · Explanation'}</h4>
+          <p class="trans">"${typeof a.tr==='object'?a.tr[L]:a.tr}"</p>
+          <h4>${L==='ar'?'التفسير':'Tafseer'}</h4>
+          <p class="tafsir">${typeof a.tafsir==='object'?a.tafsir[L]:a.tafsir}</p>
+          <h4>${L==='ar'?'معاني الكلمات':'Word-by-Word'}</h4>
+          <div class="words">
+            ${a.words.map(w=>`<span class="word"><span class="ar">${w.ar}</span><span class="en">${typeof w.en==='object'?w.en[L]:w.en}</span></span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=>{
+      card.classList.toggle('flipped');
+      chime('flip');
+    });
+    deck.appendChild(card);
+  });
+}
+
+function renderStory(){
+  const sl = document.getElementById('storyList');
+  sl.innerHTML = '';
+  const L = currentLang;
+  STORY.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'story-item';
+    const title = typeof s.t==='object'?s.t[L]:s.t;
+    const desc = typeof s.d==='object'?s.d[L]:s.d;
+    const tags = typeof s.tags==='object'&&!Array.isArray(s.tags)?s.tags[L]:s.tags;
+    el.innerHTML = `
+      <div class="step-no">${i+1}</div>
+      <div>
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <div class="badge-row">${tags.map(t=>`<span class="badge">${t}</span>`).join('')}</div>
+      </div>`;
+    sl.appendChild(el);
+  });
+}
+
+function renderCharacters(){
+  const cl = document.getElementById('charList');
+  cl.innerHTML = '';
+  const L = currentLang;
+  CHARS.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'char-card';
+    const name = typeof c.name==='object'?c.name[L]:c.name;
+    const role = typeof c.role==='object'?c.role[L]:c.role;
+    const desc = typeof c.d==='object'?c.d[L]:c.d;
+    el.innerHTML = `<div class="char-emoji">${c.e}</div><div class="role">${role}</div><h3>${name}</h3><p>${desc}</p>`;
+    cl.appendChild(el);
+  });
+}
+
+function renderVocab(){
+  const tbody = document.getElementById('vocabBody');
+  tbody.innerHTML = '';
+  const L = currentLang;
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m[L]:v.m;
+    const n = typeof v.n==='object'?v.n[L]:v.n;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="vocab-ar">${v.ar}</td><td class="vocab-tl-col">${v.tl||""}</td><td>${m}</td><td>${n}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderLessons(){
+  const lg = document.getElementById('lessonGrid');
+  lg.innerHTML = '';
+  const L = currentLang;
+  LESSONS.forEach(l=>{
+    const el = document.createElement('div');
+    el.className = 'lesson';
+    const t = typeof l.t==='object'?l.t[L]:l.t;
+    const d = typeof l.d==='object'?l.d[L]:l.d;
+    el.innerHTML = `<div class="ic">${l.ic}</div><h4>${t}</h4><p>${d}</p>`;
+    lg.appendChild(el);
+  });
+}
+
+/* ============= SCORE ============= */
+let score = 0, maxScore = 0;
+function updateScore(){ document.getElementById('scoreVal').textContent = score; document.getElementById('scoreMax').textContent = maxScore; }
+
+/* ============= MCQ ============= */
+function renderMCQ(){
+  const container = document.getElementById('mcqContainer');
+  container.innerHTML = '';
+  const L = currentLang;
+  MCQ.forEach((q,qi)=>{
+    maxScore++;
+    const div = document.createElement('div');
+    div.className = 'mcq';
+    const qText = typeof q.q==='object'?q.q[L]:q.q;
+    const opts = typeof q.o==='object'&&!Array.isArray(q.o)?q.o[L]:q.o;
+    const ex = typeof q.ex==='object'?q.ex[L]:q.ex;
+    div.innerHTML = `<p class="q">${qi+1}. ${qText}</p><div class="opts">${opts.map((o,i)=>`<div class="opt" data-qi="${qi}" data-i="${i}">${o}</div>`).join('')}</div><div class="feedback" id="fb-${qi}">${ex}</div>`;
+    container.appendChild(div);
+  });
+  updateScore();
+  container.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click', function(){
+      const qi = +this.dataset.qi, i = +this.dataset.i;
+      const parent = this.closest('.mcq');
+      if(parent.querySelector('.correct')) return;
+      if(i === MCQ[qi].a){ this.classList.add('correct'); score++; chime('ok'); }
+      else { this.classList.add('wrong'); chime('err'); parent.querySelectorAll('.opt')[MCQ[qi].a].classList.add('correct'); }
+      parent.querySelector('#fb-'+qi).classList.add('show');
+      updateScore();
+    });
+  });
+}
+
+/* ============= MATCHING ============= */
+let selAr = null, selEn = null;
+function renderMatch(){
+  const arDiv = document.getElementById('matchAr'), enDiv = document.getElementById('matchEn');
+  arDiv.innerHTML = ''; enDiv.innerHTML = '';
+  const L = currentLang;
+  const shuffledEn = [...MATCH].sort(()=>Math.random()-.5);
+  maxScore += MATCH.length;
+  MATCH.forEach(m=>{
+    const a = document.createElement('div');
+    a.className = 'match-item match-ar';
+    a.textContent = m.ar; a.dataset.key = m.ar;
+    a.addEventListener('click', ()=>handleMatchClick(a, 'ar'));
+    arDiv.appendChild(a);
+  });
+  shuffledEn.forEach(m=>{
+    const e = document.createElement('div');
+    e.className = 'match-item';
+    const enText = typeof m.en==='object'?m.en[L]:m.en;
+    e.textContent = enText; e.dataset.key = m.ar;
+    e.addEventListener('click', ()=>handleMatchClick(e, 'en'));
+    enDiv.appendChild(e);
+  });
+  updateScore();
+}
+
+function handleMatchClick(el, side){
+  if(el.classList.contains('matched')) return;
+  if(side==='ar'){ if(selAr){ selAr.classList.remove('selected'); } selAr=el; el.classList.add('selected'); }
+  else { if(selEn){ selEn.classList.remove('selected'); } selEn=el; el.classList.add('selected'); }
+  if(selAr && selEn){
+    if(selAr.dataset.key === selEn.dataset.key){
+      selAr.classList.remove('selected'); selEn.classList.remove('selected');
+      selAr.classList.add('matched'); selEn.classList.add('matched');
+      score++; chime('ok'); updateScore();
+    } else {
+      selAr.classList.add('error'); selEn.classList.add('error');
+      setTimeout(()=>{ selAr.classList.remove('selected','error'); selEn.classList.remove('selected','error'); selAr=null; selEn=null; }, 700);
+      chime('err'); return;
+    }
+    selAr=null; selEn=null;
+  }
+}
+
+/* ============= FILL IN BLANKS ============= */
+function renderFill(){
+  const container = document.getElementById('fillContainer');
+  container.innerHTML = '';
+  FILL.forEach((f,i)=>{
+    const div = document.createElement('div');
+    div.className = 'fill-card';
+    div.innerHTML = `<div class="fill-q arabic" style="direction:rtl;text-align:right;font-size:22px">${f.parts[0]}<input type="text" id="fill-${i}" class="arabic" style="font-size:22px;width:160px">${f.parts[1]}</div>`;
+    container.appendChild(div);
+    maxScore++;
+  });
+  updateScore();
+}
+
+document.getElementById('checkFill').addEventListener('click', ()=>{
+  FILL.forEach((f,i)=>{
+    const inp = document.getElementById('fill-'+i);
+    if(!inp.classList.contains('correct') && !inp.classList.contains('wrong')){
+      const val = inp.value.trim();
+      if(val === f.a){ inp.classList.add('correct'); score++; chime('ok'); }
+      else { inp.classList.add('wrong'); chime('err'); }
+      updateScore();
+    }
+  });
+});
+
+/* ============= ORDER ============= */
+let dragSrc = null;
+function renderOrder(){
+  const ol = document.getElementById('orderList');
+  ol.innerHTML = '';
+  const order = getOrder();
+  const shuffled = [...order].sort(()=>Math.random()-.5);
+  maxScore++;
+  shuffled.forEach(item=>{
+    const div = document.createElement('div');
+    div.className = 'order-item';
+    div.draggable = true;
+    div.dataset.val = item;
+    div.innerHTML = `<span class="order-handle">⠿</span>${item}`;
+    div.addEventListener('dragstart', ()=>{ dragSrc=div; div.classList.add('dragging'); });
+    div.addEventListener('dragend', ()=>div.classList.remove('dragging'));
+    div.addEventListener('dragover', e=>e.preventDefault());
+    div.addEventListener('drop', ()=>{
+      if(dragSrc && dragSrc!==div){
+        const items=[...ol.children];
+        const si=items.indexOf(dragSrc), di=items.indexOf(div);
+        if(si<di) ol.insertBefore(dragSrc, div.nextSibling); else ol.insertBefore(dragSrc, div);
+      }
+    });
+    ol.appendChild(div);
+  });
+  updateScore();
+}
+
+document.getElementById('checkOrder').addEventListener('click', ()=>{
+  const ol = document.getElementById('orderList');
+  const order = getOrder();
+  const items = [...ol.children].map(x=>x.dataset.val);
+  const correct = items.every((v,i)=>v===order[i]);
+  if(correct){ score++; chime('ok'); toast(currentLang==='ar'?'ترتيب صحيح! 🎉':'Correct order! 🎉','success'); }
+  else { chime('err'); toast(currentLang==='ar'?'ترتيب خاطئ — حاول مجدداً':'Wrong order — try again','error'); }
+  updateScore();
+});
+
+document.getElementById('resetQuiz').addEventListener('click', ()=>{
+  score=0; maxScore=0;
+  renderMCQ(); selAr=null; selEn=null; renderMatch();
+  renderFill(); renderOrder();
+  chime('flip');
+});
+
+document.getElementById('flipAll').addEventListener('click', ()=>{
+  const allFlipped = [...document.querySelectorAll('.flip')].every(c=>c.classList.contains('flipped'));
+  document.querySelectorAll('.flip').forEach(c=>{ allFlipped?c.classList.remove('flipped'):c.classList.add('flipped'); });
+  chime('flip');
+});
+
+document.getElementById('resetCards').addEventListener('click', ()=>{
+  document.querySelectorAll('.flip').forEach(c=>c.classList.remove('flipped'));
+  chime('flip');
+});
+
+/* ============= i18n ============= */
+const langToggle = document.getElementById('langToggle');
+const langLabel = document.getElementById('langLabel');
+
+function applyI18N(lang){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(I18N[key]) el.innerHTML = I18N[key][lang] || el.innerHTML;
+  });
+  const nameInput = document.getElementById('studentName');
+  if(nameInput){
+    nameInput.placeholder = lang==='ar' ? nameInput.dataset.placeholderAr : nameInput.dataset.placeholderEn;
+  }
+  document.querySelectorAll('textarea[data-placeholder-ar]').forEach(t=>{
+    t.placeholder = lang==='ar' ? t.dataset.placeholderAr : t.dataset.placeholderEn;
+  });
+}
+
+function setLanguage(lang){
+  currentLang = lang;
+  const html = document.documentElement;
+  if(lang === 'ar'){
+    html.setAttribute('lang','ar');
+    html.setAttribute('dir','rtl');
+    document.body.setAttribute('dir','rtl');
+    langLabel.textContent = 'English';
+  } else {
+    html.setAttribute('lang','en');
+    html.setAttribute('dir','ltr');
+    document.body.setAttribute('dir','ltr');
+    langLabel.textContent = 'العربية';
+  }
+  applyI18N(lang);
+  score = 0; maxScore = 0;
+  renderFlashcards();
+  renderStory();
+  renderCharacters();
+  renderVocab();
+  renderLessons();
+  renderMCQ();
+  renderMatch();
+  renderFill();
+  renderOrder();
+}
+
+langToggle.addEventListener('click', ()=>{
+  setLanguage(currentLang === 'en' ? 'ar' : 'en');
+  chime('flip');
+});
+
+/* ============= WHATSAPP EXPORT ============= */
+document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  let text = '';
+  text += '📖 *سورة الجن — مذكرة تدبري للقرآن*\n';
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `👤 *اسم الطالب:* ${studentName}\n`;
+  text += `📅 *التاريخ:* ${dateStr}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  const q4 = document.getElementById('mudh-q4').value.trim();
+
+  text += '*أولاً: المحور العام (الفهم والتدبر)*\n\n';
+  text += '❓ *ما خلاصة الآيات في رأيك بأسلوبك البسيط؟*\n';
+  text += (q1 || '(لم يُجب)') + '\n\n';
+  text += '❓ *ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟*\n';
+  text += (q2 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثانياً: المحور الوجداني والشخصي*\n\n';
+  text += '❓ *هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟*\n';
+  text += (q3 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثالثاً: المحور التطبيقي*\n\n';
+  text += '❓ *حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.*\n';
+  text += (q4 || '(لم يُجب)') + '\n\n';
+
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `📊 *النتيجة في التمارين:* ${score} / ${maxScore}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+
+  const encoded = encodeURIComponent(text);
+  window.open('https://wa.me/?text=' + encoded, '_blank');
+});
+
+/* ============= PDF EXPORT ============= */
+document.getElementById('btnPDF').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  const container = document.getElementById('pdfContainer');
+  container.style.direction = 'rtl';
+
+  let html = '';
+  html += '<h1 style="text-align:center;font-family:Amiri,serif">📖 سورة الجن — بوابة تعليمية تفاعلية</h1>';
+  html += `<div class="pdf-meta">👤 اسم الطالب: <strong>${studentName}</strong> &nbsp;|&nbsp; 📅 التاريخ: ${dateStr}</div>`;
+
+  html += '<h2 style="font-family:Amiri,serif">نص السورة الكريمة</h2>';
+  html += '<div class="arabic-block" style="font-family:\'Amiri\',Amiri,serif">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
+  AYAT.forEach(a=>{
+    html += `<div class="arabic-block" style="font-family:'Amiri',Amiri,serif;font-size:18px">${a.ar} ﴿${a.n}﴾</div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">الشرح والتفسير</h2>';
+  AYAT.forEach(a=>{
+    const tr = typeof a.tr==='object'?a.tr.ar:a.tr;
+    const tf = typeof a.tafsir==='object'?a.tafsir.ar:a.tafsir;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">الآية ${a.n}</h3>`;
+    html += `<p><em>${tr}</em></p>`;
+    html += `<p>${tf}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">القصة — نزول القلم ومكانتها</h2>';
+  STORY.forEach((s,i)=>{
+    const title = typeof s.t==='object'?s.t.ar:s.t;
+    const desc = typeof s.d==='object'?s.d.ar:s.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${i+1}. ${title}</h3><p>${desc}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">المفردات</h2>';
+  html += '<table><tr><th style="font-family:Amiri,serif">الكلمة</th><th>المعنى</th><th>ملاحظات</th></tr>';
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m.ar:v.m;
+    const n = typeof v.n==='object'?v.n.ar:v.n;
+    html += `<tr><td style="font-family:Amiri,serif;font-size:16px">${v.ar}</td><td>${m}</td><td>${n}</td></tr>`;
+  });
+  html += '</table>';
+
+  html += '<h2 style="font-family:Amiri,serif">الدروس المستفادة</h2>';
+  LESSONS.forEach(l=>{
+    const t = typeof l.t==='object'?l.t.ar:l.t;
+    const d = typeof l.d==='object'?l.d.ar:l.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${l.ic} ${t}</h3><p>${d}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">📝 مذكرة تدبري للقرآن</h2>';
+  html += '<h3 style="font-family:Amiri,serif">أولاً: المحور العام (الفهم والتدبر)</h3>';
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  html += `<div class="pdf-qa"><label>ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</label><div class="answer">${q1||'(لم يُجب)'}</div></div>`;
+  html += `<div class="pdf-qa"><label>ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</label><div class="answer">${q2||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثانياً: المحور الوجداني والشخصي</h3>';
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  html += `<div class="pdf-qa"><label>هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</label><div class="answer">${q3||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثالثاً: المحور التطبيقي</h3>';
+  const q4 = document.getElementById('mudh-q4').value.trim();
+  html += `<div class="pdf-qa"><label>حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</label><div class="answer">${q4||'(لم يُجب)'}</div></div>`;
+
+  html += `<div style="text-align:center;margin-top:20px;font-size:16px;font-weight:700">📊 النتيجة في التمارين: ${score} / ${maxScore}</div>`;
+
+  container.innerHTML = html;
+
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     `سورة_الجن_${studentName}_${now.toISOString().slice(0,10)}.pdf`,
+    image:        { type: 'jpeg', quality: 0.95 },
+    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['avoid-all','css','legacy'] }
+  };
+
+  toast(currentLang==='ar'?'جاري إنشاء الملف...':'Generating PDF...','');
+
+  html2pdf().set(opt).from(container).save().then(()=>{
+    toast(currentLang==='ar'?'تم تحميل الملف بنجاح!':'PDF downloaded!','success');
+    chime('ok');
+  }).catch(()=>{
+    toast(currentLang==='ar'?'حدث خطأ في إنشاء الملف':'PDF generation failed','error');
+    chime('err');
+  });
+});
+
+/* ============= INITIAL RENDER ============= */
+
+/* === Verse-card word meanings: synchronized verbatim with VOCAB table === */
+(function(){
+  if(typeof AYAT==='undefined' || typeof VOCAB==='undefined') return;
+  function norm(s){
+    if(!s) return '';
+    return String(s)
+      .normalize('NFD')
+      .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g,'')
+      .replace(/[\u0622\u0623\u0625\u0671]/g,'\u0627')
+      .replace(/\u0649/g,'\u064A')
+      .replace(/\u0629/g,'\u0647')
+      .replace(/\s+/g,'')
+      .trim();
+  }
+  const vmap = {};
+  VOCAB.forEach(v=>{
+    if(!v || !v.ar) return;
+    const key = norm(v.ar);
+    if(!key) return;
+    vmap[key] = v.m;
+    String(v.ar).split(/\s+/).forEach(tok=>{
+      const k = norm(tok);
+      if(k && !vmap[k]) vmap[k] = v.m;
+    });
+  });
+  AYAT.forEach(a=>{
+    const matched = [];
+    (a.words||[]).forEach(w=>{
+      const k = norm(w.ar);
+      if(vmap[k]){
+        matched.push({ar:w.ar, en:vmap[k]});
+      }
+    });
+    a.words = matched.length ? matched : a.words;
+  });
+})();
+
+/* Initial language application so translations appear immediately on first load */
+applyI18N(currentLang);
+
+renderFlashcards();
+renderStory();
+renderCharacters();
+renderVocab();
+renderLessons();
+renderMCQ();
+renderMatch();
+renderFill();
+renderOrder();
+
+
+/* === Mushaf flipbook controller === */
+(function(){
+  const book = document.getElementById('mushafBook');
+  if(!book) return;
+  const stage = document.getElementById('mushafStage');
+  const idxEl = document.getElementById('mushafIdx');
+  const totalEl = document.getElementById('mushafTotal');
+  const btnPrev = document.getElementById('mushafPrev');
+  const btnNext = document.getElementById('mushafNext');
+
+  const SURA_NAME_AR = window.__MUSHAF_SURA_NAME_AR || 'السورة';
+  const JUZ_LABEL    = window.__MUSHAF_JUZ_LABEL    || '';
+  const SHOW_BISMILLAH_ON_FIRST = window.__MUSHAF_BISMILLAH !== false;
+  const AYAT_M = window.__MUSHAF_AYAT || [];
+  const PAGE_LABELS = window.__MUSHAF_PAGE_LABELS || null;
+
+  function arDigits(n){
+    const map = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    return String(n).split('').map(d=> map[+d] ?? d).join('');
+  }
+
+  // Page boundaries for Surah Al-Jinn (28 verses) — 3 pages as requested.
+  //   Page 1 -> ayat  1 - 10
+  //   Page 2 -> ayat 11 - 18
+  //   Page 3 -> ayat 19 - 28
+  const PAGE_BREAKS = [10, 21];
+  const groups = [];
+  let pageGroup = [];
+  AYAT_M.forEach((t, i) => {
+    const ayahNum = i + 1;
+    pageGroup.push({ n: ayahNum, t });
+    if (PAGE_BREAKS.includes(ayahNum) || ayahNum === AYAT_M.length) {
+      groups.push(pageGroup);
+      pageGroup = [];
+    }
+  });
+  if (pageGroup.length) groups.push(pageGroup);
+  groups.forEach((grp, pi)=>{
+    const pg = document.createElement('div');
+    pg.className = 'mushaf-page';
+    pg.dataset.page = pi;
+
+    const isFirst = pi===0;
+    const ayatHtml = grp.map(a =>
+      `<span class="ayah">${a.t} </span>` +
+      `<span class="ayah-end" aria-label="آية ${a.n}"><span>${arDigits(a.n)}</span></span> `
+    ).join('');
+
+    const labelTxt = PAGE_LABELS && PAGE_LABELS[pi]
+      ? `صفحة ${PAGE_LABELS[pi]} — ${SURA_NAME_AR}`
+      : `صفحة ${arDigits(pi+1)} من ${arDigits(groups.length)} — ${SURA_NAME_AR}`;
+
+    pg.innerHTML = `
+      <div class="mushaf-frame">
+        <div class="mushaf-head">
+          <span class="surah-name">${SURA_NAME_AR}</span>
+          <span class="juz">${JUZ_LABEL}</span>
+        </div>
+        ${isFirst && SHOW_BISMILLAH_ON_FIRST ? '<div class="mushaf-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>' : ''}
+        <div class="mushaf-text">${ayatHtml}</div>
+        <div class="mushaf-foot">${labelTxt}</div>
+      </div>`;
+    stage.appendChild(pg);
+  });
+
+
+  function fitMushafText(){
+    const isSmall = window.matchMedia && window.matchMedia('(max-width:600px)').matches;
+    pages.forEach(pg => {
+      const text = pg.querySelector('.mushaf-text');
+      if(!text) return;
+      const maxSize = isSmall ? 36 : 50;
+      const minSize = isSmall ? 18 : 22;
+      let size = isSmall ? 26 : 34;
+      let lineHeight = 2.0;
+      text.style.fontSize = size + 'px';
+      text.style.lineHeight = String(lineHeight);
+      text.style.paddingBottom = isSmall ? '16px' : '20px';
+
+      for(let i=0;i<54;i++){
+        const available = text.clientHeight;
+        const used = text.scrollHeight;
+        if(!available) break;
+        if(used > available - 8 && size > minSize){
+          size -= 0.5;
+          if(lineHeight > 2.0) lineHeight -= 0.025;
+          text.style.fontSize = size + 'px';
+          text.style.lineHeight = String(lineHeight);
+        } else if(used < available * 0.92 && size < maxSize){
+          size += 0.5;
+          if(lineHeight < 2.45) lineHeight += 0.02;
+          text.style.fontSize = size + 'px';
+          text.style.lineHeight = String(lineHeight);
+        } else if(used < available * 0.97 && lineHeight < 2.5){
+          lineHeight += 0.02;
+          text.style.lineHeight = String(lineHeight);
+        } else {
+          break;
+        }
+      }
+      while(text.scrollHeight > text.clientHeight - 10 && size > minSize){
+        size -= 0.5;
+        text.style.fontSize = size + 'px';
+      }
+    });
+  }
+
+  const pages = [...stage.querySelectorAll('.mushaf-page')];
+  fitMushafText();
+  fitMushafText();
+  let mushafResizeTimer;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(mushafResizeTimer);
+    mushafResizeTimer = setTimeout(()=>{ fitMushafText(); }, 120);
+  });
+  if(totalEl) totalEl.textContent = arDigits(pages.length);
+  let curPage = 0;
+
+  function render(){
+    pages.forEach((p,i)=>{
+      p.classList.remove('is-top','is-under','is-hidden','flipped','dragging');
+      p.style.transform = '';
+      p.style.boxShadow = '';
+      if(i < curPage){ p.classList.add('flipped','is-under'); }
+      else if(i === curPage){ p.classList.add('is-top'); }
+      else if(i === curPage+1){ p.classList.add('is-under'); }
+      else { p.classList.add('is-hidden'); }
+    });
+    if(idxEl) idxEl.textContent = arDigits(curPage+1);
+    if(btnPrev) btnPrev.disabled = curPage===0;
+    if(btnNext) btnNext.disabled = curPage>=pages.length-1;
+  }
+  render();
+
+  function goNext(){
+    if(curPage >= pages.length-1) return;
+    const top = pages[curPage];
+    top.style.transition = 'transform .7s cubic-bezier(.4,.05,.2,1), box-shadow .7s ease';
+    top.style.transform = 'rotateY(-180deg)';
+    top.style.boxShadow = '-22px 0 50px -10px rgba(0,0,0,.35)';
+    setTimeout(()=>{ curPage++; render(); }, 700);
+  }
+  function goPrev(){
+    if(curPage <= 0) return;
+    const prev = pages[curPage-1];
+    prev.classList.remove('is-hidden','is-under','flipped');
+    prev.classList.add('is-top');
+    prev.style.transition = 'none';
+    prev.style.transform = 'rotateY(-180deg)';
+    prev.style.boxShadow = '-22px 0 50px -10px rgba(0,0,0,.35)';
+    pages[curPage].classList.remove('is-top'); pages[curPage].classList.add('is-under');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      prev.style.transition = 'transform .7s cubic-bezier(.4,.05,.2,1), box-shadow .7s ease';
+      prev.style.transform = 'rotateY(0deg)';
+      prev.style.boxShadow = '';
+    }));
+    setTimeout(()=>{ curPage--; render(); }, 720);
+  }
+
+  if(btnNext) btnNext.addEventListener('click', goNext);
+  if(btnPrev) btnPrev.addEventListener('click', goPrev);
+
+  let drag = null;
+  function onDown(e){
+    if(e.target.closest('button,a,.mushaf-text')) return;
+    const top = pages[curPage];
+    if(!top) return;
+    const rect = stage.getBoundingClientRect();
+    drag = { x0:e.clientX, y0:e.clientY, w:rect.width, page:top, moved:false, dir:0 };
+    try{ top.setPointerCapture && top.setPointerCapture(e.pointerId); }catch(_){}
+  }
+  function onMove(e){
+    if(!drag) return;
+    const dx = e.clientX - drag.x0;
+    const dy = e.clientY - drag.y0;
+    if(!drag.moved){
+      if(Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      if(Math.abs(dy) > Math.abs(dx)*1.4){ drag = null; return; }
+      drag.moved = true;
+      drag.page.classList.add('dragging');
+    }
+    const ratio = Math.max(-1, Math.min(1, dx / (drag.w * 0.7)));
+    if(dx < 0){
+      if(curPage >= pages.length-1){ return; }
+      const ang = ratio * 180;
+      drag.page.style.transform = `rotateY(${ang}deg)`;
+      drag.page.style.boxShadow = `${ang*0.15}px 0 50px -10px rgba(0,0,0,.35)`;
+      drag.dir = +1;
+    } else {
+      if(curPage <= 0){ return; }
+      const prev = pages[curPage-1];
+      prev.classList.remove('is-hidden','is-under','flipped');
+      prev.classList.add('is-top','dragging');
+      drag.page.classList.remove('is-top'); drag.page.classList.add('is-under');
+      const ang = 180 - ratio*180;
+      prev.style.transform = `rotateY(-${ang}deg)`;
+      prev.style.boxShadow = `-${ang*0.15}px 0 50px -10px rgba(0,0,0,.35)`;
+      drag.prevPage = prev;
+      drag.dir = -1;
+    }
+  }
+  function onUp(e){
+    if(!drag) return;
+    const dx = e.clientX - drag.x0;
+    const threshold = drag.w * 0.18;
+    const passed = Math.abs(dx) > threshold;
+    const wasDir = drag.dir;
+    const page = drag.page;
+    const prevPage = drag.prevPage;
+    drag = null;
+    page.classList.remove('dragging');
+    if(prevPage) prevPage.classList.remove('dragging');
+
+    if(wasDir === +1 && passed && curPage < pages.length-1){
+      page.style.transition = 'transform .35s ease-out, box-shadow .35s ease-out';
+      page.style.transform = 'rotateY(-180deg)';
+      setTimeout(()=>{ curPage++; render(); }, 360);
+    } else if(wasDir === -1 && passed && curPage > 0){
+      prevPage.style.transition = 'transform .35s ease-out, box-shadow .35s ease-out';
+      prevPage.style.transform = 'rotateY(0deg)';
+      prevPage.style.boxShadow = '';
+      setTimeout(()=>{ curPage--; render(); }, 360);
+    } else {
+      if(wasDir === +1){
+        page.style.transition = 'transform .35s ease-out, box-shadow .35s ease-out';
+        page.style.transform = 'rotateY(0deg)';
+        page.style.boxShadow = '';
+      } else if(wasDir === -1 && prevPage){
+        prevPage.style.transition = 'transform .35s ease-out, box-shadow .35s ease-out';
+        prevPage.style.transform = 'rotateY(-180deg)';
+        setTimeout(()=>{ render(); }, 360);
+      }
+    }
+  }
+  stage.addEventListener('pointerdown', onDown);
+  stage.addEventListener('pointermove', onMove);
+  stage.addEventListener('pointerup', onUp);
+  stage.addEventListener('pointercancel', onUp);
+
+  document.addEventListener('keydown', e=>{
+    const intro = document.getElementById('panel-intro');
+    if(!intro || !intro.classList.contains('active')) return;
+    if(e.key==='ArrowLeft') goNext();
+    else if(e.key==='ArrowRight') goPrev();
+  });
+})();
+</script>
+</body>
+</html>

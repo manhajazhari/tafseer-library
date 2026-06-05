@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Surah Quraysh — Interactive Learning Portal</title>
+<meta name="description" content="An interactive educational portal for Surah Quraysh (Chapter 106) — the tribe of Quraysh and the favor of Allah. Tafseer, Tadabbur, flashcards, vocabulary, and exercises for young learners." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f3ea;
+    --bg-2:#fbf8f1;
+    --paper:#ffffff;
+    --ink:#1f2330;
+    --ink-soft:#4a5063;
+    --muted:#8a8f9e;
+    --line:#e5dccb;
+    --gold:#b08833;
+    --gold-2:#d4a84a;
+    --teal:#0f6b6b;
+    --teal-soft:#e6f1f1;
+    --rose:#b04646;
+    --rose-soft:#fbe9e7;
+    --green:#2f7d4f;
+    --green-soft:#e6f4ec;
+    --indigo:#3b3f8c;
+    --indigo-soft:#ecedfb;
+    --shadow: 0 10px 30px -12px rgba(60,40,10,.18);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden;width:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 10% -10%, #fff7e0 0%, transparent 60%),
+      radial-gradient(900px 600px at 110% 20%, #eaf6f3 0%, transparent 60%),
+      var(--bg);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    max-width:100vw;
+  }
+  body[dir="rtl"]{
+    font-family:'Amiri','Inter',system-ui,sans-serif;
+  }
+  .arabic{font-family:'Amiri Quran','Amiri','Scheherazade New','Traditional Arabic',serif; direction:rtl;}
+  .display{font-family:'Playfair Display',serif;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;
+    border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.6);
+    backdrop-filter: blur(8px);
+    position:sticky;top:0;z-index:20;
+    flex-wrap:wrap;gap:12px;
+    max-width:100vw;
+    overflow:hidden;
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .crest{
+    width:46px;height:46px;border-radius:14px;
+    background:linear-gradient(135deg,var(--teal) 0%,#1a9e9e 100%);
+    display:grid;place-items:center;color:#fff;font-weight:800;
+    box-shadow:var(--shadow);
+  }
+  .brand h1{margin:0;font-size:18px;letter-spacing:.2px}
+  .brand p{margin:0;color:var(--muted);font-size:12px}
+  .meta{display:flex;gap:10px;align-items:center;color:var(--ink-soft);font-size:13px;flex-wrap:wrap}
+  .pill{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff}
+
+  /* Language Toggle */
+  .lang-toggle{
+    cursor:pointer;
+    padding:8px 16px;
+    border-radius:999px;
+    border:2px solid var(--gold);
+    background:linear-gradient(135deg,#fffaf0,#fff);
+    color:var(--gold);
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;gap:8px;
+    transition:all .3s ease;
+    user-select:none;
+  }
+  .lang-toggle:hover{
+    background:linear-gradient(135deg,var(--gold),var(--gold-2));
+    color:#fff;
+    box-shadow:0 4px 14px rgba(176,136,51,.35);
+  }
+  .lang-toggle .globe{font-size:18px}
+
+  /* ===== Tabs ===== */
+  .wrap{max-width:1280px;margin:24px auto;padding:0 22px;overflow-x:hidden;width:100%;}
+  .tabs{
+    display:flex;flex-wrap:wrap;gap:8px;
+    background:#fff;padding:8px;border-radius:16px;border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .tab{
+    flex:1 1 auto;min-width:110px;
+    padding:12px 14px;border-radius:12px;cursor:pointer;
+    text-align:center;font-weight:600;color:var(--ink-soft);
+    border:1px solid transparent;
+    transition:all .25s ease;user-select:none;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:13px;
+  }
+  .tab .ic{font-size:18px}
+  .tab:hover{background:#faf6ee;color:var(--ink)}
+  .tab.active{
+    background:linear-gradient(135deg,#1f2330,#2a3144);
+    color:#fff;box-shadow:0 8px 18px -8px rgba(31,35,48,.45);
+  }
+
+  .panel{display:none;animation:fade .35s ease both;margin-top:22px}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);
+    max-width:100%;overflow-x:auto;
+  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  h2.section{font-family:'Playfair Display',serif;font-size:28px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 18px}
+
+  /* ===== Intro / Hero ===== */
+  .hero{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:22px;
+    max-width:100%;overflow:hidden;
+  }
+  @media(max-width:900px){.hero{grid-template-columns:1fr}}
+  .hero-card{
+    background:
+      radial-gradient(600px 300px at 100% 0%, #e0f0ff 0%, transparent 60%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    border:1px solid var(--line);border-radius:var(--radius);padding:28px;
+    box-shadow:var(--shadow);
+  }
+  .kicker{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:12px;letter-spacing:.6px}
+  .hero h2{font-family:'Playfair Display',serif;font-size:38px;margin:14px 0 6px;line-height:1.1}
+  .hero p.lead{font-size:15px;color:var(--ink-soft);line-height:1.7}
+  .quick-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .fact{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .fact .lbl{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .fact .val{font-weight:700;margin-top:4px}
+
+  .side-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow);
+    max-height:600px;overflow-y:auto;
+    max-width:100%;overflow-x:hidden;
+    word-wrap:break-word;
+  }
+  .side-card .arabic{font-size:26px;line-height:2.2;text-align:center;color:#2a2f44}
+  .bismillah{font-size:30px;text-align:center;color:var(--gold);margin-bottom:10px}
+
+  /* scrollbar for side-card */
+  .side-card::-webkit-scrollbar{width:6px}
+  .side-card::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  /* ===== Flashcards ===== */
+  .deck-controls{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+  .btn{
+    cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:10px 16px;border-radius:10px;font-weight:600;transition:all .2s;
+    display:inline-flex;align-items:center;gap:8px;font-size:14px;
+    font-family:inherit;
+  }
+  .btn:hover{background:#faf6ee;border-color:var(--gold)}
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn.primary:hover{background:#2a3144}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#fff;border-color:transparent}
+  .btn.teal-btn{background:linear-gradient(135deg,var(--teal),#1a9e9e);color:#fff;border-color:transparent}
+  .btn.teal-btn:hover{box-shadow:0 4px 16px rgba(15,107,107,.35)}
+  .btn.whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border-color:transparent}
+  .btn.whatsapp:hover{box-shadow:0 4px 16px rgba(37,211,102,.4)}
+  .btn.pdf-btn{background:linear-gradient(135deg,var(--rose),#d85050);color:#fff;border-color:transparent}
+  .btn.pdf-btn:hover{box-shadow:0 4px 16px rgba(176,70,70,.35)}
+
+  .deck{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:18px;
+  }
+  .flip{
+    perspective:1400px;height:360px;cursor:pointer;
+  }
+  .flip-inner{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .flip.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;border-radius:var(--radius);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid var(--line);box-shadow:var(--shadow);
+    padding:18px;display:flex;flex-direction:column;
+  }
+  .face.front{
+    background:
+      radial-gradient(400px 200px at 100% 0%, #e0f0ff 0%, transparent 70%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    align-items:center;justify-content:space-between;
+  }
+  .face.back{
+    background:#fffdf8;
+    transform:rotateY(180deg);
+    overflow-y:auto;
+  }
+  .ayah-num{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow);font-size:14px;
+  flex-shrink:0;line-height:1;}
+  .ayah-ar{
+    font-family:'Amiri Quran',serif;direction:rtl;
+    font-size:26px;line-height:2;text-align:center;color:#2a2f44;
+    flex:1;display:flex;align-items:center;justify-content:center;padding:0 6px;
+  }
+  .flip-hint{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .back h4{margin:0 0 4px;font-family:'Playfair Display',serif;font-size:16px;color:var(--teal)}
+  .back .trans{font-size:13px;color:var(--ink-soft);line-height:1.6;font-style:italic;margin:0 0 10px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+  .back .tafsir{font-size:13px;color:var(--ink);line-height:1.6;margin:0 0 10px}
+  .words{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .word{
+    background:var(--teal-soft);color:var(--teal);
+    padding:4px 8px;border-radius:8px;font-size:12px;font-weight:600;
+    display:inline-flex;flex-direction:column;align-items:center;gap:2px;
+  }
+  .word .ar{font-family:'Amiri',serif;font-size:14px}
+  .word .en{font-size:10px;color:var(--ink-soft);font-weight:500}
+
+  /* ===== Story timeline ===== */
+  .story-list{display:grid;gap:14px}
+  .story-item{
+    display:grid;grid-template-columns:60px 1fr;gap:16px;
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow);transition:all .25s;
+  }
+  .story-item:hover{transform:translateY(-2px);border-color:var(--teal)}
+  .step-no{
+    width:48px;height:48px;border-radius:14px;background:var(--indigo-soft);color:var(--indigo);
+    display:grid;place-items:center;font-weight:800;font-size:20px;
+  }
+  .story-item h3{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:20px}
+  .story-item p{margin:0;color:var(--ink-soft);line-height:1.7;font-size:14px}
+  .badge-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .badge{font-size:11px;padding:4px 10px;border-radius:999px;background:#f3eee2;color:var(--ink-soft);font-weight:600}
+
+  /* ===== Characters ===== */
+  .char-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .char-card h3{margin:6px 0 4px;font-family:'Playfair Display',serif}
+  .char-emoji{font-size:36px}
+  .char-card .role{color:var(--teal);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .char-card p{color:var(--ink-soft);font-size:13px;line-height:1.6}
+
+  /* ===== Lessons (Tadabbur) ===== */
+  .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .lesson{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .lesson::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--teal),#1a9e9e)}
+  body[dir="rtl"] .lesson::before{left:auto;right:0}
+  .lesson .ic{font-size:28px;margin-bottom:8px}
+  .lesson h4{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:18px}
+  .lesson p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+  /* ===== Vocabulary ===== */
+  .vocab-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow)}
+  .vocab-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:500px}
+  .vocab-table th, .vocab-table td{padding:14px 16px;text-align:start;border-bottom:1px solid var(--line)}
+  .vocab-table th{background:#faf6ee;font-weight:700;font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.5px}
+  .vocab-table tr:last-child td{border-bottom:none}
+  .vocab-table tr:hover{background:#fbf8f1}
+  .vocab-ar{font-family:'Amiri',serif;font-size:22px;color:#2a2f44;direction:rtl;text-align:right}
+
+  /* ===== Exercises ===== */
+  .quiz-section{margin-bottom:22px}
+  .quiz-section h3{font-family:'Playfair Display',serif;margin:0 0 4px}
+  .quiz-section .desc{color:var(--muted);margin:0 0 14px;font-size:13px}
+
+  .mcq{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .mcq .q{font-weight:700;margin:0 0 12px;font-size:15px}
+  .mcq .opts{display:grid;gap:8px}
+  .opt{
+    padding:12px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;
+    transition:all .2s;background:#fff;font-size:14px;
+  }
+  .opt:hover{background:#faf6ee;border-color:var(--gold)}
+  .opt.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600}
+  .opt.wrong{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);font-weight:600}
+  .feedback{margin-top:10px;font-size:13px;color:var(--ink-soft);display:none}
+  .feedback.show{display:block}
+
+  /* Matching */
+  .match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:100%}
+  @media(max-width:700px){.match-wrap{grid-template-columns:1fr}}
+  .match-col h4{margin:0 0 8px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .match-item{
+    padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:14px;
+    user-select:none;
+  }
+  .match-item:hover{border-color:var(--gold)}
+  .match-item.selected{background:var(--teal-soft);border-color:var(--teal);color:var(--teal);font-weight:600}
+  .match-item.matched{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600;cursor:default;pointer-events:none}
+  .match-item.error{background:var(--rose-soft);border-color:var(--rose)}
+  .match-ar{font-family:'Amiri',serif;font-size:20px;direction:rtl;text-align:right}
+
+  /* Order */
+  .order-list{display:grid;gap:8px;margin-bottom:12px}
+  .order-item{
+    padding:14px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    cursor:grab;font-size:14px;display:flex;align-items:center;gap:12px;
+    transition:all .2s;
+  }
+  .order-item:hover{border-color:var(--gold)}
+  .order-item.dragging{opacity:.5}
+  .order-handle{color:var(--muted);font-size:18px}
+
+  /* Fill blanks */
+  .fill-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .fill-q{font-size:15px;line-height:1.9;margin-bottom:10px}
+  .fill-q input{
+    border:none;border-bottom:2px dashed var(--gold);background:transparent;
+    padding:4px 8px;font-size:15px;width:140px;text-align:center;font-family:inherit;
+    color:var(--ink);outline:none;
+  }
+  .fill-q input:focus{border-color:var(--teal)}
+  .fill-q input.correct{color:var(--green);border-color:var(--green);border-style:solid}
+  .fill-q input.wrong{color:var(--rose);border-color:var(--rose);border-style:solid}
+
+  /* Score */
+  .score-bar{
+    position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);
+    padding:14px 22px;display:flex;justify-content:space-between;align-items:center;
+    margin:30px -24px -24px;border-radius:0 0 var(--radius) var(--radius);
+    flex-wrap:wrap;gap:10px;
+  }
+  .score-bar .lbl{color:var(--muted);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+  .score-bar .v{font-size:24px;font-weight:800;color:var(--teal)}
+
+  /* ===== Mudhakkirah Tab ===== */
+  .mudhakkirah-section{margin-bottom:28px}
+  .mudhakkirah-section h3{
+    font-family:'Playfair Display','Amiri',serif;
+    font-size:22px;margin:0 0 6px;
+    color:var(--teal);
+    display:flex;align-items:center;gap:10px;
+  }
+  .mudhakkirah-section h3 .num-badge{
+    width:32px;height:32px;border-radius:10px;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-size:14px;font-weight:800;
+    display:grid;place-items:center;flex-shrink:0;
+  }
+  .mudhakkirah-question{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;box-shadow:var(--shadow);margin-bottom:14px;
+    position:relative;overflow:hidden;
+  }
+  .mudhakkirah-question::before{
+    content:"";position:absolute;top:0;right:0;bottom:0;width:5px;
+    background:linear-gradient(180deg,var(--teal),#1a9e9e);
+  }
+  body:not([dir="rtl"]) .mudhakkirah-question::before{right:auto;left:0}
+  .mudhakkirah-question label{
+    display:block;font-weight:700;font-size:15px;margin-bottom:10px;
+    color:var(--ink);line-height:1.6;
+  }
+  .mudhakkirah-question label .q-icon{margin-inline-end:8px;font-size:18px}
+  .mudhakkirah-question textarea{
+    width:100%;min-height:120px;
+    border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-size:14px;font-family:'Amiri','Inter',serif;
+    color:var(--ink);background:#faf9f6;
+    outline:none;resize:vertical;line-height:1.8;
+    direction:rtl;text-align:right;
+  }
+  .mudhakkirah-question textarea:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(15,107,107,.12);
+  }
+  .mudhakkirah-question textarea::placeholder{
+    color:var(--muted);font-style:italic;
+  }
+
+  /* ===== Export Bar ===== */
+  .export-bar{
+    display:flex;gap:12px;align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#f0f7ff,#f0f4eb);
+    border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-top:24px;
+    flex-wrap:wrap;
+  }
+  .export-bar .export-title{
+    font-weight:700;font-size:14px;color:var(--ink);
+    margin-inline-end:auto;display:flex;align-items:center;gap:8px;
+  }
+
+  /* Footer */
+  .footer{
+    text-align:center;color:var(--muted);font-size:12px;padding:30px 0 20px;
+  }
+
+  /* Scrollbar */
+  .face.back::-webkit-scrollbar{width:6px}
+  .face.back::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;right:auto;transform:translateX(-50%);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:10px;
+    font-size:14px;font-weight:600;opacity:0;transition:all .3s;
+    box-shadow:var(--shadow);z-index:50;pointer-events:none;
+    max-width:90vw;text-align:center;
+    direction:ltr;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+  .toast.success{background:var(--green)}
+  .toast.error{background:var(--rose)}
+
+  /* PDF Generation hidden container */
+  #pdfContainer{
+    position:fixed;left:-9999px;top:0;width:800px;
+    background:#fff;color:#1f2330;font-family:'Inter','Amiri',sans-serif;
+    padding:40px;
+    z-index:-9999;
+    opacity:0;
+    pointer-events:none;
+  }
+  #pdfContainer h1{font-size:22px;margin:0 0 4px;text-align:center}
+  #pdfContainer h2{font-size:18px;margin:20px 0 8px;color:var(--teal);border-bottom:2px solid var(--teal);padding-bottom:4px}
+  #pdfContainer h3{font-size:15px;margin:14px 0 4px;color:var(--gold)}
+  #pdfContainer p{font-size:13px;line-height:1.7;margin:4px 0}
+  #pdfContainer .pdf-meta{text-align:center;color:#8a8f9e;font-size:12px;margin-bottom:16px}
+  #pdfContainer .pdf-section{margin-bottom:16px;page-break-inside:avoid}
+  #pdfContainer .pdf-qa{background:#faf9f6;border:1px solid #e5dccb;border-radius:8px;padding:12px;margin:8px 0}
+  #pdfContainer .pdf-qa label{font-weight:700;display:block;margin-bottom:4px;font-size:13px}
+  #pdfContainer .pdf-qa .answer{font-size:13px;color:#4a5063;white-space:pre-wrap;min-height:20px}
+  #pdfContainer .arabic-block{font-family:'Amiri Quran','Amiri',serif;direction:rtl;text-align:center;font-size:20px;line-height:2.2;color:#2a2f44;margin:10px 0}
+  #pdfContainer table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+  #pdfContainer th,#pdfContainer td{border:1px solid #e5dccb;padding:8px;text-align:left}
+  #pdfContainer th{background:#faf6ee;font-weight:700}
+
+  /* Responsive refinements */
+  @media(max-width:600px){
+    .topbar{padding:14px 12px}
+    .brand h1{font-size:15px}
+    .wrap{padding:0 10px}
+    .tab{min-width:80px;font-size:12px;padding:10px 6px}
+    .hero h2{font-size:24px}
+    .hero-card{padding:18px}
+    .side-card{padding:14px}
+    .side-card .arabic{font-size:20px;line-height:2}
+    .export-bar{padding:14px}
+    .card{padding:16px}
+    .score-bar{margin:20px -16px -16px;padding:12px 14px}
+    .flip{height:320px}
+    .ayah-ar{font-size:22px;line-height:1.8}
+    .story-item{grid-template-columns:48px 1fr;gap:10px;padding:14px}
+    .mcq{padding:14px}
+    .fill-card{padding:14px}
+    .lesson{padding:16px}
+    .mudhakkirah-question{padding:16px}
+    .match-item{padding:10px}
+    .bismillah{font-size:22px}
+    .vocab-table th,.vocab-table td{padding:10px 8px;font-size:12px}
+    .vocab-ar{font-size:18px}
+  }
+
+  /* ===== Premium Unified Responsive Design ===== */
+  img, video, iframe, canvas, svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media(max-width: 768px) {
+    .topbar {
+      padding: 14px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .brand {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .meta {
+      width: 100%;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .lang-toggle {
+      margin-inline-start: auto;
+    }
+    
+    .tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+      padding: 6px;
+    }
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .tab {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      padding: 10px 14px;
+    }
+    
+    .side-card {
+      max-height: 400px;
+    }
+  }
+
+  /* Hide transliteration column in vocab table when Arabic is active */
+  html[lang="ar"] .vocab-table thead th:nth-child(2),
+  html[lang="ar"] .vocab-table tbody td:nth-child(2){display:none}
+
+  
+  /* ===== Verse Highlight Feature ===== */
+  .verse-row {
+    display: inline;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 2px 4px;
+    transition: background .25s ease;
+    user-select: none;
+  }
+  .verse-row:hover {
+    background: rgba(173, 216, 230, 0.4);
+  }
+  .verse-row.active {
+    background: #b3e0f7;
+    font-weight: 800;
+  }
+  .verse-num {
+    font-size: 0.72em;
+    color: #0f6b6b;
+    vertical-align: middle;
+    font-family: 'Amiri', serif;
+    user-select: none;
+  }
+
+
+  /* ============================================================
+     MOBILE & TABLET FIX — Arabic font loading & verse numbers
+     ============================================================ */
+
+  /* 1. Force Arabic font to load with swap to avoid invisible text (squares) */
+  @font-face {
+    font-family: 'Amiri Quran';
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Amiri';
+    font-display: swap;
+  }
+
+  /* 2. Arabic text base — ensure proper rendering on all devices */
+  .arabic,
+  [dir="rtl"],
+  .ayah-ar,
+  .vocab-ar,
+  .match-ar,
+  .bismillah,
+  .side-card .arabic,
+  .fill-q {
+    font-family: 'Amiri Quran', 'Amiri', 'Scheherazade New', 'Traditional Arabic',
+                 'Arabic Typesetting', serif !important;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  }
+
+  /* 3. Fix ayah number circle — ALWAYS centred, never overflows */
+  .ayah-num {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    font-size: 13px !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 4. verse-num (the ۝١ ornate numbers in the side-card text) */
+  .verse-num {
+    font-family: 'Amiri Quran', 'Amiri', serif !important;
+    font-size: 0.85em !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+    display: inline !important;
+  }
+
+  /* 5. Flashcard face — ensure num badge stays circular on small screens */
+  .face.front {
+    overflow: hidden;
+  }
+  .face.front > .ayah-num {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* 6. Tablet (768px – 1024px) adjustments */
+  @media (max-width: 1024px) and (min-width: 601px) {
+    .ayah-ar {
+      font-size: 24px !important;
+      line-height: 2 !important;
+    }
+    .side-card .arabic {
+      font-size: 22px !important;
+      line-height: 2.2 !important;
+    }
+    .bismillah {
+      font-size: 26px !important;
+    }
+    .vocab-ar {
+      font-size: 20px !important;
+    }
+    .flip {
+      height: 340px !important;
+    }
+  }
+
+  /* 7. Mobile (≤600px) adjustments */
+  @media (max-width: 600px) {
+    .ayah-num {
+      width: 36px !important;
+      height: 36px !important;
+      min-width: 36px !important;
+      min-height: 36px !important;
+      font-size: 12px !important;
+    }
+    .ayah-ar {
+      font-size: 20px !important;
+      line-height: 1.9 !important;
+    }
+    .side-card .arabic {
+      font-size: 20px !important;
+      line-height: 2.2 !important;
+    }
+    .bismillah {
+      font-size: 22px !important;
+    }
+    .vocab-ar {
+      font-size: 18px !important;
+    }
+    .verse-num {
+      font-size: 0.8em !important;
+    }
+    .flip {
+      height: 300px !important;
+    }
+    /* make sure the card top area doesn't squash the circle */
+    .face {
+      padding: 14px !important;
+    }
+    .fill-q input {
+      width: 110px !important;
+      font-size: 14px !important;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="crest arabic">ق</div>
+    <div>
+      <h1 data-i18n="brand-title">Surah Quraysh · Interactive Portal</h1>
+      <p data-i18n="brand-sub">The Tribe of Quraysh · Tafseer & Tadabbur for Young Learners</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="pill" data-i18n="pill-chapter">Chapter 106</span>
+    <span class="pill" data-i18n="pill-verses">4 Verses</span>
+    <span class="pill" data-i18n="pill-period">Makkiyyah</span>
+    <div class="lang-toggle" id="langToggle" title="Switch language">
+      <span class="globe">🌐</span>
+      <span id="langLabel">العربية</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="intro"><span class="ic">📜</span> <span data-i18n="tab-intro">Introduction</span></div>
+    <div class="tab" data-tab="ayat"><span class="ic">🃏</span> <span data-i18n="tab-ayat">Ayat Flashcards</span></div>
+    <div class="tab" data-tab="story"><span class="ic">📖</span> <span data-i18n="tab-story">The Story</span></div>
+    <div class="tab" data-tab="characters"><span class="ic">👥</span> <span data-i18n="tab-chars">Characters</span></div>
+    <div class="tab" data-tab="vocab"><span class="ic">🔤</span> <span data-i18n="tab-vocab">Vocabulary</span></div>
+    <div class="tab" data-tab="lessons"><span class="ic">💡</span> <span data-i18n="tab-lessons">Lessons</span></div>
+    <div class="tab" data-tab="exercises"><span class="ic">🧠</span> <span data-i18n="tab-exercises">Exercises</span></div>
+    <div class="tab" data-tab="mudhakkirah"><span class="ic">📝</span> <span data-i18n="tab-mudh">مذكرة تدبري</span></div>
+  </div>
+
+  <!-- ============ INTRO ============ -->
+  <section class="panel active" id="panel-intro">
+    <div class="hero">
+      <div class="hero-card">
+        <span class="kicker" data-i18n="kicker">SURAH QURAYSH · قُرَيْش</span>
+        <h2 data-i18n="hero-title">Ilaf Quraysh — A Gift of Safety and Sustenance</h2>
+        <p class="lead" data-i18n="hero-lead">In the heart of the Arabian Peninsula stood Makkah — a barren valley with no rivers, no fields, no protection but the sanctuary of the Ka'bah. Yet a small tribe, the Quraysh, flourished there. Why? Because Allah granted them <em>Ilaf</em> — a sacred covenant of safety and brotherhood that allowed their caravans to travel south to Yemen in winter and north to Sham in summer, untouched by the raids that destroyed other tribes. Surah Quraysh is a divine reminder: every blessing you enjoy — food, safety, family — is a direct gift from the Lord of this House. The only fitting response is worship.</p>
+        <div class="quick-facts">
+          <div class="fact"><div class="lbl" data-i18n="fact-revealed">Revealed in</div><div class="val" data-i18n="fact-revealed-val">Makkah</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-order">Order of Revelation</div><div class="val" data-i18n="fact-order-val">29th</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-verses">Verses</div><div class="val" data-i18n="fact-verses-val">4 Ayat</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-theme">Theme</div><div class="val" data-i18n="fact-theme-val">Gratitude & Worship</div></div>
+        </div>
+      </div>
+      <div class="side-card">
+        <div class="bismillah arabic">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+        <div class="arabic" style="font-size:24px;line-height:2.2;text-align:center;color:#2a2f44">
+<span class="verse-row" title="Verse 1">لِإِيلَافِ قُرَيْشٍ <span class="verse-num">۝١</span></span>
+<span class="verse-row" title="Verse 2">إِيلَافِهِمْ رِحْلَةَ ٱلشِّتَآءِ وَٱلصَّيْفِ <span class="verse-num">۝٢</span></span>
+<span class="verse-row" title="Verse 3">فَلْيَعْبُدُوا۟ رَبَّ هَٰذَا ٱلْبَيْتِ <span class="verse-num">۝٣</span></span>
+<span class="verse-row" title="Verse 4">ٱلَّذِىٓ أَطْعَمَهُم مِّن جُوعٍۢ وَءَامَنَهُم مِّنْ خَوْفٍۭ <span class="verse-num">۝٤</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AYAT FLASHCARDS ============ -->
+  <section class="panel" id="panel-ayat">
+    <h2 class="section" data-i18n="section-ayat">Ayat Flashcards</h2>
+    <p class="sub" data-i18n="sub-ayat">Tap any card to flip — see translation, tafseer, and word-by-word meanings.</p>
+    <div class="deck-controls">
+      <button class="btn" id="flipAll"><span data-i18n="btn-flipall">🔄 Flip All</span></button>
+      <button class="btn" id="resetCards"><span data-i18n="btn-reset-cards">↺ Reset</span></button>
+    </div>
+    <div class="deck" id="deck"></div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section class="panel" id="panel-story">
+    <h2 class="section" data-i18n="section-story">The Story · The Crusher</h2>
+    <p class="sub" data-i18n="sub-story">The divine warning against the slanderers and wealth-hoarders of every age.</p>
+    <div class="story-list" id="storyList"></div>
+  </section>
+
+  <!-- ============ CHARACTERS ============ -->
+  <section class="panel" id="panel-characters">
+    <h2 class="section" data-i18n="section-chars">Key Figures</h2>
+    <p class="sub" data-i18n="sub-chars">The people and forces at the heart of this thunderous revelation.</p>
+    <div class="grid-3" id="charList"></div>
+  </section>
+
+  <!-- ============ VOCABULARY ============ -->
+  <section class="panel" id="panel-vocab">
+    <h2 class="section" data-i18n="section-vocab">Word-by-Word Glossary</h2>
+    <p class="sub" data-i18n="sub-vocab">Every key Quranic word explained — root, meaning, and context.</p>
+    <div class="vocab-table-wrap">
+    <table class="vocab-table">
+      <thead>
+        <tr>
+          <th data-i18n="th-word">Word</th>
+          <th data-i18n="th-translit">Transliteration</th>
+          <th data-i18n="th-meaning">Meaning</th>
+          <th data-i18n="th-notes">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="panel" id="panel-lessons">
+    <h2 class="section" data-i18n="section-lessons">Lessons for Modern Youth</h2>
+    <p class="sub" data-i18n="sub-lessons">Timeless principles from the surah that crushes arrogance.</p>
+    <div class="lesson-grid" id="lessonGrid"></div>
+  </section>
+
+  <!-- ============ EXERCISES ============ -->
+  <section class="panel" id="panel-exercises">
+    <h2 class="section" data-i18n="section-exercises">Deep Practice</h2>
+    <p class="sub" data-i18n="sub-exercises">Multiple-choice, matching, fill-in-the-blank, and chronological ordering.</p>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-mcq-title">① Comprehension — Multiple Choice</h3>
+      <p class="desc" data-i18n="quiz-mcq-desc">Choose the most accurate answer based on the Surah and its tafseer.</p>
+      <div id="mcqContainer"></div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-match-title">② Word Matching</h3>
+      <p class="desc" data-i18n="quiz-match-desc">Tap an Arabic word, then tap its English meaning.</p>
+      <div class="card">
+        <div class="match-wrap">
+          <div class="match-col">
+            <h4 data-i18n="match-arabic">Arabic</h4>
+            <div id="matchAr"></div>
+          </div>
+          <div class="match-col">
+            <h4 data-i18n="match-english">English</h4>
+            <div id="matchEn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-fill-title">③ Fill in the Blanks</h3>
+      <p class="desc" data-i18n="quiz-fill-desc">Complete the verses with the correct word.</p>
+      <div id="fillContainer"></div>
+      <button class="btn primary" id="checkFill"><span data-i18n="btn-check-answers">Check Answers</span></button>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-order-title">④ Order the Events</h3>
+      <p class="desc" data-i18n="quiz-order-desc">Drag the story events into the correct chronological order.</p>
+      <div class="card">
+        <div class="order-list" id="orderList"></div>
+        <button class="btn primary" id="checkOrder"><span data-i18n="btn-check-order">Check Order</span></button>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <div>
+        <div class="lbl" data-i18n="score-label">Your Score</div>
+        <div class="v"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+      </div>
+      <button class="btn gold" id="resetQuiz"><span data-i18n="btn-reset-quiz">↺ Reset All</span></button>
+    </div>
+  </section>
+
+  <!-- ============ MUDHAKKIRAH (مذكرة تدبري) ============ -->
+  <section class="panel" id="panel-mudhakkirah">
+    <h2 class="section" data-i18n="mudh-title" style="font-family:'Amiri','Playfair Display',serif;">📝 مذكرة تدبري للقرآن</h2>
+    <p class="sub" data-i18n="mudh-sub" style="font-family:'Amiri',serif;font-size:15px;direction:rtl;text-align:right;">تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.</p>
+
+    <!-- Student Name (only on Tadabbur page) -->
+    <div class="mudhakkirah-question" style="margin-bottom:22px;">
+      <label><span class="q-icon">👤</span> <span data-i18n="student-label">Student Name:</span></label>
+      <input type="text" id="studentName" data-placeholder-en="Enter your name..." data-placeholder-ar="اكتب اسمك هنا..." placeholder="Enter your name..."
+        style="width:100%;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:16px;font-family:'Amiri','Inter',serif;color:var(--ink);background:#faf9f6;outline:none;direction:rtl;text-align:right;" />
+    </div>
+
+    <!-- Section 1 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-1">١</span> <span data-i18n="mudh-sec-1">أولاً: المحور العام (الفهم والتدبر)</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">📖</span> <span data-i18n="mudh-q1-label">ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</span></label>
+        <textarea id="mudh-q1" data-placeholder-ar="اكتب خلاصة الآيات بأسلوبك الخاص هنا..." data-placeholder-en="Write the summary of the verses in your own words here..." placeholder="اكتب خلاصة الآيات بأسلوبك الخاص هنا..."></textarea>
+      </div>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">💡</span> <span data-i18n="mudh-q2-label">ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</span></label>
+        <textarea id="mudh-q2" data-placeholder-ar="اكتب أهم درس وكيف ستطبقه..." data-placeholder-en="Write the most important lesson and how you will apply it..." placeholder="اكتب أهم درس وكيف ستطبقه..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-2">٢</span> <span data-i18n="mudh-sec-2">ثانياً: المحور الوجداني والشخصي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">❤️</span> <span data-i18n="mudh-q3-label">هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</span></label>
+        <textarea id="mudh-q3" data-placeholder-ar="اكتب عن الآية التي أثرت فيك ولماذا..." data-placeholder-en="Write about the verse that touched you and why..." placeholder="اكتب عن الآية التي أثرت فيك ولماذا..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-3">٣</span> <span data-i18n="mudh-sec-3">ثالثاً: المحور التطبيقي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">🎯</span> <span data-i18n="mudh-q4-label">حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</span></label>
+        <textarea id="mudh-q4" data-placeholder-ar="اكتب هدفك العملي أو عهدك مع نفسك..." data-placeholder-en="Write your practical goal or personal commitment..." placeholder="اكتب هدفك العملي أو عهدك مع نفسك..."></textarea>
+      </div>
+    </div>
+
+    <!-- Export Bar -->
+    <div class="export-bar">
+      <div class="export-title">
+        <span>📤</span>
+        <span data-i18n="export-title">Share Your Work</span>
+      </div>
+      <button class="btn whatsapp" id="btnWhatsApp">
+        <span style="font-size:20px">💬</span>
+        <span data-i18n="btn-whatsapp">Send to my Teacher</span>
+      </button>
+      <button class="btn pdf-btn" id="btnPDF">
+        <span style="font-size:20px">📄</span>
+        <span data-i18n="btn-pdf">Download PDF</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="footer" data-i18n="footer">Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Hidden PDF render container -->
+<div id="pdfContainer"></div>
+
+<script>
+/* ============= LANGUAGE DATA ============= */
+let currentLang = 'en';
+
+const I18N = {
+  'brand-title':       { en: 'Surah Quraysh · Interactive Portal',   ar: 'سورة قريش · بوابة تعليمية تفاعلية' },
+  'brand-sub':         { en: 'The Tribe of Quraysh · Tafseer & Tadabbur for Young Learners', ar: 'قبيلة قريش · تفسير وتدبر للناشئة' },
+  'pill-chapter':      { en: 'Chapter 106',    ar: 'السورة ١٠٦' },
+  'pill-verses':       { en: '4 Verses',     ar: '٤ آيات' },
+  'pill-period':       { en: 'Makkiyyah',     ar: 'مكّيّة' },
+  'student-label':     { en: 'Student Name:',  ar: 'اسم الطالب:' },
+  'tab-intro':         { en: 'Introduction',   ar: 'المقدمة' },
+  'tab-ayat':          { en: 'Ayat Flashcards', ar: 'بطاقات الآيات' },
+  'tab-story':         { en: 'The Story',      ar: 'القصة' },
+  'tab-chars':         { en: 'Surah Landmarks', ar: 'معالم السورة' },
+  'tab-vocab':         { en: 'Vocabulary',     ar: 'المفردات' },
+  'tab-lessons':       { en: 'Lessons',        ar: 'الدروس' },
+  'tab-exercises':     { en: 'Exercises',      ar: 'التمارين' },
+  'tab-mudh':          { en: 'My Reflection Journal', ar: 'مذكرة تدبري' },
+  'kicker':            { en: 'SURAH QURAYSH · قُرَيْش', ar: 'سورة قريش · قُرَيْش' },
+  'hero-title':        { en: 'Ilaf Quraysh — A Gift of Safety and Sustenance', ar: 'إيلاف قريش — هبة الأمن والرزق' },
+  'hero-lead':         { en: 'In the heart of the Arabian Peninsula stood Makkah — a barren valley with no rivers, no fields, no protection but the sanctuary of the Ka\'bah. Yet a small tribe, the Quraysh, flourished there. Why? Because Allah granted them <em>Ilaf</em> — a sacred covenant of safety and brotherhood that allowed their caravans to travel south to Yemen in winter and north to Sham in summer, untouched by the raids that destroyed other tribes. Surah Quraysh is a divine reminder: every blessing you enjoy — food, safety, family — is a direct gift from the Lord of this House. The only fitting response is worship.', ar: 'في قلب جزيرة العرب كانت مكة — وادٍ قاحل لا أنهار فيه ولا زروع ولا حماية إلا حُرمة الكعبة. ومع ذلك ازدهرت فيها قبيلةٌ صغيرة هي قريش. لماذا؟ لأن الله منحهم <em>الإيلاف</em> — ميثاقًا مقدسًا من الأمان والأخوّة جعل قوافلهم تذهب جنوبًا إلى اليمن في الشتاء وشمالًا إلى الشام في الصيف دون أن تمسّها غاراتٌ أفنت سواهم. سورة قريش تذكيرٌ إلهي: كلّ نعمةٍ تتقلّب فيها — طعامٌ وأمنٌ وأهلٌ — هي عطيّةٌ من ربّ هذا البيت، وما يليق بها إلا أن نعبده وحده.' },
+  'fact-revealed':     { en: 'Revealed in',       ar: 'مكان النزول' },
+  'fact-revealed-val': { en: 'Makkah',            ar: 'مكة المكرمة' },
+  'fact-order':        { en: 'Order of Revelation', ar: 'ترتيب النزول' },
+  'fact-order-val':    { en: '29th',                ar: 'التاسعة والعشرون' },
+  'fact-verses':       { en: 'Verses',             ar: 'الآيات' },
+  'fact-verses-val':   { en: '4 Ayat',            ar: '٤ آيات' },
+  'fact-theme':        { en: 'Theme',              ar: 'الموضوع' },
+  'fact-theme-val':    { en: 'Gratitude & Worship', ar: 'الشكر والعبادة' },
+  'section-ayat':      { en: 'Ayat Flashcards',    ar: 'بطاقات الآيات' },
+  'sub-ayat':          { en: 'Tap any card to flip — see translation, tafseer, and word-by-word meanings.', ar: 'اضغط على أي بطاقة لقلبها — شاهد الشرح والتفسير ومعاني الكلمات.' },
+  'btn-flipall':       { en: '🔄 Flip All',        ar: '🔄 اقلب الكل' },
+  'btn-reset-cards':   { en: '↺ Reset',            ar: '↺ إعادة ضبط' },
+  'section-story':     { en: 'The Story · The Tribe of Quraysh', ar: 'القصة · قبيلة قريش' },
+  'sub-story':         { en: 'How Allah gathered, protected, and fed a tribe in a barren valley — and why they owe Him everything.', ar: 'كيف جمع الله قبيلةً في وادٍ قاحل وحماها ورزقها — ولماذا له عليهم كل شيء.' },
+  'section-chars':     { en: 'Surah Landmarks',     ar: 'معالم السورة' },
+  'sub-chars':         { en: 'The people and places at the heart of this short but profound surah.', ar: 'الأشخاص والأماكن في قلب هذه السورة الموجزة العميقة.' },
+  'section-vocab':     { en: 'Word-by-Word Glossary', ar: 'معجم الكلمات' },
+  'sub-vocab':         { en: 'Every key Quranic word explained — root, meaning, and context.', ar: 'شرح كل كلمة قرآنية مهمة — الجذر والمعنى والسياق.' },
+  'th-word':           { en: 'Word',            ar: 'الكلمة' },
+  'th-translit':       { en: 'Transliteration', ar: 'النطق' },
+  'th-meaning':        { en: 'Meaning',         ar: 'المعنى' },
+  'th-notes':          { en: 'Notes',           ar: 'ملاحظات' },
+  'section-lessons':   { en: 'Lessons for Modern Youth', ar: 'دروس للشباب المعاصر' },
+  'sub-lessons':       { en: 'Timeless principles from the surah of gratitude and worship.', ar: 'مبادئ خالدة من سورة الشكر والعبادة.' },
+  'section-exercises': { en: 'Deep Practice',   ar: 'تمارين تطبيقية' },
+  'sub-exercises':     { en: 'Multiple-choice, matching, fill-in-the-blank, and chronological ordering.', ar: 'اختيار من متعدد، مطابقة، ملء الفراغات، وترتيب زمني.' },
+  'quiz-mcq-title':    { en: '① Comprehension — Multiple Choice', ar: '① الفهم — اختيار من متعدد' },
+  'quiz-mcq-desc':     { en: 'Choose the most accurate answer based on the Surah and its tafseer.', ar: 'اختر الإجابة الأدق بناءً على السورة وتفسيرها.' },
+  'quiz-match-title':  { en: '② Word Matching',  ar: '② مطابقة الكلمات' },
+  'quiz-match-desc':   { en: 'Tap an Arabic word, then tap its English meaning.', ar: 'اضغط على الكلمة العربية ثم اضغط على معناها.' },
+  'match-arabic':      { en: 'Arabic',           ar: 'عربي' },
+  'match-english':     { en: 'English',          ar: 'المعنى' },
+  'quiz-fill-title':   { en: '③ Fill in the Blanks', ar: '③ أكمل الفراغات' },
+  'quiz-fill-desc':    { en: 'Complete the verses with the correct word.', ar: 'أكمل الآيات بالكلمة الصحيحة.' },
+  'btn-check-answers': { en: 'Check Answers',     ar: 'تحقق من الإجابات' },
+  'quiz-order-title':  { en: '④ Order the Events', ar: '④ رتّب الأحداث' },
+  'quiz-order-desc':   { en: 'Drag the story events into the correct chronological order.', ar: 'اسحب الأحداث ورتّبها ترتيباً زمنياً صحيحاً.' },
+  'btn-check-order':   { en: 'Check Order',       ar: 'تحقق من الترتيب' },
+  'score-label':       { en: 'Your Score',        ar: 'درجتك' },
+  'btn-reset-quiz':    { en: '↺ Reset All',       ar: '↺ إعادة ضبط الكل' },
+  'export-title':      { en: 'Share Your Work',   ar: 'شارك عملك' },
+  'btn-whatsapp':      { en: 'Send to my Teacher', ar: 'أرسل للمعلم' },
+  'btn-pdf':           { en: 'Download PDF',      ar: 'تحميل PDF' },
+  'footer':            { en: 'Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.', ar: 'تَمَّ بِتَوْفِقٍ مِنَ اللهِ وِفْقَ مَرَاجِعِ المُفَسِّرِينَ مِنْ عُلَمَاءِ أهْلِ السُّنَّةِ، وَالْحَمْدُ للهِ رَبِّ العَالَمِينَ.' },
+  'mudh-title':        { en: '📝 My Reflection Journal on the Quran', ar: '📝 مذكرة تدبري للقرآن' },
+  'mudh-sub':          { en: 'Written reflections and contemplations that help the student understand the verses and apply them in daily life.', ar: 'تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.' },
+  'mudh-num-1':        { en: '1', ar: '١' },
+  'mudh-num-2':        { en: '2', ar: '٢' },
+  'mudh-num-3':        { en: '3', ar: '٣' },
+  'mudh-sec-1':        { en: 'First: General Axis (Understanding & Reflection)', ar: 'أولاً: المحور العام (الفهم والتدبر)' },
+  'mudh-sec-2':        { en: 'Second: Emotional & Personal Axis', ar: 'ثانياً: المحور الوجداني والشخصي' },
+  'mudh-sec-3':        { en: 'Third: Practical Axis', ar: 'ثالثاً: المحور التطبيقي' },
+  'mudh-q1-label':     { en: 'In your own simple words, what is the gist of these verses?', ar: 'ما خلاصة الآيات في رأيك بأسلوبك البسيط؟' },
+  'mudh-q2-label':     { en: 'What is the most important lesson from these verses, and how will you apply it in your daily life?', ar: 'ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟' },
+  'mudh-q3-label':     { en: 'Is there a particular verse that touched your heart or affected you especially? Why?', ar: 'هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟' },
+  'mudh-q4-label':     { en: 'Set a small practical goal or a personal commitment to apply these verses.', ar: 'حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.' },
+};
+
+/* ============= CONTENT DATA ============= */
+const AYAT = [
+  {
+    n:1,
+    ar:"لِإِيلَافِ قُرَيْشٍ",
+    tr:{ en:"For the accustomed security of the Quraysh —", ar:"لِأَجل إيلاف قريش وأُلفتهم." },
+    tafsir:{ en:"'Ilaf' means a binding bond, a treaty of friendship, and a settled habit. Allah opens the surah by reminding Quraysh that the safety, agreements, and prosperity they enjoy were granted to them by Him — not earned by their lineage or strength.", ar:"«الإيلاف» هو رباطٌ وعهدٌ وعادةٌ مستقرة. يفتتح الله السورة بتذكير قريش بأن ما يتمتعون به من أمنٍ ومواثيق ورخاء إنما هو منحةٌ منه سبحانه، لا من نسبهم ولا من قوّتهم." },
+    words:[
+      {ar:"لِإِيلَافِ", en:{en:"For the familiarity / covenant", ar:"لأجل الإيلاف والاعتياد"}},
+      {ar:"قُرَيْشٍ", en:{en:"Quraysh (the tribe)", ar:"قبيلة قريش"}},
+    ]
+  },
+  {
+    n:2,
+    ar:"إِيلَافِهِمْ رِحْلَةَ ٱلشِّتَآءِ وَٱلصَّيْفِ",
+    tr:{ en:"Their accustomed safety in the journey of winter and summer —", ar:"إيلافِهم رحلتَي الشتاء إلى اليمن، والصيف إلى الشام." },
+    tafsir:{ en:"Quraysh sent two annual trade caravans: south to Yemen in winter where the climate was warm, and north to Sham (greater Syria) in summer where it was cool. Other tribes raided travelers, but Quraysh — as guardians of the Ka'bah — were granted safe passage by all. This was a unique divine favor.", ar:"كانت لقريش رحلتان تجاريّتان في العام: رحلة الشتاء جنوبًا إلى اليمن حيث الدفء، ورحلة الصيف شمالًا إلى الشام حيث البرد. وكانت القبائل تنهب القوافل، أما قريش — حُجّاب البيت — فكانوا يمرّون بأمانٍ كامل. وهذه نعمةٌ إلهيّة فريدة." },
+    words:[
+      {ar:"إِيلَافِهِمْ", en:{en:"their familiarity / safe habit", ar:"إيلافهم وعهدهم"}},
+      {ar:"رِحْلَةَ", en:{en:"the journey", ar:"رحلة"}},
+      {ar:"ٱلشِّتَآءِ", en:{en:"of winter (to Yemen)", ar:"الشتاء — إلى اليمن"}},
+      {ar:"وَٱلصَّيْفِ", en:{en:"and of summer (to Sham)", ar:"والصيف — إلى الشام"}},
+    ]
+  },
+  {
+    n:3,
+    ar:"فَلْيَعْبُدُوا۟ رَبَّ هَٰذَا ٱلْبَيْتِ",
+    tr:{ en:"So let them worship the Lord of this House,", ar:"فليُفرِدوا بالعبادة ربَّ هذا البيت الحرام." },
+    tafsir:{ en:"After listing the favor, Allah states the only fitting response: pure worship of the Lord of the Ka'bah. Notice it does not say 'the Lord of Quraysh' — it says 'the Lord of this House' — because their honor came from the House, not the House from them. Worship is the price of gratitude.", ar:"بعد ذكر النعمة يأمر الله بالاستجابة اللائقة: إفراده وحده بالعبادة، ربِّ الكعبة. ولاحظ أنه لم يقل «ربّ قريش» بل «ربّ هذا البيت» — لأن شرفهم جاء من البيت، لا البيت من شرفهم. والعبادة هي ثمن الشكر." },
+    words:[
+      {ar:"فَلْيَعْبُدُوا۟", en:{en:"so let them worship", ar:"فليعبدوا"}},
+      {ar:"رَبَّ", en:{en:"the Lord (of)", ar:"ربّ"}},
+      {ar:"هَٰذَا", en:{en:"this", ar:"هذا"}},
+      {ar:"ٱلْبَيْتِ", en:{en:"the House (the Ka'bah)", ar:"البيت — الكعبة"}},
+    ]
+  },
+  {
+    n:4,
+    ar:"ٱلَّذِىٓ أَطْعَمَهُم مِّن جُوعٍۢ وَءَامَنَهُم مِّنْ خَوْفٍۭ",
+    tr:{ en:"Who has fed them, [saving them] from hunger, and made them safe from fear.", ar:"الذي رزقهم الطعام بعد جوع، وأعطاهم الأمن بعد خوف." },
+    tafsir:{ en:"Allah names two of the greatest human needs: food and safety. Makkah grows nothing — yet fruits and goods flowed in. The desert was full of raiders — yet Quraysh slept peacefully. Both blessings came from the same source. Whoever enjoys food and safety today is enjoying the same two gifts and owes the same gratitude.", ar:"يذكر الله أعظم حاجتين للإنسان: الطعام والأمن. مكةٌ لا تنبت زرعًا — ومع ذلك تتدفّق إليها الثمار والبضائع. والصحراءُ مملوءةٌ بقُطّاع الطرق — ومع ذلك ينام أهل قريش آمنين. النعمتان من المصدر نفسه. ومن يتمتع اليوم بالطعام والأمن إنما يتقلّب في النعمتين ذاتهما، وعليه الشكر ذاته." },
+    words:[
+      {ar:"ٱلَّذِىٓ", en:{en:"Who (the One who)", ar:"الذي"}},
+      {ar:"أَطْعَمَهُم", en:{en:"fed them", ar:"أطعمهم"}},
+      {ar:"مِّن جُوعٍۢ", en:{en:"from hunger", ar:"من جوع"}},
+      {ar:"وَءَامَنَهُم", en:{en:"and gave them safety", ar:"وآمنهم"}},
+      {ar:"مِّنْ خَوْفٍۭ", en:{en:"from fear", ar:"من خوف"}},
+    ]
+  },
+];
+
+const STORY = [
+  {t:{en:"A Valley Without Water",ar:"وادٍ بلا ماء"}, d:{en:"Makkah lies in a stony, barren valley with no rivers or farms. By any logic, no civilization should have arisen there. Yet Prophet Ibrahim ﷺ left his wife Hajar and son Isma'il ﷺ here by Allah's command, trusting in His provision.", ar:"تقع مكة في وادٍ صخريٍّ جدبٍ لا أنهار فيه ولا مزارع. ومن حيث المنطق لا يمكن أن تقوم فيه حضارة. ومع ذلك ترك إبراهيم ﷺ زوجَه هاجر وابنَه إسماعيل ﷺ هناك بأمر الله، واثقًا برزقه."}, tags:{en:["Makkah","Ibrahim","Trust"], ar:["مكة","إبراهيم","التوكل"]}},
+  {t:{en:"Zamzam and the Tribe of Jurhum",ar:"زمزم وقبيلة جُرهم"}, d:{en:"When Hajar ran between Safa and Marwa searching for water, Allah caused Zamzam to gush forth. Birds circling the water drew the tribe of Jurhum, who settled there with her permission. A city began to grow around the well and the foundations of the Ka'bah.", ar:"حين سعت هاجر بين الصفا والمروة باحثةً عن الماء، فجّر الله زمزم. ودلّت الطيورُ الدائرةُ فوق الماء قبيلةَ جُرهم فاستوطنوا المكان بإذنها. وبدأت مدينةٌ تنمو حول البئر وأساسات الكعبة."}, tags:{en:["Zamzam","Hajar","Jurhum"], ar:["زمزم","هاجر","جُرهم"]}},
+  {t:{en:"Qusayy Gathers the Quraysh",ar:"قُصَيٌّ يجمع قريشًا"}, d:{en:"Generations later, Qusayy ibn Kilab — a noble descendant of Isma'il — united the scattered clans of Quraysh and brought them back to live around the Ka'bah. He organized their leadership, watering of pilgrims, and care of the House. This is the 'gathering' (ilaf) referenced in the surah.", ar:"بعد أجيال، وحّد قُصَيُّ بن كلاب — السليلُ الشريفُ لإسماعيل — بطونَ قريش المتفرّقة وأعادهم إلى السكن حول الكعبة. ونظّم الزعامة وسقاية الحجيج ورعاية البيت. وهذا هو «الإيلاف» — الجمع — الذي تشير إليه السورة."}, tags:{en:["Qusayy","Gathering","Leadership"], ar:["قُصَي","الجمع","القيادة"]}},
+  {t:{en:"Guardians of the Sacred House",ar:"حُجّاب البيت الحرام"}, d:{en:"Because Quraysh served the Ka'bah, every Arab tribe respected them. They were called 'Ahl Allah' — the people of Allah's House. This status gave them an unwritten safe-passage across the whole peninsula — a divine privilege no army could have purchased.", ar:"لأن قريشًا خدمت الكعبة، احترمتهم كلُّ قبيلةٍ عربيّة. وكانوا يُدعَون «أهل الله» — أهل بيت الله. وهذه المكانة منحتهم مرورًا آمنًا غير مكتوب عبر الجزيرة كلها — امتيازٌ إلهيٌّ لم يكن جيشٌ ليشتريَه."}, tags:{en:["Ka'bah","Honor","Safety"], ar:["الكعبة","الشرف","الأمن"]}},
+  {t:{en:"The Two Great Journeys",ar:"الرحلتان الكبيرتان"}, d:{en:"Every winter a caravan left Makkah for Yemen — warm and rich with spices. Every summer another caravan headed to Sham — cool and full of olive oil, fabrics, and Roman goods. These two journeys made Quraysh the merchant princes of Arabia.", ar:"في كل شتاءٍ تنطلق قافلةٌ من مكة إلى اليمن — حيث الدفء وغنى التوابل. وفي كل صيفٍ تنطلق قافلةٌ أخرى إلى الشام — حيث البرد وزيت الزيتون والأقمشة والبضائع الروميّة. هاتان الرحلتان جعلتا قريشًا أمراءَ التجارة في الجزيرة."}, tags:{en:["Winter","Summer","Trade"], ar:["الشتاء","الصيف","التجارة"]}},
+  {t:{en:"The Year of the Elephant",ar:"عام الفيل"}, d:{en:"Just before the Prophet's birth ﷺ, Abraha came with elephants to demolish the Ka'bah. Allah destroyed his army with flocks of birds carrying stones (Surah Al-Fil). After this, Arabs were certain: this House is divinely protected — and so is the tribe that lives by it.", ar:"قُبيل مولد النبي ﷺ، جاء أبرهةُ بالفيلة ليهدم الكعبة. فأهلك اللهُ جيشَه بأسرابٍ من الطير تحمل الحجارة (سورة الفيل). وبعد هذا اليوم أيقن العربُ: هذا البيتُ محميٌّ بأمر الله — والقبيلةُ التي تسكن بجواره كذلك."}, tags:{en:["Abraha","Al-Fil","Protection"], ar:["أبرهة","الفيل","الحماية"]}},
+  {t:{en:"Fed in a Barren Land",ar:"إطعامٌ في أرضٍ جدباء"}, d:{en:"Despite the rocky soil, every fruit of the earth reached Makkah — from Yemeni dates to Syrian olives. The prayer of Ibrahim ﷺ was answered: 'O Lord, provide its people with fruits.' Allah fed them when by all natural means they should have starved.", ar:"رغم الأرض الصخريّة، كانت تصل إلى مكة ثمارُ الأرض كلِّها — من تمر اليمن إلى زيتون الشام. استجاب الله دعوة إبراهيم ﷺ: «رَبِّ ٱرْزُقْ أَهْلَهُ مِنَ ٱلثَّمَرَٰتِ». أطعمهم الله في موضعٍ كانت فيه المجاعةُ هي القاعدة."}, tags:{en:["Provision","Du'a","Ibrahim"], ar:["الرزق","الدعاء","إبراهيم"]}},
+  {t:{en:"Safe While Others Trembled",ar:"آمنون والناس يخافون"}, d:{en:"Allah Himself describes it in another surah: 'Do they not see that We have made [Makkah] a safe sanctuary while people are being snatched away all around them?' (29:67). Caravans were ambushed in every direction — but Makkah's people slept safely.", ar:"يصف الله ذلك في سورةٍ أخرى: «أَوَلَمْ يَرَوْا۟ أَنَّا جَعَلْنَا حَرَمًا ءَامِنًا وَيُتَخَطَّفُ ٱلنَّاسُ مِنْ حَوْلِهِمْ» (٢٩:٦٧). كانت القوافل تُهاجَم في كلِّ ناحية — وأهلُ مكةَ في أمنٍ ينامون."}, tags:{en:["Safety","Sanctuary","Mercy"], ar:["الأمن","الحرم","الرحمة"]}},
+  {t:{en:"The Surah Is Revealed",ar:"تنزّل السورة"}, d:{en:"After centuries of unique blessing, many of Quraysh still rejected Tawheed and persecuted the Prophet ﷺ. Allah revealed Surah Quraysh as a tender, urgent reminder: count the favors you live by, then ask yourself — Who deserves your worship?", ar:"بعد قرونٍ من نعمةٍ متفرّدة، ظلّ كثيرٌ من قريش يردّون التوحيد ويؤذون النبي ﷺ. فأنزل الله سورة قريش تذكيرًا رفيقًا عاجلًا: عُدُّوا النعم التي تتقلّبون فيها، ثم اسألوا أنفسكم — من يستحقّ عبادتكم؟"}, tags:{en:["Revelation","Tawheed","Gratitude"], ar:["الوحي","التوحيد","الشكر"]}},
+];
+
+const CHARS = [
+  {e:"🕋", role:{en:"The Sacred House",ar:"البيت الحرام"}, name:{en:"The Ka'bah",ar:"الكعبة المشرّفة"}, d:{en:"Built by Ibrahim and Isma'il ﷺ, it is the first House appointed for the worship of Allah. The whole status of Quraysh was borrowed from it — He is 'the Lord of this House,' not the Lord of Quraysh.", ar:"بناها إبراهيم وإسماعيل ﷺ، وهي أوّل بيتٍ وُضع لعبادة الله. ومكانة قريش كلّها مستعارةٌ منها — فهو «ربّ هذا البيت» لا ربّ قريش."}},
+  {e:"👳🏽‍♂️", role:{en:"The Founding Father",ar:"الأب المؤسّس"}, name:{en:"Prophet Ibrahim ﷺ",ar:"النبي إبراهيم ﷺ"}, d:{en:"He raised the foundations of the Ka'bah and prayed for Makkah's safety and provision. The surah is the answer to his du'a — every fruit and every safe night in Makkah is part of his accepted prayer.", ar:"رفع قواعد الكعبة ودعا بأمن مكة ورزقها. والسورة استجابةٌ لدعائه — كلُّ ثمرةٍ وكلُّ ليلةٍ آمنةٍ في مكة جزءٌ من دعوته المستجابة."}},
+  {e:"👨🏽", role:{en:"The Unifier",ar:"الموحِّد للقبيلة"}, name:{en:"Qusayy ibn Kilab",ar:"قُصَيُّ بن كلاب"}, d:{en:"The great-great-grandfather of the Prophet ﷺ who gathered Quraysh around the Ka'bah, organized leadership, and made them custodians of pilgrim affairs. The Arabs of his time called him 'Mujammi' — the Gatherer.", ar:"الجدُّ الأعلى للنبي ﷺ، جمع قريشًا حول الكعبة ونظّم الزعامة وجعلهم أصحابَ شؤون الحج. ولقّبه عربُ زمانه بـ«المجمِّع»."}},
+  {e:"🐪", role:{en:"The Two Caravans",ar:"الرحلتان"}, name:{en:"Winter & Summer Journeys",ar:"رحلتا الشتاء والصيف"}, d:{en:"The economic lifeline of Makkah: south in winter for Yemeni warmth and spices, north in summer for Syrian coolness and goods. Each caravan was an act of providence in motion.", ar:"شريانُ مكة الاقتصادي: جنوبًا في الشتاء لدفء اليمن وتوابلها، وشمالًا في الصيف لبرد الشام وبضائعها. وكلّ قافلةٍ آيةٌ من آيات الرزق تتحرّك."}},
+  {e:"🐘", role:{en:"The Failed Aggressor",ar:"المعتدي الذي خاب"}, name:{en:"Abraha & the Elephant Army",ar:"أبرهة وجيش الفيل"}, d:{en:"The Abyssinian governor who marched on Makkah to destroy the Ka'bah. Allah destroyed him with birds and stones — a public proof to the Arabs that Quraysh's safety was divine, not human.", ar:"الوالي الحبشيُّ الذي زحف على مكة ليهدم الكعبة. فأهلكه الله بطيرٍ وحجارةٍ — برهانٌ علنيٌّ للعرب بأن أمن قريش إلهيٌّ لا بشريّ."}},
+  {e:"🧔🏽", role:{en:"The Final Messenger",ar:"الرسول الخاتم"}, name:{en:"Prophet Muhammad ﷺ",ar:"النبي محمد ﷺ"}, d:{en:"Born among Quraysh and the rightful inheritor of Ibrahim's mission. The surah addresses his own people: you of all tribes have the most reasons to worship Allah alone — so why do you turn away?", ar:"وُلد في قريش وهو الوارثُ الحقُّ لرسالة إبراهيم. تخاطب السورة قومه: أنتم من بين القبائل أَولى الناس بعبادة الله وحده — فلِمَ تُعرضون؟"}},
+];
+
+const VOCAB = [
+  {ar:"لِإِيلَافِ", tl:"Li-Ilaf", m:{en:"For the familiarity / covenant",ar:"لأجل الإيلاف والاعتياد والعهد"}, n:{en:"Root: أ-ل-ف. A bond of friendship and a settled habit.",ar:"الجذر: أ-ل-ف. رباطُ مودّةٍ وعادةٌ مستقرّة."}},
+  {ar:"قُرَيْشٍ", tl:"Quraysh", m:{en:"The tribe of Quraysh",ar:"قبيلة قريش"}, n:{en:"The noble tribe of Makkah, descendants of Isma'il through Qusayy.",ar:"قبيلةُ مكةَ الكريمة، من ذريّة إسماعيل عن طريق قُصَي."}},
+  {ar:"إِيلَافِهِمْ", tl:"Ilafihim", m:{en:"Their safe accustomed bond",ar:"إيلافهم وأمنهم المعتاد"}, n:{en:"Repeated for emphasis — the second mention drives the favor home.",ar:"كُرّرت للتأكيد — التكرارُ يُرسّخ النعمة في النفس."}},
+  {ar:"رِحْلَةَ", tl:"Rihlah", m:{en:"Journey / caravan trip",ar:"رحلة وسفر"}, n:{en:"Root: ر-ح-ل. A planned journey, especially for trade.",ar:"الجذر: ر-ح-ل. السفر المنظَّم لا سيّما للتجارة."}},
+  {ar:"ٱلشِّتَآءِ", tl:"Al-Shita'", m:{en:"Winter (journey to Yemen)",ar:"الشتاء — الرحلة إلى اليمن"}, n:{en:"South to warm Yemen for spices and perfumes.",ar:"جنوبًا إلى دفء اليمن للتوابل والعطور."}},
+  {ar:"وَٱلصَّيْفِ", tl:"Wa al-Sayf", m:{en:"And summer (journey to Sham)",ar:"والصيف — الرحلة إلى الشام"}, n:{en:"North to cool Sham (Syria) for oil, cloth, and goods.",ar:"شمالًا إلى برد الشام للزيت والقماش والبضائع."}},
+  {ar:"فَلْيَعْبُدُوا۟", tl:"Falya'budu", m:{en:"So let them worship",ar:"فليُفرِدوه بالعبادة"}, n:{en:"Root: ع-ب-د. Lām of command + worship = the obligatory response to favor.",ar:"الجذر: ع-ب-د. لامُ الأمر مع العبادة = الاستجابةُ الواجبةُ للنعمة."}},
+  {ar:"رَبَّ", tl:"Rabb", m:{en:"Lord, Sustainer",ar:"الربّ — المالك المربّي"}, n:{en:"The One who creates, owns, and nurtures — not just 'master.'",ar:"الخالقُ المالكُ المربّي — أوسع من معنى «السيّد»."}},
+  {ar:"ٱلْبَيْتِ", tl:"Al-Bayt", m:{en:"The House (the Ka'bah)",ar:"البيت — الكعبة المشرّفة"}, n:{en:"'This House' — definite, near, honored. Quraysh's whole status flows from it.",ar:"«هذا البيت» — معرفة، قريبة، معظَّمة. ومن البيت تأتي كلُّ مكانة قريش."}},
+  {ar:"أَطْعَمَهُم", tl:"At'amahum", m:{en:"Fed them",ar:"أطعمهم ورزقهم القوت"}, n:{en:"Root: ط-ع-م. The first basic need — food in a valley with no farms.",ar:"الجذر: ط-ع-م. الحاجة الأولى — الطعام في وادٍ لا زرع فيه."}},
+  {ar:"جُوعٍۢ", tl:"Ju'", m:{en:"Hunger",ar:"الجوع"}, n:{en:"The natural state of a barren valley — reversed by divine provision.",ar:"الحالة الطبيعيّة لوادٍ جدب — قلبها الرزق الإلهي."}},
+  {ar:"وَءَامَنَهُم", tl:"Wa Amanahum", m:{en:"And made them safe",ar:"وأعطاهم الأمن"}, n:{en:"Root: أ-م-ن. The second basic need — security among raiders.",ar:"الجذر: أ-م-ن. الحاجة الثانية — الأمن بين قُطّاع الطرق."}},
+  {ar:"خَوْفٍۭ", tl:"Khawf", m:{en:"Fear",ar:"الخوف"}, n:{en:"The natural state of caravans in the desert — replaced by divine peace.",ar:"الحالة الطبيعيّة للقوافل في الصحراء — أبدلها الله طمأنينة."}},
+];
+
+const LESSONS = [
+  {ic:"🙏", t:{en:"Gratitude Is the Heartbeat of Faith",ar:"الشكر نبضُ الإيمان"}, d:{en:"The whole surah is one sentence: because of this favor, worship Him. Faith begins when you stop taking food, family, and safety for granted, and you trace each blessing back to its true Giver.",ar:"السورةُ كلّها جملةٌ واحدة: لأجل هذه النعمة، فاعبدوه. ويبدأ الإيمانُ حين تكفّ عن اعتبار الطعام والأهل والأمن بدهيّات، وتُرجع كلَّ نعمةٍ إلى مُسديها الحقيقي."}},
+  {ic:"🍞", t:{en:"Food on Your Table Is a Miracle",ar:"رزقُ مائدتك معجزة"}, d:{en:"Makkah grew nothing, yet Allah fed it. Your fridge, your meal, your morning bread — none of it is automatic. Pause before eating, say Bismillah, and remember the One who fed Quraysh feeds you too.",ar:"مكةُ لا تنبت زرعًا، ومع ذلك أطعمها الله. ثلّاجتك ووجبتك ورغيفك صباحًا — لا شيء منها تلقائي. توقّف قبل الأكل، وقُل «بسم الله»، وتذكّر أن الذي أطعم قريشًا يُطعمك أنت."}},
+  {ic:"🕊️", t:{en:"Safety Is a Quiet, Forgotten Gift",ar:"الأمنُ نعمةٌ هادئةٌ منسيّة"}, d:{en:"We notice fear when it comes; we rarely notice safety while it stays. The Prophet ﷺ said: whoever wakes up safe in his home, healthy in his body, with food for the day — has been given the whole world.",ar:"نشعر بالخوف حين يأتي، وقلّما نشعر بالأمن حين يستمر. قال النبي ﷺ: «من أصبح منكم آمنًا في سربه، معافًى في بدنه، عنده قوتُ يومه، فكأنما حِيزت له الدنيا»."}},
+  {ic:"🧭", t:{en:"Worship Is the Right Reply to Favor",ar:"العبادةُ هي الردُّ اللائق على النعمة"}, d:{en:"Allah does not ask Quraysh to repay Him with money or sacrifice — He asks for worship. Your salah, your honesty, your obedience: these are your 'thank you' for a life He gave you for free.",ar:"لم يطلب الله من قريش أن يردّوا عليه بمالٍ أو قربان — طلب العبادة. صلاتك وصدقك وطاعتك: هذه هي «شكرًا» لحياةٍ منحك إيّاها مجانًا."}},
+  {ic:"🛡️", t:{en:"Honor Comes From What You Serve",ar:"الكرامةُ من حيث تخدم"}, d:{en:"Quraysh were honored because they served the Ka'bah. Whatever you make the center of your life — that is what will give you status, or take it away. Make Allah's pleasure your center.",ar:"شَرُفت قريشٌ لأنها خدمت الكعبة. وأيّما شيءٍ تجعله مركز حياتك — فهو الذي سيمنحك المكانة أو يسلبها. اجعل رضا الله مركزك."}},
+  {ic:"💔", t:{en:"Don't Be Like Those Who Saw Favors and Refused",ar:"لا تكن كمن رأى النعمَ فأعرض"}, d:{en:"Quraysh enjoyed unique blessings yet still rejected Tawheed at first. Many people today see Allah's gifts every day and still ignore Him. Receiving without thanking is the sickness this surah cures.",ar:"تنعّمت قريشٌ بنعمٍ فريدة ومع ذلك ردّت التوحيد في البداية. وكثيرون اليوم يرون عطايا الله كلَّ يومٍ ويُعرضون عنه. الأخذُ بلا شكرٍ هو المرضُ الذي تعالجه هذه السورة."}},
+];
+
+const MCQ = [
+  {q:{en:"What does the word 'Ilaf' mean?",ar:"ما معنى كلمة «إيلاف»؟"}, o:{en:["A type of camel","A familiar bond / covenant of safety","A kind of food","A weapon"],ar:["نوع من الإبل","رباطٌ وعهدُ أمانٍ معتاد","نوع من الطعام","سلاح"]}, a:1, ex:{en:"'Ilaf' is a bond of friendship, a treaty, and a settled habit of safety — granted by Allah to Quraysh.",ar:"«الإيلاف» رباطُ مودّةٍ وعهدٌ وعادةُ أمانٍ مستقرّة — منحها الله لقريش."}},
+  {q:{en:"In which season did Quraysh travel to Yemen?",ar:"في أي فصلٍ كانت قريشٌ ترحل إلى اليمن؟"}, o:{en:["Spring","Summer","Winter","Autumn"],ar:["الربيع","الصيف","الشتاء","الخريف"]}, a:2, ex:{en:"They traveled south to warm Yemen in winter, and north to cool Sham in summer.",ar:"كانوا يرحلون جنوبًا إلى اليمن الدافئ في الشتاء، وشمالًا إلى الشام البارد في الصيف."}},
+  {q:{en:"In which season did Quraysh travel to Sham?",ar:"في أي فصلٍ كانت قريشٌ ترحل إلى الشام؟"}, o:{en:["Winter","Summer","Spring","Autumn"],ar:["الشتاء","الصيف","الربيع","الخريف"]}, a:1, ex:{en:"The summer caravan went north to Sham (greater Syria) where the climate was cool.",ar:"قافلةُ الصيف كانت تتّجه شمالًا إلى الشام حيث البرد."}},
+  {q:{en:"Whom does the surah command Quraysh to worship?",ar:"بمن تأمر السورةُ قريشًا أن يعبدوا؟"}, o:{en:["The Lord of Quraysh","The idols of Makkah","The Lord of this House","Their ancestors"],ar:["ربّ قريش","أصنام مكة","ربّ هذا البيت","آباءهم"]}, a:2, ex:{en:"Allah says 'the Lord of this House' — because Quraysh's honor came from the Ka'bah, not the other way around.",ar:"يقول الله «ربّ هذا البيت» — لأن شرف قريش جاء من الكعبة، لا العكس."}},
+  {q:{en:"What two great needs did Allah fulfill for Quraysh in verse 4?",ar:"ما الحاجتان العظيمتان اللتان قضاهما الله لقريش في الآية الرابعة؟"}, o:{en:["Wealth and power","Food and safety","Knowledge and honor","Children and land"],ar:["المال والسلطة","الطعام والأمن","العلم والشرف","الولد والأرض"]}, a:1, ex:{en:"He fed them from hunger and made them safe from fear — the two most basic human needs.",ar:"أطعمهم من جوع وآمنهم من خوف — أعظم حاجتي الإنسان الأساسيّتين."}},
+  {q:{en:"Why was Makkah a place where food was a special blessing?",ar:"لِمَ كان الطعامُ في مكة نعمةً خاصة؟"}, o:{en:["It had vast farms","It is a barren valley with no agriculture","It had many rivers","It was on the sea coast"],ar:["كانت ذاتَ مزارع شاسعة","هي وادٍ جدبٌ لا زراعة فيه","كانت كثيرة الأنهار","كانت على ساحل البحر"]}, a:1, ex:{en:"Makkah is a stony, barren valley — yet Allah caused fruits and goods to flow into it.",ar:"مكةُ وادٍ صخريٌّ جدبٌ — ومع ذلك أجرى الله الثمار والبضائع إليها."}},
+  {q:{en:"Why was safety so unusual for caravans in Arabia?",ar:"لِمَ كان الأمنُ غريبًا على قوافل العرب؟"}, o:{en:["Roads were too narrow","Tribes constantly raided travelers","Camels were rare","Weather was extreme"],ar:["الطرق كانت ضيّقة جدًا","القبائل كانت تنهب المسافرين باستمرار","كانت الإبلُ نادرة","كان الطقس قاسيًا"]}, a:1, ex:{en:"Raids on caravans were the norm in pre-Islamic Arabia — Quraysh's safe passage was uniquely divine.",ar:"كانت غاراتُ القوافل قاعدةً في الجاهلية — وأمنُ قريش امتيازٌ إلهيٌّ متفرّد."}},
+  {q:{en:"What is the correct human response to Allah's favors, according to the surah?",ar:"ما الردُّ الإنسانيُّ الصحيحُ على نعم الله بحسب السورة؟"}, o:{en:["Boast of one's wealth","Build bigger houses","Worship Him alone","Travel more often"],ar:["التفاخر بالمال","بناء بيوتٍ أكبر","عبادته وحده","الإكثار من السفر"]}, a:2, ex:{en:"'Falya'budu' — 'so let them worship.' Worship is the only fitting reply to such a favor.",ar:"«فليعبدوا» — العبادةُ هي الردُّ اللائقُ الوحيدُ على هذه النعمة."}},
+];
+
+const MATCH = [
+  {ar:"إِيلَافِ", en:{en:"Familiar bond / safety",ar:"رباط الأمن المعتاد"}},
+  {ar:"قُرَيْشٍ", en:{en:"The Quraysh tribe",ar:"قبيلة قريش"}},
+  {ar:"ٱلشِّتَآءِ", en:{en:"Winter (Yemen journey)",ar:"الشتاء — رحلة اليمن"}},
+  {ar:"وَٱلصَّيْفِ", en:{en:"And summer (Sham journey)",ar:"والصيف — رحلة الشام"}},
+  {ar:"ٱلْبَيْتِ", en:{en:"The House (the Ka'bah)",ar:"البيت — الكعبة"}},
+  {ar:"أَطْعَمَهُم", en:{en:"Fed them",ar:"أطعمهم"}},
+  {ar:"خَوْفٍۭ", en:{en:"Fear",ar:"الخوف"}},
+];
+
+const FILL = [
+  {parts:["لِإِيلَافِ ",""], a:"قُرَيْشٍ"},
+  {parts:["إِيلَافِهِمْ "," ٱلشِّتَآءِ وَٱلصَّيْفِ"], a:"رِحْلَةَ"},
+  {parts:["فَلْيَعْبُدُوا۟ رَبَّ هَٰذَا ",""], a:"ٱلْبَيْتِ"},
+  {parts:["ٱلَّذِىٓ "," مِّن جُوعٍۢ"], a:"أَطْعَمَهُم"},
+  {parts:["وَءَامَنَهُم مِّنْ ",""], a:"خَوْفٍۭ"},
+];
+
+const ORDER_EN = [
+  "Ibrahim ﷺ leaves Hajar and Isma'il in a barren valley by Allah's command.",
+  "Zamzam gushes forth and the tribe of Jurhum settles around the well.",
+  "Qusayy ibn Kilab gathers the scattered clans of Quraysh around the Ka'bah.",
+  "Quraysh become honored guardians of the Sacred House across all Arabia.",
+  "Two annual caravans depart — winter to Yemen, summer to Sham.",
+  "Allah destroys Abraha and the army of the elephant before the Ka'bah.",
+  "Food flows into a barren valley and safety covers Makkah while others tremble.",
+  "Surah Quraysh is revealed, listing the favors and demanding worship in return.",
+];
+const ORDER_AR = [
+  "إبراهيم ﷺ يترك هاجر وإسماعيل في وادٍ جدبٍ بأمر الله.",
+  "تنفجر زمزم وتستوطن قبيلةُ جُرهم حول البئر.",
+  "قُصَيُّ بن كلاب يجمع بطون قريش المتفرّقة حول الكعبة.",
+  "تصبح قريشٌ حُجّابًا مكرَّمين للبيت الحرام في الجزيرة العربيّة كلِّها.",
+  "تنطلق رحلتان كلَّ عام — الشتاء إلى اليمن والصيف إلى الشام.",
+  "يُهلك الله أبرهةَ وجيشَ الفيل أمام الكعبة.",
+  "يتدفّق الطعام إلى وادٍ جدبٍ ويعمُّ الأمن مكةَ والناسُ من حولها يخافون.",
+  "تنزل سورة قريش تعدّد النعم وتطلب العبادة جزاءً.",
+];
+
+function getOrder(){ return currentLang === 'ar' ? ORDER_AR : ORDER_EN; }
+
+/* ============= CHIME ============= */
+let AC;
+function chime(type){
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    const now = AC.currentTime;
+    if(type==='ok'){
+      o.frequency.setValueAtTime(660, now);
+      o.frequency.exponentialRampToValueAtTime(990, now+.15);
+    } else if(type==='err'){
+      o.frequency.setValueAtTime(220, now);
+      o.frequency.exponentialRampToValueAtTime(140, now+.2);
+    } else {
+      o.frequency.setValueAtTime(520, now);
+      o.frequency.exponentialRampToValueAtTime(720, now+.08);
+    }
+    g.gain.setValueAtTime(.12, now);
+    g.gain.exponentialRampToValueAtTime(.001, now+.25);
+    o.start(now); o.stop(now+.3);
+  }catch(e){}
+}
+
+/* ============= TABS ============= */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* ============= TOAST ============= */
+const toastEl = document.getElementById('toast');
+function toast(msg, kind=''){
+  toastEl.textContent = msg;
+  toastEl.className = 'toast show '+kind;
+  setTimeout(()=>toastEl.className='toast '+kind, 1800);
+}
+
+/* ============= RENDER FUNCTIONS ============= */
+function renderFlashcards(){
+  const deck = document.getElementById('deck');
+  deck.innerHTML = '';
+  AYAT.forEach(a=>{
+    const L = currentLang;
+    const card = document.createElement('div');
+    card.className = 'flip';
+    card.innerHTML = `
+      <div class="flip-inner">
+        <div class="face front">
+          <div class="ayah-num">${a.n}</div>
+          <div class="ayah-ar">${a.ar}</div>
+          <div class="flip-hint">${L==='ar'?'اضغط للقلب ↻':'Tap to flip ↻'}</div>
+        </div>
+        <div class="face back">
+          <h4>${L==='ar'?'الآية '+a.n+' · الشرح':'Ayah '+a.n+' · Translation'}</h4>
+          <p class="trans">"${typeof a.tr==='object'?a.tr[L]:a.tr}"</p>
+          <h4>${L==='ar'?'التفسير':'Tafseer'}</h4>
+          <p class="tafsir">${typeof a.tafsir==='object'?a.tafsir[L]:a.tafsir}</p>
+          <h4>${L==='ar'?'معاني الكلمات':'Word-by-Word'}</h4>
+          <div class="words">
+            ${a.words.map(w=>{const v=VOCAB.find(x=>x.ar===w.ar);const m=v?(typeof v.m==='object'?v.m[L]:v.m):(typeof w.en==='object'?w.en[L]:w.en);return `<span class="word"><span class="ar">${w.ar}</span><span class="en">${m}</span></span>`;}).join('')}
+          </div>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=>{
+      card.classList.toggle('flipped');
+      chime('flip');
+    });
+    deck.appendChild(card);
+  });
+}
+
+function renderStory(){
+  const sl = document.getElementById('storyList');
+  sl.innerHTML = '';
+  const L = currentLang;
+  STORY.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'story-item';
+    const title = typeof s.t==='object'?s.t[L]:s.t;
+    const desc = typeof s.d==='object'?s.d[L]:s.d;
+    const tags = typeof s.tags==='object'&&!Array.isArray(s.tags)?s.tags[L]:s.tags;
+    el.innerHTML = `
+      <div class="step-no">${i+1}</div>
+      <div>
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <div class="badge-row">${tags.map(t=>`<span class="badge">${t}</span>`).join('')}</div>
+      </div>`;
+    sl.appendChild(el);
+  });
+}
+
+function renderCharacters(){
+  const cl = document.getElementById('charList');
+  cl.innerHTML = '';
+  const L = currentLang;
+  CHARS.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'char-card';
+    const role = typeof c.role==='object'?c.role[L]:c.role;
+    const name = typeof c.name==='object'?c.name[L]:c.name;
+    const desc = typeof c.d==='object'?c.d[L]:c.d;
+    el.innerHTML = `<div class="char-emoji">${c.e}</div><div class="role">${role}</div><h3>${name}</h3><p>${desc}</p>`;
+    cl.appendChild(el);
+  });
+}
+
+function renderVocab(){
+  const vb = document.getElementById('vocabBody');
+  vb.innerHTML = '';
+  const L = currentLang;
+  VOCAB.forEach(v=>{
+    const tr = document.createElement('tr');
+    const meaning = typeof v.m==='object'?v.m[L]:v.m;
+    const notes = typeof v.n==='object'?v.n[L]:v.n;
+    tr.innerHTML = `<td class="vocab-ar">${v.ar}</td><td><em>${v.tl}</em></td><td><strong>${meaning}</strong></td><td style="color:var(--muted);font-size:13px">${notes}</td>`;
+    vb.appendChild(tr);
+  });
+}
+
+function renderLessons(){
+  const lg = document.getElementById('lessonGrid');
+  lg.innerHTML = '';
+  const L = currentLang;
+  LESSONS.forEach(l=>{
+    const el = document.createElement('div');
+    el.className = 'lesson';
+    const title = typeof l.t==='object'?l.t[L]:l.t;
+    const desc = typeof l.d==='object'?l.d[L]:l.d;
+    el.innerHTML = `<div class="ic">${l.ic}</div><h4>${title}</h4><p>${desc}</p>`;
+    lg.appendChild(el);
+  });
+}
+
+/* ============= SCORE ============= */
+let score = 0, maxScore = 0;
+const scoreVal = document.getElementById('scoreVal');
+const scoreMax = document.getElementById('scoreMax');
+function addMax(n){ maxScore += n; scoreMax.textContent = maxScore; }
+function addScore(n){ score += n; scoreVal.textContent = score; }
+
+/* ============= MCQ ============= */
+function renderMCQ(){
+  const mc = document.getElementById('mcqContainer');
+  mc.innerHTML = '';
+  const L = currentLang;
+  MCQ.forEach((item,qi)=>{
+    const q = typeof item.q==='object'?item.q[L]:item.q;
+    const opts = typeof item.o==='object'&&!Array.isArray(item.o)?item.o[L]:item.o;
+    const ex = typeof item.ex==='object'?item.ex[L]:item.ex;
+    addMax(1);
+    const div = document.createElement('div');
+    div.className = 'mcq';
+    div.innerHTML = `<p class="q">${qi+1}. ${q}</p><div class="opts">${opts.map((o,i)=>`<div class="opt" data-i="${i}">${o}</div>`).join('')}</div><div class="feedback">${ex}</div>`;
+    div.querySelectorAll('.opt').forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        if(div.dataset.done) return;
+        div.dataset.done = '1';
+        const i = +opt.dataset.i;
+        if(i === item.a){ opt.classList.add('correct'); addScore(1); chime('ok'); }
+        else { opt.classList.add('wrong'); div.querySelectorAll('.opt')[item.a].classList.add('correct'); chime('err'); }
+        div.querySelector('.feedback').classList.add('show');
+      });
+    });
+    mc.appendChild(div);
+  });
+}
+
+/* ============= MATCHING ============= */
+let matchSelected = null;
+function renderMatch(){
+  const arC = document.getElementById('matchAr');
+  const enC = document.getElementById('matchEn');
+  arC.innerHTML = ''; enC.innerHTML = '';
+  matchSelected = null;
+  const L = currentLang;
+
+  const shuffledEn = [...MATCH].sort(()=>Math.random()-.5);
+  addMax(MATCH.length);
+
+  MATCH.forEach((m,i)=>{
+    const arEl = document.createElement('div');
+    arEl.className = 'match-item match-ar';
+    arEl.textContent = m.ar;
+    arEl.dataset.idx = i;
+    arEl.addEventListener('click', ()=>selectMatch(arEl, 'ar'));
+    arC.appendChild(arEl);
+  });
+
+  shuffledEn.forEach((m,i)=>{
+    const enEl = document.createElement('div');
+    enEl.className = 'match-item';
+    const txt = typeof m.en==='object'?m.en[L]:m.en;
+    enEl.textContent = txt;
+    enEl.dataset.idx = MATCH.indexOf(m);
+    enEl.addEventListener('click', ()=>selectMatch(enEl, 'en'));
+    enC.appendChild(enEl);
+  });
+}
+
+function selectMatch(el, side){
+  if(el.classList.contains('matched')) return;
+  if(matchSelected && matchSelected.side === side){
+    matchSelected.el.classList.remove('selected');
+    if(matchSelected.el === el){ matchSelected=null; return; }
+  }
+  el.classList.remove('error');
+  el.classList.add('selected');
+  if(!matchSelected){ matchSelected = {el, side}; return; }
+  if(matchSelected.side === side){ matchSelected.el.classList.remove('selected'); matchSelected={el,side}; return;}
+  const arIdx = side==='ar' ? el.dataset.idx : matchSelected.el.dataset.idx;
+  const enIdx = side==='en' ? el.dataset.idx : matchSelected.el.dataset.idx;
+  if(arIdx === enIdx){
+    el.classList.remove('selected'); el.classList.add('matched');
+    matchSelected.el.classList.remove('selected'); matchSelected.el.classList.add('matched');
+    addScore(1); chime('ok');
+  } else {
+    el.classList.remove('selected'); el.classList.add('error');
+    matchSelected.el.classList.remove('selected'); matchSelected.el.classList.add('error');
+    chime('err');
+    setTimeout(()=>{el.classList.remove('error'); matchSelected&&matchSelected.el&&matchSelected.el.classList.remove('error');},600);
+  }
+  matchSelected = null;
+}
+
+/* ============= FILL ============= */
+function renderFill(){
+  const fc = document.getElementById('fillContainer');
+  fc.innerHTML = '';
+  FILL.forEach((f,i)=>{
+    addMax(1);
+    const div = document.createElement('div');
+    div.className = 'fill-card';
+    div.innerHTML = `<div class="fill-q arabic" style="font-size:22px;line-height:2.2">${f.parts[0]}<<input type="text" data-a="${f.a}" id="fill-${i}" autocomplete="off" style="font-family:'Amiri',serif;direction:rtl" />${f.parts[1]}</div>`;
+    fc.appendChild(div);
+  });
+}
+
+document.getElementById('checkFill').addEventListener('click', ()=>{
+  FILL.forEach((f,i)=>{
+    const inp = document.getElementById('fill-'+i);
+    if(inp.dataset.done) return;
+    inp.dataset.done = '1';
+    const val = inp.value.trim().replace(/\u200e|\u200f/g,'');
+    const ans = f.a.replace(/\u200e|\u200f/g,'');
+    if(val === ans){ inp.classList.add('correct'); addScore(1); chime('ok'); }
+    else { inp.classList.add('wrong'); inp.value = f.a; chime('err'); }
+  });
+});
+
+/* ============= ORDER ============= */
+function renderOrder(){
+  const ol = document.getElementById('orderList');
+  ol.innerHTML = '';
+  const items = getOrder();
+  const shuffled = items.map((t,i)=>({t,i})).sort(()=>Math.random()-.5);
+  addMax(1);
+
+  shuffled.forEach(item=>{
+    const el = document.createElement('div');
+    el.className = 'order-item';
+    el.draggable = true;
+    el.dataset.correct = item.i;
+    el.innerHTML = `<span class="order-handle">☰</span><span>${item.t}</span>`;
+    el.addEventListener('dragstart', e=>{ e.dataTransfer.setData('text/plain',''); el.classList.add('dragging'); });
+    el.addEventListener('dragend', ()=>el.classList.remove('dragging'));
+    el.addEventListener('dragover', e=>{ e.preventDefault(); const drag = ol.querySelector('.dragging'); if(drag && drag!==el) ol.insertBefore(drag, el); });
+    // Touch support
+    let touchY;
+    el.addEventListener('touchstart', e=>{touchY=e.touches[0].clientY; el.classList.add('dragging');},{passive:true});
+    el.addEventListener('touchmove', e=>{
+      e.preventDefault();
+      const touch = e.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if(target && target.closest && target.closest('.order-item') && target.closest('.order-item')!==el){
+        ol.insertBefore(el, target.closest('.order-item'));
+      }
+    },{passive:false});
+    el.addEventListener('touchend', ()=>el.classList.remove('dragging'));
+    ol.appendChild(el);
+  });
+}
+
+document.getElementById('checkOrder').addEventListener('click', ()=>{
+  const items = document.querySelectorAll('#orderList .order-item');
+  const correct = [...items].every((el,i)=>+el.dataset.correct===i);
+  if(correct){
+    addScore(1);
+    toast(currentLang==='ar'?'أحسنت! ترتيب صحيح!':'Correct order!','success'); chime('ok');
+    items.forEach(el=>{
+      el.style.background='var(--green-soft)'; el.style.borderColor='var(--green)';
+    });
+  } else {
+    toast(currentLang==='ar'?'ليس بعد — حاول مرة أخرى':'Not yet — try again','error'); chime('err');
+  }
+});
+
+/* ============= RESET ============= */
+document.getElementById('resetQuiz').addEventListener('click', ()=>{
+  location.reload();
+});
+
+/* ============= LANGUAGE TOGGLE ============= */
+const langToggle = document.getElementById('langToggle');
+const langLabel = document.getElementById('langLabel');
+
+function applyI18N(lang){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(I18N[key] && I18N[key][lang] !== undefined){
+      el.innerHTML = I18N[key][lang];
+    }
+  });
+  // placeholders
+  document.querySelectorAll('[data-placeholder-en][data-placeholder-ar]').forEach(inp=>{
+    inp.placeholder = lang==='ar' ? inp.dataset.placeholderAr : inp.dataset.placeholderEn;
+  });
+}
+
+function setLanguage(lang){
+  currentLang = lang;
+  const html = document.documentElement;
+  if(lang === 'ar'){
+    html.setAttribute('lang','ar');
+    html.setAttribute('dir','rtl');
+    document.body.setAttribute('dir','rtl');
+    langLabel.textContent = 'English';
+  } else {
+    html.setAttribute('lang','en');
+    html.setAttribute('dir','ltr');
+    document.body.setAttribute('dir','ltr');
+    langLabel.textContent = 'العربية';
+  }
+  applyI18N(lang);
+
+  // Re-render dynamic content
+  score = 0; maxScore = 0;
+  renderFlashcards();
+  renderStory();
+  renderCharacters();
+  renderVocab();
+  renderLessons();
+  renderMCQ();
+  renderMatch();
+  renderFill();
+  renderOrder();
+}
+
+langToggle.addEventListener('click', ()=>{
+  setLanguage(currentLang === 'en' ? 'ar' : 'en');
+  chime('flip');
+});
+
+/* ============= FLASHCARD CONTROLS ============= */
+document.getElementById('flipAll').addEventListener('click', ()=>{
+  const cards = document.querySelectorAll('#deck .flip');
+  // If any card is not flipped, flip them all; otherwise unflip all.
+  const anyUnflipped = [...cards].some(c => !c.classList.contains('flipped'));
+  cards.forEach(c => c.classList.toggle('flipped', anyUnflipped));
+  chime('flip');
+});
+
+document.getElementById('resetCards').addEventListener('click', ()=>{
+  document.querySelectorAll('#deck .flip').forEach(c => c.classList.remove('flipped'));
+  chime('flip');
+});
+
+/* ============= WHATSAPP EXPORT ============= */
+document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  let text = '';
+  text += '📖 *سورة قريش — مذكرة تدبري للقرآن*\n';
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `👤 *اسم الطالب:* ${studentName}\n`;
+  text += `📅 *التاريخ:* ${dateStr}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  // Mudhakkirah answers
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  const q4 = document.getElementById('mudh-q4').value.trim();
+
+  text += '*أولاً: المحور العام (الفهم والتدبر)*\n\n';
+  text += '❓ *ما خلاصة الآيات في رأيك بأسلوبك البسيط؟*\n';
+  text += (q1 || '(لم يُجب)') + '\n\n';
+  text += '❓ *ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟*\n';
+  text += (q2 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثانياً: المحور الوجداني والشخصي*\n\n';
+  text += '❓ *هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟*\n';
+  text += (q3 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثالثاً: المحور التطبيقي*\n\n';
+  text += '❓ *حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.*\n';
+  text += (q4 || '(لم يُجب)') + '\n\n';
+
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+
+  // Quiz score
+  text += `📊 *النتيجة في التمارين:* ${score} / ${maxScore}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+
+  // Encode and open WhatsApp
+  const encoded = encodeURIComponent(text);
+  const w = window.open('https://wa.me/?text=' + encoded, '_blank');
+  if(!w){ window.location.href = 'https://wa.me/?text=' + encoded; }
+});
+
+/* ============= PDF EXPORT ============= */
+document.getElementById('btnPDF').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  const container = document.getElementById('pdfContainer');
+  container.style.direction = 'rtl';
+
+  let html = '';
+  html += '<h1 style="text-align:center;font-family:Amiri,serif">📖 سورة قريش — بوابة تعليمية تفاعلية</h1>';
+  html += `<div class="pdf-meta">👤 اسم الطالب: <strong>${studentName}</strong> &nbsp;|&nbsp; 📅 التاريخ: ${dateStr}</div>`;
+
+  // Full Surah
+  html += '<h2 style="font-family:Amiri,serif">نص السورة الكريمة</h2>';
+  html += '<div class="arabic-block" style="font-family:\'Amiri Quran\',Amiri,serif">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
+  AYAT.forEach(a=>{
+    html += `<div class="arabic-block" style="font-family:'Amiri Quran',Amiri,serif;font-size:18px">${a.ar} ﴿${a.n}﴾</div>`;
+  });
+
+  // Translations & Tafseer
+  html += '<h2 style="font-family:Amiri,serif">الترجمة والتفسير</h2>';
+  AYAT.forEach(a=>{
+    const tr = typeof a.tr==='object'?a.tr.ar:a.tr;
+    const tf = typeof a.tafsir==='object'?a.tafsir.ar:a.tafsir;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">الآية ${a.n}</h3>`;
+    html += `<p><em>${tr}</em></p>`;
+    html += `<p>${tf}</p></div>`;
+  });
+
+  // Story
+  html += '<h2 style="font-family:Amiri,serif">القصة — قبيلة قريش</h2>';
+  STORY.forEach((s,i)=>{
+    const title = typeof s.t==='object'?s.t.ar:s.t;
+    const desc = typeof s.d==='object'?s.d.ar:s.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${i+1}. ${title}</h3><p>${desc}</p></div>`;
+  });
+
+  // Vocabulary
+  html += '<h2 style="font-family:Amiri,serif">المفردات</h2>';
+  html += '<table><tr><th style="font-family:Amiri,serif">الكلمة</th><th>النطق</th><th>المعنى</th><th>ملاحظات</th></tr>';
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m.ar:v.m;
+    const n = typeof v.n==='object'?v.n.ar:v.n;
+    html += `<tr><td style="font-family:Amiri,serif;font-size:16px">${v.ar}</td><td>${v.tl}</td><td>${m}</td><td>${n}</td></tr>`;
+  });
+  html += '</table>';
+
+  // Lessons
+  html += '<h2 style="font-family:Amiri,serif">الدروس المستفادة</h2>';
+  LESSONS.forEach(l=>{
+    const t = typeof l.t==='object'?l.t.ar:l.t;
+    const d = typeof l.d==='object'?l.d.ar:l.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${l.ic} ${t}</h3><p>${d}</p></div>`;
+  });
+
+  // Mudhakkirah
+  html += '<h2 style="font-family:Amiri,serif">📝 مذكرة تدبري للقرآن</h2>';
+
+  html += '<h3 style="font-family:Amiri,serif">أولاً: المحور العام (الفهم والتدبر)</h3>';
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  html += `<div class="pdf-qa"><label>ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</label><div class="answer">${q1||'(لم يُجب)'}</div></div>`;
+  html += `<div class="pdf-qa"><label>ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</label><div class="answer">${q2||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثانياً: المحور الوجداني والشخصي</h3>';
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  html += `<div class="pdf-qa"><label>هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</label><div class="answer">${q3||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثالثاً: المحور التطبيقي</h3>';
+  const q4 = document.getElementById('mudh-q4').value.trim();
+  html += `<div class="pdf-qa"><label>حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</label><div class="answer">${q4||'(لم يُجب)'}</div></div>`;
+
+  // Score
+  html += `<div style="text-align:center;margin-top:20px;font-size:16px;font-weight:700">📊 النتيجة في التمارين: ${score} / ${maxScore}</div>`;
+
+  container.innerHTML = html;
+
+  // Generate PDF using html2pdf
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     `سورة_قريش_${studentName}_${now.toISOString().slice(0,10)}.pdf`,
+    image:        { type: 'jpeg', quality: 0.95 },
+    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['avoid-all','css','legacy'] }
+  };
+
+  toast(currentLang==='ar'?'جاري إنشاء الملف...':'Generating PDF...','');
+
+  html2pdf().set(opt).from(container).save().then(()=>{
+    toast(currentLang==='ar'?'تم تحميل الملف بنجاح!':'PDF downloaded!','success');
+    chime('ok');
+  }).catch(()=>{
+    toast(currentLang==='ar'?'حدث خطأ في إنشاء الملف':'PDF generation failed','error');
+    chime('err');
+  });
+});
+
+/* ============= INITIAL RENDER ============= */
+// Call setLanguage on first load so all translations (including the
+// Mudhakkirah/Tadabbur page) and all dynamic content are applied from
+// the very first paint — fixes the bug where the English translation
+// of the Reflection Journal only appeared after toggling languages.
+setLanguage(currentLang);
+
+
+/* ===== Verse Highlight on Click ===== */
+document.querySelectorAll('.verse-row').forEach(row => {
+  row.addEventListener('click', () => {
+    const wasActive = row.classList.contains('active');
+    document.querySelectorAll('.verse-row').forEach(r => r.classList.remove('active'));
+    if (!wasActive) row.classList.add('active');
+  });
+});
+
+</script>
+</body>
+</html>

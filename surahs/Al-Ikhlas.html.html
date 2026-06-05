@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Surah Al-Ikhlas — Interactive Learning Portal</title>
+<meta name="description" content="An interactive educational portal for Surah Al-Ikhlas (Chapter 112) — the surah of pure Tawheed. Tafseer, Tadabbur, flashcards, vocabulary, and exercises for young learners." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f3ea;
+    --bg-2:#fbf8f1;
+    --paper:#ffffff;
+    --ink:#1f2330;
+    --ink-soft:#4a5063;
+    --muted:#8a8f9e;
+    --line:#e5dccb;
+    --gold:#b08833;
+    --gold-2:#d4a84a;
+    --teal:#0f6b6b;
+    --teal-soft:#e6f1f1;
+    --rose:#b04646;
+    --rose-soft:#fbe9e7;
+    --green:#2f7d4f;
+    --green-soft:#e6f4ec;
+    --indigo:#3b3f8c;
+    --indigo-soft:#ecedfb;
+    --shadow: 0 10px 30px -12px rgba(60,40,10,.18);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden;width:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 10% -10%, #fff7e0 0%, transparent 60%),
+      radial-gradient(900px 600px at 110% 20%, #eaf6f3 0%, transparent 60%),
+      var(--bg);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    max-width:100vw;
+  }
+  body[dir="rtl"]{
+    font-family:'Amiri','Inter',system-ui,sans-serif;
+  }
+  .arabic{font-family:'Amiri Quran','Amiri',serif; direction:rtl;}
+  .display{font-family:'Playfair Display',serif;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;
+    border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.6);
+    backdrop-filter: blur(8px);
+    position:sticky;top:0;z-index:20;
+    flex-wrap:wrap;gap:12px;
+    max-width:100vw;
+    overflow:hidden;
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .crest{
+    width:46px;height:46px;border-radius:14px;
+    background:linear-gradient(135deg,var(--teal) 0%,#1a9e9e 100%);
+    display:grid;place-items:center;color:#fff;font-weight:800;
+    box-shadow:var(--shadow);
+  }
+  .brand h1{margin:0;font-size:18px;letter-spacing:.2px}
+  .brand p{margin:0;color:var(--muted);font-size:12px}
+  .meta{display:flex;gap:10px;align-items:center;color:var(--ink-soft);font-size:13px;flex-wrap:wrap}
+  .pill{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff}
+
+  /* Language Toggle */
+  .lang-toggle{
+    cursor:pointer;
+    padding:8px 16px;
+    border-radius:999px;
+    border:2px solid var(--gold);
+    background:linear-gradient(135deg,#fffaf0,#fff);
+    color:var(--gold);
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;gap:8px;
+    transition:all .3s ease;
+    user-select:none;
+  }
+  .lang-toggle:hover{
+    background:linear-gradient(135deg,var(--gold),var(--gold-2));
+    color:#fff;
+    box-shadow:0 4px 14px rgba(176,136,51,.35);
+  }
+  .lang-toggle .globe{font-size:18px}
+
+  /* ===== Tabs ===== */
+  .wrap{max-width:1280px;margin:24px auto;padding:0 22px;overflow-x:hidden;width:100%;}
+  .tabs{
+    display:flex;flex-wrap:wrap;gap:8px;
+    background:#fff;padding:8px;border-radius:16px;border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .tab{
+    flex:1 1 auto;min-width:110px;
+    padding:12px 14px;border-radius:12px;cursor:pointer;
+    text-align:center;font-weight:600;color:var(--ink-soft);
+    border:1px solid transparent;
+    transition:all .25s ease;user-select:none;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:13px;
+  }
+  .tab .ic{font-size:18px}
+  .tab:hover{background:#faf6ee;color:var(--ink)}
+  .tab.active{
+    background:linear-gradient(135deg,#1f2330,#2a3144);
+    color:#fff;box-shadow:0 8px 18px -8px rgba(31,35,48,.45);
+  }
+
+  .panel{display:none;animation:fade .35s ease both;margin-top:22px}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);
+    max-width:100%;overflow-x:auto;
+  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  h2.section{font-family:'Playfair Display',serif;font-size:28px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 18px}
+
+  /* ===== Intro / Hero ===== */
+  .hero{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:22px;
+    max-width:100%;overflow:hidden;
+  }
+  @media(max-width:900px){.hero{grid-template-columns:1fr}}
+  .hero-card{
+    background:
+      radial-gradient(600px 300px at 100% 0%, #e0f0ff 0%, transparent 60%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    border:1px solid var(--line);border-radius:var(--radius);padding:28px;
+    box-shadow:var(--shadow);
+  }
+  .kicker{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:12px;letter-spacing:.6px}
+  .hero h2{font-family:'Playfair Display',serif;font-size:38px;margin:14px 0 6px;line-height:1.1}
+  .hero p.lead{font-size:15px;color:var(--ink-soft);line-height:1.7}
+  .quick-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .fact{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .fact .lbl{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .fact .val{font-weight:700;margin-top:4px}
+
+  .side-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow);
+    max-height:600px;overflow-y:auto;
+    max-width:100%;overflow-x:hidden;
+    word-wrap:break-word;
+  }
+  .side-card .arabic{font-size:26px;line-height:2.2;text-align:center;color:#2a2f44}
+  .bismillah{font-size:30px;text-align:center;color:var(--gold);margin-bottom:10px}
+
+  /* scrollbar for side-card */
+  .side-card::-webkit-scrollbar{width:6px}
+  .side-card::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  /* ===== Flashcards ===== */
+  .deck-controls{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+  .btn{
+    cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:10px 16px;border-radius:10px;font-weight:600;transition:all .2s;
+    display:inline-flex;align-items:center;gap:8px;font-size:14px;
+    font-family:inherit;
+  }
+  .btn:hover{background:#faf6ee;border-color:var(--gold)}
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn.primary:hover{background:#2a3144}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#fff;border-color:transparent}
+  .btn.teal-btn{background:linear-gradient(135deg,var(--teal),#1a9e9e);color:#fff;border-color:transparent}
+  .btn.teal-btn:hover{box-shadow:0 4px 16px rgba(15,107,107,.35)}
+  .btn.whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border-color:transparent}
+  .btn.whatsapp:hover{box-shadow:0 4px 16px rgba(37,211,102,.4)}
+  .btn.pdf-btn{background:linear-gradient(135deg,var(--rose),#d85050);color:#fff;border-color:transparent}
+  .btn.pdf-btn:hover{box-shadow:0 4px 16px rgba(176,70,70,.35)}
+
+  .deck{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:18px;
+  }
+  .flip{
+    perspective:1400px;height:360px;cursor:pointer;
+  }
+  .flip-inner{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .flip.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;border-radius:var(--radius);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid var(--line);box-shadow:var(--shadow);
+    padding:18px;display:flex;flex-direction:column;
+  }
+  .face.front{
+    background:
+      radial-gradient(400px 200px at 100% 0%, #e0f0ff 0%, transparent 70%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    align-items:center;justify-content:space-between;
+  }
+  .face.back{
+    background:#fffdf8;
+    transform:rotateY(180deg);
+    overflow-y:auto;
+  }
+  .ayah-num{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-weight:800;display:grid;place-items:center;
+    box-shadow:var(--shadow);font-size:14px;
+  }
+  .ayah-ar{
+    font-family:'Amiri Quran',serif;direction:rtl;
+    font-size:26px;line-height:2;text-align:center;color:#2a2f44;
+    flex:1;display:flex;align-items:center;justify-content:center;padding:0 6px;
+  }
+  .flip-hint{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .back h4{margin:0 0 4px;font-family:'Playfair Display',serif;font-size:16px;color:var(--teal)}
+  .back .trans{font-size:13px;color:var(--ink-soft);line-height:1.6;font-style:italic;margin:0 0 10px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+  .back .tafsir{font-size:13px;color:var(--ink);line-height:1.6;margin:0 0 10px}
+  .words{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .word{
+    background:var(--teal-soft);color:var(--teal);
+    padding:4px 8px;border-radius:8px;font-size:12px;font-weight:600;
+    display:inline-flex;flex-direction:column;align-items:center;gap:2px;
+  }
+  .word .ar{font-family:'Amiri',serif;font-size:14px}
+  .word .en{font-size:10px;color:var(--ink-soft);font-weight:500}
+
+  /* ===== Story timeline ===== */
+  .story-list{display:grid;gap:14px}
+  .story-item{
+    display:grid;grid-template-columns:60px 1fr;gap:16px;
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow);transition:all .25s;
+  }
+  .story-item:hover{transform:translateY(-2px);border-color:var(--teal)}
+  .step-no{
+    width:48px;height:48px;border-radius:14px;background:var(--indigo-soft);color:var(--indigo);
+    display:grid;place-items:center;font-weight:800;font-size:20px;
+  }
+  .story-item h3{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:20px}
+  .story-item p{margin:0;color:var(--ink-soft);line-height:1.7;font-size:14px}
+  .badge-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .badge{font-size:11px;padding:4px 10px;border-radius:999px;background:#f3eee2;color:var(--ink-soft);font-weight:600}
+
+  /* ===== Characters ===== */
+  .char-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .char-card h3{margin:6px 0 4px;font-family:'Playfair Display',serif}
+  .char-emoji{font-size:36px}
+  .char-card .role{color:var(--teal);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .char-card p{color:var(--ink-soft);font-size:13px;line-height:1.6}
+
+  /* ===== Lessons (Tadabbur) ===== */
+  .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .lesson{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .lesson::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--teal),#1a9e9e)}
+  body[dir="rtl"] .lesson::before{left:auto;right:0}
+  .lesson .ic{font-size:28px;margin-bottom:8px}
+  .lesson h4{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:18px}
+  .lesson p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+  /* ===== Vocabulary ===== */
+  .vocab-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow)}
+  .vocab-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:500px}
+  .vocab-table th, .vocab-table td{padding:14px 16px;text-align:start;border-bottom:1px solid var(--line)}
+  .vocab-table th{background:#faf6ee;font-weight:700;font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.5px}
+  .vocab-table tr:last-child td{border-bottom:none}
+  .vocab-table tr:hover{background:#fbf8f1}
+  .vocab-ar{font-family:'Amiri',serif;font-size:22px;color:#2a2f44;direction:rtl;text-align:right}
+  .vocab-tl-col{font-style:italic;color:var(--ink-soft);font-size:14px;white-space:nowrap}
+  body[dir="rtl"] .vocab-tl-col{display:none}
+
+  /* ===== Exercises ===== */
+  .quiz-section{margin-bottom:22px}
+  .quiz-section h3{font-family:'Playfair Display',serif;margin:0 0 4px}
+  .quiz-section .desc{color:var(--muted);margin:0 0 14px;font-size:13px}
+
+  .mcq{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .mcq .q{font-weight:700;margin:0 0 12px;font-size:15px}
+  .mcq .opts{display:grid;gap:8px}
+  .opt{
+    padding:12px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;
+    transition:all .2s;background:#fff;font-size:14px;
+  }
+  .opt:hover{background:#faf6ee;border-color:var(--gold)}
+  .opt.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600}
+  .opt.wrong{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);font-weight:600}
+  .feedback{margin-top:10px;font-size:13px;color:var(--ink-soft);display:none}
+  .feedback.show{display:block}
+
+  /* Matching */
+  .match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:100%}
+  @media(max-width:700px){.match-wrap{grid-template-columns:1fr}}
+  .match-col h4{margin:0 0 8px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .match-item{
+    padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:14px;
+    user-select:none;
+  }
+  .match-item:hover{border-color:var(--gold)}
+  .match-item.selected{background:var(--teal-soft);border-color:var(--teal);color:var(--teal);font-weight:600}
+  .match-item.matched{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600;cursor:default;pointer-events:none}
+  .match-item.error{background:var(--rose-soft);border-color:var(--rose)}
+  .match-ar{font-family:'Amiri',serif;font-size:20px;direction:rtl;text-align:right}
+
+  /* Order */
+  .order-list{display:grid;gap:8px;margin-bottom:12px}
+  .order-item{
+    padding:14px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    cursor:grab;font-size:14px;display:flex;align-items:center;gap:12px;
+    transition:all .2s;
+  }
+  .order-item:hover{border-color:var(--gold)}
+  .order-item.dragging{opacity:.5}
+  .order-handle{color:var(--muted);font-size:18px}
+
+  /* Fill blanks */
+  .fill-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .fill-q{font-size:15px;line-height:1.9;margin-bottom:10px}
+  .fill-q input{
+    border:none;border-bottom:2px dashed var(--gold);background:transparent;
+    padding:4px 8px;font-size:15px;width:140px;text-align:center;font-family:inherit;
+    color:var(--ink);outline:none;
+  }
+  .fill-q input:focus{border-color:var(--teal)}
+  .fill-q input.correct{color:var(--green);border-color:var(--green);border-style:solid}
+  .fill-q input.wrong{color:var(--rose);border-color:var(--rose);border-style:solid}
+
+  /* Score */
+  .score-bar{
+    position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);
+    padding:14px 22px;display:flex;justify-content:space-between;align-items:center;
+    margin:30px -24px -24px;border-radius:0 0 var(--radius) var(--radius);
+    flex-wrap:wrap;gap:10px;
+  }
+  .score-bar .lbl{color:var(--muted);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+  .score-bar .v{font-size:24px;font-weight:800;color:var(--teal)}
+
+  /* ===== Mudhakkirah Tab ===== */
+  .mudhakkirah-section{margin-bottom:28px}
+  .mudhakkirah-section h3{
+    font-family:'Playfair Display','Amiri',serif;
+    font-size:22px;margin:0 0 6px;
+    color:var(--teal);
+    display:flex;align-items:center;gap:10px;
+  }
+  .mudhakkirah-section h3 .num-badge{
+    width:32px;height:32px;border-radius:10px;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-size:14px;font-weight:800;
+    display:grid;place-items:center;flex-shrink:0;
+  }
+  .mudhakkirah-question{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;box-shadow:var(--shadow);margin-bottom:14px;
+    position:relative;overflow:hidden;
+  }
+  .mudhakkirah-question::before{
+    content:"";position:absolute;top:0;right:0;bottom:0;width:5px;
+    background:linear-gradient(180deg,var(--teal),#1a9e9e);
+  }
+  body:not([dir="rtl"]) .mudhakkirah-question::before{right:auto;left:0}
+  .mudhakkirah-question label{
+    display:block;font-weight:700;font-size:15px;margin-bottom:10px;
+    color:var(--ink);line-height:1.6;
+  }
+  .mudhakkirah-question label .q-icon{margin-inline-end:8px;font-size:18px}
+  .mudhakkirah-question textarea{
+    width:100%;min-height:120px;
+    border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-size:14px;font-family:'Amiri','Inter',serif;
+    color:var(--ink);background:#faf9f6;
+    outline:none;resize:vertical;line-height:1.8;
+    direction:rtl;text-align:right;
+  }
+  .mudhakkirah-question textarea:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(15,107,107,.12);
+  }
+  .mudhakkirah-question textarea::placeholder{
+    color:var(--muted);font-style:italic;
+  }
+
+  /* ===== Export Bar ===== */
+  .export-bar{
+    display:flex;gap:12px;align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#f0f7ff,#f0f4eb);
+    border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-top:24px;
+    flex-wrap:wrap;
+  }
+  .export-bar .export-title{
+    font-weight:700;font-size:14px;color:var(--ink);
+    margin-inline-end:auto;display:flex;align-items:center;gap:8px;
+  }
+
+  /* Footer */
+  .footer{
+    text-align:center;color:var(--muted);font-size:12px;padding:30px 0 20px;
+  }
+
+  /* Scrollbar */
+  .face.back::-webkit-scrollbar{width:6px}
+  .face.back::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;right:auto;transform:translateX(-50%);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:10px;
+    font-size:14px;font-weight:600;opacity:0;transition:all .3s;
+    box-shadow:var(--shadow);z-index:50;pointer-events:none;
+    max-width:90vw;text-align:center;
+    direction:ltr;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+  .toast.success{background:var(--green)}
+  .toast.error{background:var(--rose)}
+
+  /* PDF Generation hidden container */
+  #pdfContainer{
+    position:fixed;left:-9999px;top:0;width:800px;
+    background:#fff;color:#1f2330;font-family:'Inter','Amiri',sans-serif;
+    padding:40px;
+    z-index:-9999;
+    opacity:0;
+    pointer-events:none;
+  }
+  #pdfContainer h1{font-size:22px;margin:0 0 4px;text-align:center}
+  #pdfContainer h2{font-size:18px;margin:20px 0 8px;color:var(--teal);border-bottom:2px solid var(--teal);padding-bottom:4px}
+  #pdfContainer h3{font-size:15px;margin:14px 0 4px;color:var(--gold)}
+  #pdfContainer p{font-size:13px;line-height:1.7;margin:4px 0}
+  #pdfContainer .pdf-meta{text-align:center;color:#8a8f9e;font-size:12px;margin-bottom:16px}
+  #pdfContainer .pdf-section{margin-bottom:16px;page-break-inside:avoid}
+  #pdfContainer .pdf-qa{background:#faf9f6;border:1px solid #e5dccb;border-radius:8px;padding:12px;margin:8px 0}
+  #pdfContainer .pdf-qa label{font-weight:700;display:block;margin-bottom:4px;font-size:13px}
+  #pdfContainer .pdf-qa .answer{font-size:13px;color:#4a5063;white-space:pre-wrap;min-height:20px}
+  #pdfContainer .arabic-block{font-family:'Amiri Quran','Amiri',serif;direction:rtl;text-align:center;font-size:20px;line-height:2.2;color:#2a2f44;margin:10px 0}
+  #pdfContainer table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+  #pdfContainer th,#pdfContainer td{border:1px solid #e5dccb;padding:8px;text-align:left}
+  #pdfContainer th{background:#faf6ee;font-weight:700}
+
+  /* Responsive refinements */
+  @media(max-width:600px){
+    .topbar{padding:14px 12px}
+    .brand h1{font-size:15px}
+    .wrap{padding:0 10px}
+    .tab{min-width:80px;font-size:12px;padding:10px 6px}
+    .hero h2{font-size:24px}
+    .hero-card{padding:18px}
+    .side-card{padding:14px}
+    .side-card .arabic{font-size:20px;line-height:2}
+    .export-bar{padding:14px}
+    .card{padding:16px}
+    .score-bar{margin:20px -16px -16px;padding:12px 14px}
+    .flip{height:320px}
+    .ayah-ar{font-size:22px;line-height:1.8}
+    .story-item{grid-template-columns:48px 1fr;gap:10px;padding:14px}
+    .mcq{padding:14px}
+    .fill-card{padding:14px}
+    .lesson{padding:16px}
+    .mudhakkirah-question{padding:16px}
+    .match-item{padding:10px}
+    .bismillah{font-size:22px}
+    .vocab-table th,.vocab-table td{padding:10px 8px;font-size:12px}
+    .vocab-ar{font-size:18px}
+  }
+
+  /* ===== Premium Unified Responsive Design ===== */
+  img, video, iframe, canvas, svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media(max-width: 768px) {
+    .topbar {
+      padding: 14px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .brand {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .meta {
+      width: 100%;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .lang-toggle {
+      margin-inline-start: auto;
+    }
+    
+    .tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+      padding: 6px;
+    }
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .tab {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      padding: 10px 14px;
+    }
+    
+    .side-card {
+      max-height: 400px;
+    }
+  }
+
+  /* ===== Verse Highlight Feature ===== */
+  .verse-row {
+    display: inline;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 2px 4px;
+    transition: background .25s ease;
+    user-select: none;
+  }
+  .verse-row:hover {
+    background: rgba(173, 216, 230, 0.4);
+  }
+  .verse-row.active {
+    background: #b3e0f7;
+    font-weight: 800;
+  }
+  .verse-num {
+    font-size: 0.72em;
+    color: #0f6b6b;
+    vertical-align: middle;
+    font-family: 'Amiri', serif;
+    user-select: none;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="crest arabic">إ</div>
+    <div>
+      <h1 data-i18n="brand-title">Surah Al-Ikhlas · Interactive Portal</h1>
+      <p data-i18n="brand-sub">Sincerity · Pure Tawheed for Young Learners</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="pill" data-i18n="pill-chapter">Chapter 112</span>
+    <span class="pill" data-i18n="pill-verses">4 Verses</span>
+    <span class="pill" data-i18n="pill-period">Makkiyyah</span>
+    <div class="lang-toggle" id="langToggle" title="Switch language">
+      <span class="globe">🌐</span>
+      <span id="langLabel">العربية</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="intro"><span class="ic">📜</span> <span data-i18n="tab-intro">Introduction</span></div>
+    <div class="tab" data-tab="ayat"><span class="ic">🃏</span> <span data-i18n="tab-ayat">Ayat Flashcards</span></div>
+    <div class="tab" data-tab="story"><span class="ic">📖</span> <span data-i18n="tab-story">The Story</span></div>
+    <div class="tab" data-tab="characters"><span class="ic">👥</span> <span data-i18n="tab-chars">Characters</span></div>
+    <div class="tab" data-tab="vocab"><span class="ic">🔤</span> <span data-i18n="tab-vocab">Vocabulary</span></div>
+    <div class="tab" data-tab="lessons"><span class="ic">💡</span> <span data-i18n="tab-lessons">Lessons</span></div>
+    <div class="tab" data-tab="exercises"><span class="ic">🧠</span> <span data-i18n="tab-exercises">Exercises</span></div>
+    <div class="tab" data-tab="mudhakkirah"><span class="ic">📝</span> <span data-i18n="tab-mudh">Reflection Journal</span></div>
+  </div>
+
+  <!-- ============ INTRO ============ -->
+  <section class="panel active" id="panel-intro">
+    <div class="hero">
+      <div class="hero-card">
+        <span class="kicker" data-i18n="kicker">SURAH AL-IKHLAS · ٱلْإِخْلَاص</span>
+        <h2 data-i18n="hero-title">Al-Ikhlas — The Constitution of Tawheed</h2>
+        <p class="lead" data-i18n="hero-lead">Surah Al-Ikhlas is the heart of belief in Allah. In four short verses it establishes who Allah truly is: One without partner, eternally needed by all yet needing none, without origin or offspring, resembling nothing. The Prophet ﷺ taught that it equals a third of the Quran — because it perfects the creed upon which the whole religion stands.</p>
+        <div class="quick-facts">
+          <div class="fact"><div class="lbl" data-i18n="fact-revealed">Revealed in</div><div class="val" data-i18n="fact-revealed-val">Makkah</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-order">Order of Revelation</div><div class="val" data-i18n="fact-order-val">22nd</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-verses">Verses</div><div class="val" data-i18n="fact-verses-val">4 Ayat</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-theme">Theme</div><div class="val" data-i18n="fact-theme-val">Pure Tawheed</div></div>
+        </div>
+      </div>
+      <div class="side-card">
+        <div class="bismillah arabic">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+        <div class="arabic" style="font-size:24px;line-height:2.2;text-align:center;color:#2a2f44">
+<span class="verse-row" title="Verse 1">قُلْ هُوَ ٱللَّهُ أَحَدٌ <span class="verse-num">۝١</span></span>
+<span class="verse-row" title="Verse 2">ٱللَّهُ ٱلصَّمَدُ <span class="verse-num">۝٢</span></span>
+<span class="verse-row" title="Verse 3">لَمْ يَلِدْ وَلَمْ يُولَدْ <span class="verse-num">۝٣</span></span>
+<span class="verse-row" title="Verse 4">وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ <span class="verse-num">۝٤</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AYAT FLASHCARDS ============ -->
+  <section class="panel" id="panel-ayat">
+    <h2 class="section" data-i18n="section-ayat">Ayat Flashcards</h2>
+    <p class="sub" data-i18n="sub-ayat">Tap any card to flip — see translation, tafseer, and word-by-word meanings.</p>
+    <div class="deck-controls">
+      <button class="btn" id="flipAll"><span data-i18n="btn-flipall">🔄 Flip All</span></button>
+      <button class="btn" id="resetCards"><span data-i18n="btn-reset-cards">↺ Reset</span></button>
+    </div>
+    <div class="deck" id="deck"></div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section class="panel" id="panel-story">
+    <h2 class="section" data-i18n="section-story">The Story · The Greatest Surah</h2>
+    <p class="sub" data-i18n="sub-story">How Al-Fatiha was revealed, its names, and its place at the heart of every prayer.</p>
+    <div class="story-list" id="storyList"></div>
+  </section>
+
+  <!-- ============ CHARACTERS ============ -->
+  <section class="panel" id="panel-characters">
+    <h2 class="section" data-i18n="section-chars">Key Figures</h2>
+    <p class="sub" data-i18n="sub-chars">The concepts, paths, and people referred to in Al-Fatiha.</p>
+    <div class="grid-3" id="charList"></div>
+  </section>
+
+  <!-- ============ VOCABULARY ============ -->
+  <section class="panel" id="panel-vocab">
+    <h2 class="section" data-i18n="section-vocab">Word-by-Word Glossary</h2>
+    <p class="sub" data-i18n="sub-vocab">Every key Quranic word explained — root, meaning, and context.</p>
+    <div class="vocab-table-wrap">
+    <table class="vocab-table">
+      <thead>
+        <tr>
+          <th data-i18n="th-word">Word</th>
+          <th class="vocab-tl-col" data-i18n="th-translit">Transliteration</th>
+          <th data-i18n="th-meaning">Meaning</th>
+          <th data-i18n="th-notes">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="panel" id="panel-lessons">
+    <h2 class="section" data-i18n="section-lessons">Lessons for Modern Youth</h2>
+    <p class="sub" data-i18n="sub-lessons">Timeless principles drawn from the Opening of the Quran.</p>
+    <div class="lesson-grid" id="lessonGrid"></div>
+  </section>
+
+  <!-- ============ EXERCISES ============ -->
+  <section class="panel" id="panel-exercises">
+    <div class="card">
+    <h2 class="section" data-i18n="section-exercises">Deep Practice</h2>
+    <p class="sub" data-i18n="sub-exercises">Multiple-choice, matching, fill-in-the-blank, and chronological ordering.</p>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-mcq-title">① Comprehension — Multiple Choice</h3>
+      <p class="desc" data-i18n="quiz-mcq-desc">Choose the most accurate answer based on the Surah and its tafseer.</p>
+      <div id="mcqContainer"></div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-match-title">② Word Matching</h3>
+      <p class="desc" data-i18n="quiz-match-desc">Tap an Arabic word, then tap its English meaning.</p>
+      <div class="card">
+        <div class="match-wrap">
+          <div class="match-col">
+            <h4 data-i18n="match-arabic">Arabic</h4>
+            <div id="matchAr"></div>
+          </div>
+          <div class="match-col">
+            <h4 data-i18n="match-english">English</h4>
+            <div id="matchEn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-fill-title">③ Fill in the Blanks</h3>
+      <p class="desc" data-i18n="quiz-fill-desc">Complete the verses with the correct word.</p>
+      <div id="fillContainer"></div>
+      <button class="btn primary" id="checkFill"><span data-i18n="btn-check-answers">Check Answers</span></button>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-order-title">④ Order the Verses</h3>
+      <p class="desc" data-i18n="quiz-order-desc">Drag the verse summaries into the correct order.</p>
+      <div class="card">
+        <div class="order-list" id="orderList"></div>
+        <button class="btn primary" id="checkOrder"><span data-i18n="btn-check-order">Check Order</span></button>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <div>
+        <div class="lbl" data-i18n="score-label">Your Score</div>
+        <div class="v"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+      </div>
+      <button class="btn gold" id="resetQuiz"><span data-i18n="btn-reset-quiz">↺ Reset All</span></button>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============ MUDHAKKIRAH (مذكرة تدبري) ============ -->
+  <section class="panel" id="panel-mudhakkirah">
+    <h2 class="section" data-i18n="mudh-title" style="font-family:'Amiri','Playfair Display',serif;">📝 مذكرة تدبري للقرآن</h2>
+    <p class="sub" data-i18n="mudh-sub" style="font-family:'Amiri',serif;font-size:15px;">تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.</p>
+
+    <!-- Student Name (only on Tadabbur page) -->
+    <div class="mudhakkirah-question" style="margin-bottom:22px;">
+      <label><span class="q-icon">👤</span> <span data-i18n="student-label">Student Name:</span></label>
+      <input type="text" id="studentName" data-placeholder-en="Enter your name..." data-placeholder-ar="اكتب اسمك هنا..." placeholder="Enter your name..."
+        style="width:100%;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:16px;font-family:'Amiri','Inter',serif;color:var(--ink);background:#faf9f6;outline:none;direction:rtl;text-align:right;" />
+    </div>
+
+    <!-- Section 1 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-1">١</span> <span data-i18n="mudh-h1">أولاً: المحور العام (الفهم والتدبر)</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">📖</span> <span data-i18n="mudh-q1-label">ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</span></label>
+        <textarea id="mudh-q1" data-placeholder-ar="اكتب خلاصة الآيات بأسلوبك الخاص هنا..." data-placeholder-en="Write a summary of the verses in your own words..." placeholder="اكتب خلاصة الآيات بأسلوبك الخاص هنا..."></textarea>
+      </div>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">💡</span> <span data-i18n="mudh-q2-label">ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</span></label>
+        <textarea id="mudh-q2" data-placeholder-ar="اكتب أهم درس وكيف ستطبقه..." data-placeholder-en="Write the most important lesson and how you will apply it..." placeholder="اكتب أهم درس وكيف ستطبقه..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-2">٢</span> <span data-i18n="mudh-h2">ثانياً: المحور الوجداني والشخصي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">❤️</span> <span data-i18n="mudh-q3-label">هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</span></label>
+        <textarea id="mudh-q3" data-placeholder-ar="اكتب عن الآية التي أثرت فيك ولماذا..." data-placeholder-en="Write about the verse that touched you and why..." placeholder="اكتب عن الآية التي أثرت فيك ولماذا..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-3">٣</span> <span data-i18n="mudh-h3">ثالثاً: المحور التطبيقي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">🎯</span> <span data-i18n="mudh-q4-label">حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</span></label>
+        <textarea id="mudh-q4" data-placeholder-ar="اكتب هدفك العملي أو عهدك مع نفسك..." data-placeholder-en="Write your practical goal or commitment to yourself..." placeholder="اكتب هدفك العملي أو عهدك مع نفسك..."></textarea>
+      </div>
+    </div>
+
+    <!-- Export Bar -->
+    <div class="export-bar">
+      <div class="export-title">
+        <span>📤</span>
+        <span data-i18n="export-title">Share Your Work</span>
+      </div>
+      <button class="btn whatsapp" id="btnWhatsApp">
+        <span style="font-size:20px">💬</span>
+        <span data-i18n="btn-whatsapp">Send to my Teacher</span>
+      </button>
+      <button class="btn pdf-btn" id="btnPDF">
+        <span style="font-size:20px">📄</span>
+        <span data-i18n="btn-pdf">Download PDF</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="footer" data-i18n="footer">Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Hidden PDF render container -->
+<div id="pdfContainer"></div>
+
+<script>
+/* ============= LANGUAGE DATA ============= */
+let currentLang = 'en';
+
+const I18N = {
+  "brand-title": {
+    "en": "Surah Al-Ikhlas · Interactive Portal",
+    "ar": "سورة الإخلاص · بوابة تعليمية تفاعلية"
+  },
+  "brand-sub": {
+    "en": "Sincerity · Pure Tawheed for Young Learners",
+    "ar": "الإخلاص · التوحيد الخالص للناشئة"
+  },
+  "pill-chapter": {
+    "en": "Chapter 112",
+    "ar": "السورة ١١٢"
+  },
+  "pill-verses": {
+    "en": "4 Verses",
+    "ar": "٤ آيات"
+  },
+  "pill-period": {
+    "en": "Makkiyyah",
+    "ar": "مكّيّة"
+  },
+  "student-label": {
+    "en": "Student Name:",
+    "ar": "اسم الطالب:"
+  },
+  "tab-intro": {
+    "en": "Introduction",
+    "ar": "المقدمة"
+  },
+  "tab-ayat": {
+    "en": "Ayat Flashcards",
+    "ar": "بطاقات الآيات"
+  },
+  "tab-story": {
+    "en": "The Story",
+    "ar": "القصة"
+  },
+  "tab-chars": {
+    "en": "Landmarks of the Surah",
+    "ar": "معالم السورة"
+  },
+  "tab-vocab": {
+    "en": "Vocabulary",
+    "ar": "المفردات"
+  },
+  "tab-lessons": {
+    "en": "Lessons",
+    "ar": "الدروس"
+  },
+  "tab-exercises": {
+    "en": "Exercises",
+    "ar": "التمارين"
+  },
+  "tab-mudh": {
+    "en": "Reflection Journal",
+    "ar": "مذكرة تدبري"
+  },
+  "kicker": {
+    "en": "SURAH AL-IKHLAS · ٱلْإِخْلَاص",
+    "ar": "سورة الإخلاص · ٱلْإِخْلَاص"
+  },
+  "hero-title": {
+    "en": "Al-Ikhlas — The Constitution of Tawheed",
+    "ar": "الإخلاص — دستور التوحيد"
+  },
+  "hero-lead": {
+    "en": "Surah Al-Ikhlas is the heart of belief in Allah. In four short verses it establishes who Allah truly is: One without partner, eternally needed by all yet needing none, without origin or offspring, resembling nothing. The Prophet ﷺ taught that it equals a third of the Quran — because it perfects the creed upon which the whole religion stands.",
+    "ar": "سورة الإخلاص قلب العقيدة في الله. في أربع آيات قصار تُقرّر مَن هو الله حقيقةً: واحدٌ لا شريك له، صمدٌ تقصده الخلائق وهو غني عنها، لا والد له ولا ولد، ولا يماثله شيء. علّمنا النبي ﷺ أنها تعدل ثلث القرآن لأنها تُكمل العقيدة التي يقوم عليها الدين كله."
+  },
+  "fact-revealed": {
+    "en": "Revealed in",
+    "ar": "مكان النزول"
+  },
+  "fact-revealed-val": {
+    "en": "Makkah",
+    "ar": "مكة المكرمة"
+  },
+  "fact-order": {
+    "en": "Order of Revelation",
+    "ar": "ترتيب النزول"
+  },
+  "fact-order-val": {
+    "en": "22nd",
+    "ar": "الثانية والعشرون"
+  },
+  "fact-verses": {
+    "en": "Verses",
+    "ar": "الآيات"
+  },
+  "fact-verses-val": {
+    "en": "4 Ayat",
+    "ar": "٤ آيات"
+  },
+  "fact-theme": {
+    "en": "Theme",
+    "ar": "الموضوع"
+  },
+  "fact-theme-val": {
+    "en": "Pure Tawheed",
+    "ar": "التوحيد الخالص"
+  },
+  "section-ayat": {
+    "en": "Ayat Flashcards",
+    "ar": "بطاقات الآيات"
+  },
+  "sub-ayat": {
+    "en": "Tap any card to flip — see translation, tafseer, and word-by-word meanings.",
+    "ar": "اضغط على أي بطاقة لقلبها — شاهد الشرح والتفسير ومعاني الكلمات."
+  },
+  "btn-flipall": {
+    "en": "🔄 Flip All",
+    "ar": "🔄 اقلب الكل"
+  },
+  "btn-reset-cards": {
+    "en": "↺ Reset",
+    "ar": "↺ إعادة ضبط"
+  },
+  "section-story": {
+    "en": "The Story",
+    "ar": "القصة"
+  },
+  "sub-story": {
+    "en": "Context, revelation, and place of the surah in the life of a believer.",
+    "ar": "السياق والنزول ومكانة السورة في حياة المؤمن."
+  },
+  "section-chars": {
+    "en": "Landmarks of the Surah",
+    "ar": "معالم السورة"
+  },
+  "sub-chars": {
+    "en": "The key concepts and figures referenced in the surah.",
+    "ar": "المفاهيم والشخصيات والأسماء المذكورة في السورة."
+  },
+  "section-vocab": {
+    "en": "Word-by-Word Glossary",
+    "ar": "معجم الكلمات"
+  },
+  "sub-vocab": {
+    "en": "Every key Quranic word explained — root, meaning, and context.",
+    "ar": "شرح كل كلمة قرآنية مهمة — الجذر والمعنى والسياق."
+  },
+  "th-word": {
+    "en": "Word",
+    "ar": "الكلمة"
+  },
+  "th-translit": {
+    "en": "Transliteration",
+    "ar": "النطق"
+  },
+  "th-meaning": {
+    "en": "Meaning",
+    "ar": "المعنى"
+  },
+  "th-notes": {
+    "en": "Notes",
+    "ar": "ملاحظات"
+  },
+  "section-lessons": {
+    "en": "Lessons for Modern Youth",
+    "ar": "دروس للشباب المعاصر"
+  },
+  "sub-lessons": {
+    "en": "Timeless principles drawn from this surah.",
+    "ar": "مبادئ خالدة من هذه السورة."
+  },
+  "section-exercises": {
+    "en": "Deep Practice",
+    "ar": "تمارين تطبيقية"
+  },
+  "sub-exercises": {
+    "en": "Multiple-choice, matching, fill-in-the-blank, and ordering.",
+    "ar": "اختيار من متعدد، مطابقة، ملء الفراغات، وترتيب."
+  },
+  "quiz-mcq-title": {
+    "en": "① Comprehension — Multiple Choice",
+    "ar": "① الفهم — اختيار من متعدد"
+  },
+  "quiz-mcq-desc": {
+    "en": "Choose the most accurate answer based on the Surah and its tafseer.",
+    "ar": "اختر الإجابة الأدق بناءً على السورة وتفسيرها."
+  },
+  "quiz-match-title": {
+    "en": "② Word Matching",
+    "ar": "② مطابقة الكلمات"
+  },
+  "quiz-match-desc": {
+    "en": "Tap an Arabic word, then tap its English meaning.",
+    "ar": "اضغط على الكلمة العربية ثم اضغط على معناها."
+  },
+  "match-arabic": {
+    "en": "Arabic",
+    "ar": "عربي"
+  },
+  "match-english": {
+    "en": "English",
+    "ar": "المعنى"
+  },
+  "quiz-fill-title": {
+    "en": "③ Fill in the Blanks",
+    "ar": "③ أكمل الفراغات"
+  },
+  "quiz-fill-desc": {
+    "en": "Complete the verses with the correct word.",
+    "ar": "أكمل الآيات بالكلمة الصحيحة."
+  },
+  "btn-check-answers": {
+    "en": "Check Answers",
+    "ar": "تحقق من الإجابات"
+  },
+  "quiz-order-title": {
+    "en": "④ Order the Verses",
+    "ar": "④ رتّب الآيات"
+  },
+  "quiz-order-desc": {
+    "en": "Drag the verse summaries into the correct order.",
+    "ar": "اسحب ملخصات الآيات ورتّبها ترتيباً صحيحاً."
+  },
+  "btn-check-order": {
+    "en": "Check Order",
+    "ar": "تحقق من الترتيب"
+  },
+  "score-label": {
+    "en": "Your Score",
+    "ar": "درجتك"
+  },
+  "btn-reset-quiz": {
+    "en": "↺ Reset All",
+    "ar": "↺ إعادة ضبط الكل"
+  },
+  "export-title": {
+    "en": "Share Your Work",
+    "ar": "شارك عملك"
+  },
+  "btn-whatsapp": {
+    "en": "Send to my Teacher",
+    "ar": "أرسل للمعلم"
+  },
+  "btn-pdf": {
+    "en": "Download PDF",
+    "ar": "تحميل PDF"
+  },
+  "footer": {
+    "en": "Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.",
+    "ar": "تَمَّ بِتَوْفِقٍ مِنَ اللهِ وِفْقَ مَرَاجِعِ المُفَسِّرِينَ مِنْ عُلَمَاءِ أهْلِ السُّنَّةِ، وَالْحَمْدُ للهِ رَبِّ العَالَمِينَ."
+  },
+  "mudh-title": {
+    "en": "📝 Quran Reflection Journal",
+    "ar": "📝 مذكرة تدبري للقرآن"
+  },
+  "mudh-sub": {
+    "en": "Written reflections that help the student understand the verses and apply them in daily life.",
+    "ar": "تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية."
+  },
+  "mudh-num-1": {
+    "en": "1",
+    "ar": "١"
+  },
+  "mudh-num-2": {
+    "en": "2",
+    "ar": "٢"
+  },
+  "mudh-num-3": {
+    "en": "3",
+    "ar": "٣"
+  },
+  "mudh-h1": {
+    "en": "First: General Axis (Understanding & Reflection)",
+    "ar": "أولاً: المحور العام (الفهم والتدبر)"
+  },
+  "mudh-h2": {
+    "en": "Second: Emotional & Personal Axis",
+    "ar": "ثانياً: المحور الوجداني والشخصي"
+  },
+  "mudh-h3": {
+    "en": "Third: Practical Axis",
+    "ar": "ثالثاً: المحور التطبيقي"
+  },
+  "mudh-q1-label": {
+    "en": "What is the summary of the verses in your own simple words?",
+    "ar": "ما خلاصة الآيات في رأيك بأسلوبك البسيط؟"
+  },
+  "mudh-q2-label": {
+    "en": "What is the most important lesson from the verses, and how will you apply it in your daily life?",
+    "ar": "ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟"
+  },
+  "mudh-q3-label": {
+    "en": "Is there a particular verse that touched your heart or affected you deeply, and why?",
+    "ar": "هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟"
+  },
+  "mudh-q4-label": {
+    "en": "Set a small practical goal or commitment to yourself to apply the verses.",
+    "ar": "حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات."
+  }
+};
+
+/* ============= CONTENT DATA ============= */
+const AYAT = [
+  {
+    "n": 1,
+    "ar": "قُلْ هُوَ ٱللَّهُ أَحَدٌ",
+    "tr": {
+      "en": "Say: He is Allah, the One.",
+      "ar": "قل أيها النبي: هو الله المتفرد بالوحدانية والكمال."
+    },
+    "tafsir": {
+      "en": "Allah commands His Prophet ﷺ to openly declare His absolute oneness. 'Ahad' is more emphatic than 'wahid' — it negates every form of partnership, plurality, or composition in Allah's essence (Baghawi; Razi).",
+      "ar": "يأمر الله نبيه ﷺ أن يُعلن التوحيد المطلق. «أحد» أبلغ من «واحد» لأنها تنفي كلَّ شركة وكثرة وتركيب في ذاته سبحانه. وقد نزلت ردًّا على المشركين حين سألوا النبي ﷺ أن يصف لهم ربه (البغوي، الرازي، القرطبي)."
+    },
+    "words": [
+      {
+        "ar": "قُلْ",
+        "en": {
+          "en": "Say",
+          "ar": "قل"
+        }
+      },
+      {
+        "ar": "هُوَ",
+        "en": {
+          "en": "He",
+          "ar": "هو"
+        }
+      },
+      {
+        "ar": "ٱللَّهُ",
+        "en": {
+          "en": "Allah",
+          "ar": "الله"
+        }
+      },
+      {
+        "ar": "أَحَدٌ",
+        "en": {
+          "en": "One (absolutely Unique)",
+          "ar": "الواحد المتفرد الذي لا نظير له"
+        }
+      }
+    ]
+  },
+  {
+    "n": 2,
+    "ar": "ٱللَّهُ ٱلصَّمَدُ",
+    "tr": {
+      "en": "Allah, the Eternal Refuge.",
+      "ar": "الله السيد الذي تقصده الخلائق في حوائجها وهو غني عنها."
+    },
+    "tafsir": {
+      "en": "As-Samad is the Master in perfection, to whom all turn in need, while He needs nothing. Ibn Abbas: 'The Master complete in His mastery.' This name combines self-sufficiency with absolute lordship (Qurtubi; Maraghi).",
+      "ar": "الصمد: السيد الكامل في سؤدده، المقصود في كل حاجة، الغني عن كل ما سواه ومحتاج إليه كل شيء. قال ابن عباس: «السيد الذي كَمُل في سؤدده». فالآية تجمع بين الغنى المطلق والربوبية التامة (القرطبي، المراغي، الوسيط)."
+    },
+    "words": [
+      {
+        "ar": "ٱللَّهُ",
+        "en": {
+          "en": "Allah",
+          "ar": "الله"
+        }
+      },
+      {
+        "ar": "ٱلصَّمَدُ",
+        "en": {
+          "en": "The Eternal Refuge sought by all",
+          "ar": "السيد الذي تَقصده الخلائق في حوائجها"
+        }
+      }
+    ]
+  },
+  {
+    "n": 3,
+    "ar": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
+    "tr": {
+      "en": "He begets not, nor is He begotten.",
+      "ar": "لم يتخذ ولدًا ولم يُولد من أحد، فهو الأزلي الأبدي."
+    },
+    "tafsir": {
+      "en": "A decisive refutation of those who attributed offspring to Allah — the polytheists who called the angels His daughters, the Christians who claimed Jesus as His son, and the Jews who said Uzayr was His son. Begetting implies need and likeness; Allah is far above both (Razi; Tahrir wa Tanwir).",
+      "ar": "ردٌّ قاطع على كل من نسب لله ولدًا: المشركين الذين زعموا الملائكة بنات الله، والنصارى الذين قالوا المسيح ابن الله، واليهود الذين قالوا عُزير ابن الله. والولادة تستلزم المماثلة والحاجة، وهو منزَّه عنهما (الرازي، التحرير والتنوير)."
+    },
+    "words": [
+      {
+        "ar": "لَمْ يَلِدْ",
+        "en": {
+          "en": "He begets not",
+          "ar": "لم يتخذ ولدًا"
+        }
+      },
+      {
+        "ar": "وَلَمْ يُولَدْ",
+        "en": {
+          "en": "Nor was He begotten",
+          "ar": "ولم يُولد من شيء"
+        }
+      }
+    ]
+  },
+  {
+    "n": 4,
+    "ar": "وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
+    "tr": {
+      "en": "And there is none comparable to Him.",
+      "ar": "ولم يكن له نظير ولا مماثل من خلقه."
+    },
+    "tafsir": {
+      "en": "The surah's seal: no being whatsoever resembles Allah in essence, attribute, or action. This single ayah equals a third of the Quran in meaning, as the Prophet ﷺ said, because it establishes pure tawheed — the foundation upon which everything else rests (Baghawi; Maraghi).",
+      "ar": "خاتمة السورة: ليس لله شبيه ولا نظير لا في ذاته ولا في صفاته ولا في أفعاله. وقد أخبر النبي ﷺ أن هذه السورة تعدل ثلث القرآن لأنها تقرر التوحيد الخالص الذي هو أساس كل شيء في الدين (البغوي، المراغي، الوسيط)."
+    },
+    "words": [
+      {
+        "ar": "كُفُوًا",
+        "en": {
+          "en": "Equal / Comparable",
+          "ar": "نَظير أو مكافئ أو مماثل"
+        }
+      },
+      {
+        "ar": "أَحَدٌۢ",
+        "en": {
+          "en": "Anyone (at all)",
+          "ar": "أيُّ أحد"
+        }
+      }
+    ]
+  }
+];
+
+const STORY = [
+  {
+    "t": {
+      "en": "The Cause of Revelation",
+      "ar": "سبب النزول"
+    },
+    "d": {
+      "en": "The Quraysh said to the Prophet ﷺ: 'Describe your Lord to us — is He of gold or silver?' Allah revealed Surah Al-Ikhlas as the definitive answer: He is unique, eternal, needing nothing, resembling nothing.",
+      "ar": "جاء المشركون إلى النبي ﷺ فقالوا: «صِف لنا ربك». فأنزل الله سورة الإخلاص جوابًا قاطعًا يُعرِّف بالله سبحانه: هو الواحد الأحد، الصمد، الذي لا يلد ولا يُولد ولا يماثله شيء."
+    },
+    "tags": {
+      "en": [
+        "Quraysh",
+        "Tawheed",
+        "Definitive Answer"
+      ],
+      "ar": [
+        "قريش",
+        "التوحيد",
+        "الجواب الفاصل"
+      ]
+    }
+  },
+  {
+    "t": {
+      "en": "Equal to a Third of the Quran",
+      "ar": "تعدل ثلث القرآن"
+    },
+    "d": {
+      "en": "The Prophet ﷺ said: 'By the One in whose hand is my soul, this surah equals a third of the Quran.' Scholars explain: the Quran's message divides into laws, stories, and creed — Al-Ikhlas comprehensively covers the creed of tawheed.",
+      "ar": "قال النبي ﷺ: «والذي نفسي بيده، إنها لَتعدل ثلث القرآن». ووجه ذلك عند العلماء أن مقاصد القرآن ثلاثة: أحكام وقصص وعقيدة، وهذه السورة جمعت العقيدة في التوحيد جمعًا تامًا (البغوي، الرازي)."
+    },
+    "tags": {
+      "en": [
+        "Hadith",
+        "Tawheed",
+        "Foundation"
+      ],
+      "ar": [
+        "حديث",
+        "التوحيد",
+        "الأساس"
+      ]
+    }
+  },
+  {
+    "t": {
+      "en": "A Man Who Loved It",
+      "ar": "الرجل الذي أحبها"
+    },
+    "d": {
+      "en": "A man used to recite Al-Ikhlas in every rak'ah. His companions complained to the Prophet ﷺ, who asked him why. He replied: 'Because it is the description of Ar-Rahman, and I love to recite it.' The Prophet ﷺ said: 'Tell him that Allah loves him.'",
+      "ar": "كان رجل من الصحابة يقرأ في كل ركعة بـ«قل هو الله أحد»، فلما سأله النبي ﷺ قال: إنها صفة الرحمن وأنا أحب أن أقرأها. فقال النبي ﷺ: «أخبروه أن الله يحبه» (متفق عليه)."
+    },
+    "tags": {
+      "en": [
+        "Love of Allah",
+        "Sunnah",
+        "Companion"
+      ],
+      "ar": [
+        "محبة الله",
+        "السنة",
+        "الصحابي"
+      ]
+    }
+  },
+  {
+    "t": {
+      "en": "Recited Before Sleep",
+      "ar": "تُقرأ قبل النوم"
+    },
+    "d": {
+      "en": "The Prophet ﷺ would, every night before sleep, cup his hands and recite Al-Ikhlas, Al-Falaq, and An-Nas, then blow into them and wipe over his body — three times. The three are called Al-Mu'awwidhat (the surahs of protection).",
+      "ar": "كان النبي ﷺ إذا أوى إلى فراشه كل ليلة جمع كفّيه ونفث فيهما وقرأ: «قل هو الله أحد» و«قل أعوذ برب الفلق» و«قل أعوذ برب الناس»، ثم مسح بهما ما استطاع من جسده، يفعل ذلك ثلاث مرات (البخاري)."
+    },
+    "tags": {
+      "en": [
+        "Sunnah",
+        "Protection",
+        "Daily Practice"
+      ],
+      "ar": [
+        "السنة",
+        "الحماية",
+        "الأذكار"
+      ]
+    }
+  },
+  {
+    "t": {
+      "en": "The Pillar of Aqeedah",
+      "ar": "عماد العقيدة"
+    },
+    "d": {
+      "en": "Scholars of Ahl al-Sunnah explain that this surah establishes the four cornerstones of belief in Allah: His Oneness (Ahad), His Absolute Mastery (As-Samad), His Eternity (lam yalid wa lam yulad), and the impossibility of any resemblance to Him (lam yakun lahu kufuwan ahad).",
+      "ar": "يبيّن علماء أهل السنة الأشاعرة أن هذه السورة ترسي أركان الاعتقاد في الله: وحدانيته (أحد)، وكمال سيادته وغناه (الصمد)، وأزليته وأبديته (لم يلد ولم يولد)، واستحالة مماثلته لشيء من خلقه (ولم يكن له كفوًا أحد)."
+    },
+    "tags": {
+      "en": [
+        "Aqeedah",
+        "Ahl al-Sunnah",
+        "Tawheed"
+      ],
+      "ar": [
+        "العقيدة",
+        "أهل السنة",
+        "التوحيد"
+      ]
+    }
+  },
+  {
+    "t": {
+      "en": "The Surah of Sincerity",
+      "ar": "سورة الإخلاص"
+    },
+    "d": {
+      "en": "It is called Al-Ikhlas (sincerity / purification) because whoever truly believes in its content has purified his belief from any form of shirk. It is also called Al-Asas (the foundation), At-Tawheed, and Al-Mu'awwidhah.",
+      "ar": "سُميت «الإخلاص» لأن من آمن بمعناها فقد أخلص دينه من الشرك. ولها أسماء أخرى: الأساس، والتوحيد، والمعوِّذة، والصمد. كل اسم يكشف بُعدًا من أبعاد عظمتها."
+    },
+    "tags": {
+      "en": [
+        "Names",
+        "Sincerity",
+        "Foundation"
+      ],
+      "ar": [
+        "الأسماء",
+        "الإخلاص",
+        "الأساس"
+      ]
+    }
+  }
+];
+
+const CHARS = [
+  {
+    "e": "☝️",
+    "role": {
+      "en": "Absolute Oneness",
+      "ar": "الوحدانية المطلقة"
+    },
+    "name": {
+      "en": "Al-Ahad",
+      "ar": "الأحد"
+    },
+    "d": {
+      "en": "Allah is One in a way that admits no plurality, no parts, no partners, and no peers. 'Ahad' is more emphatic than 'Wahid' — it negates every form of multiplicity in His essence.",
+      "ar": "الله واحد وحدانية لا تقبل التعدد ولا التركيب ولا الشركة ولا المثيل. و«أحد» أبلغ من «واحد» لأنها تنفي كل صور الكثرة عن ذاته سبحانه."
+    }
+  },
+  {
+    "e": "🏛️",
+    "role": {
+      "en": "Eternal Refuge",
+      "ar": "المقصود في الحوائج"
+    },
+    "name": {
+      "en": "As-Samad",
+      "ar": "الصمد"
+    },
+    "d": {
+      "en": "The Master whose perfection is so complete that every creature turns to Him in need, while He needs nothing from any of them. He is the eternal pivot of all existence.",
+      "ar": "السيد الكامل في سؤدده الذي تقصده الخلائق في حوائجها، وهو غني عنها لا يحتاج إلى شيء منها. هو محور الوجود الذي يدور كل شيء حول رحمته وعطائه."
+    }
+  },
+  {
+    "e": "♾️",
+    "role": {
+      "en": "Eternity",
+      "ar": "الأزلية والأبدية"
+    },
+    "name": {
+      "en": "Lam Yalid wa Lam Yulad",
+      "ar": "لم يلد ولم يولد"
+    },
+    "d": {
+      "en": "Allah has no offspring and no origin. He was not born, He does not die, He has no beginning and no end. Begetting implies need and likeness; both are impossible for the Creator.",
+      "ar": "الله ليس له ولد ولا والد. لم يَسبقه عدم ولا يَلحقه فناء. والولادة تستلزم الحاجة والمماثلة، وكلاهما مستحيل في حق الله الخالق سبحانه."
+    }
+  },
+  {
+    "e": "🚫",
+    "role": {
+      "en": "No Resemblance",
+      "ar": "نفي المماثلة"
+    },
+    "name": {
+      "en": "Laysa Kamithlihi Shay",
+      "ar": "ليس كمثله شيء"
+    },
+    "d": {
+      "en": "Nothing in creation resembles Allah — not in essence, not in attribute, not in action. Our minds cannot picture Him; whatever you imagine, Allah is different from it.",
+      "ar": "لا يماثل الله شيءٌ من خلقه؛ لا في ذاته ولا في صفاته ولا في أفعاله. لا تُدركه العقول ولا تُحيط به الأوهام؛ مهما تخيلت فالله بخلاف ذلك."
+    }
+  },
+  {
+    "e": "📜",
+    "role": {
+      "en": "The Greatest Creed",
+      "ar": "أعظم عقيدة"
+    },
+    "name": {
+      "en": "Pure Tawheed",
+      "ar": "التوحيد الخالص"
+    },
+    "d": {
+      "en": "This surah is the constitution of belief. Knowing Allah by these four descriptions cleanses the heart of every form of shirk and false god. It is why the Prophet ﷺ called it equal to a third of the Quran.",
+      "ar": "هذه السورة دستور الاعتقاد. معرفة الله بهذه الصفات الأربع تُطهّر القلب من كل شرك وإله باطل، ولذلك جعلها النبي ﷺ تعدل ثلث القرآن لأنها تستوعب علم التوحيد."
+    }
+  },
+  {
+    "e": "🛡️",
+    "role": {
+      "en": "One of the Mu'awwidhat",
+      "ar": "إحدى المعوذات"
+    },
+    "name": {
+      "en": "The Sealing Surahs",
+      "ar": "سور التحصين"
+    },
+    "d": {
+      "en": "Together with Al-Falaq and An-Nas, Al-Ikhlas forms the trio recited for protection morning and evening, before sleep, and after every prayer. Tawheed itself is the deepest protection.",
+      "ar": "تُتلى مع سورتي الفلق والناس صباحًا ومساءً وقبل النوم ودبر الصلوات للحماية. والتوحيد هو أعظم حصن، إذ من عرف الله حق المعرفة استعاذ به وحده."
+    }
+  }
+];
+
+const VOCAB = [
+  {
+    "ar": "قُلْ",
+    "tl": "",
+    "m": {
+      "en": "Say",
+      "ar": "قل"
+    },
+    "n": {
+      "en": "A direct divine command to the Prophet ﷺ to proclaim Allah's oneness publicly.",
+      "ar": "أمر إلهي للنبي ﷺ بإعلان توحيد الله جهرًا، وفيه دلالة على أن الرسول ﷺ مبلِّغ عن ربه."
+    }
+  },
+  {
+    "ar": "هُوَ",
+    "tl": "",
+    "m": {
+      "en": "He",
+      "ar": "هو"
+    },
+    "n": {
+      "en": "Pronoun pointing to the most well-known: Allah; emphasises His uniqueness.",
+      "ar": "ضمير الشأن يُشير إلى المعهود المعروف، وهو الله تعالى، ويُفيد التعظيم والتفخيم."
+    }
+  },
+  {
+    "ar": "ٱللَّهُ",
+    "tl": "",
+    "m": {
+      "en": "Allah",
+      "ar": "الله"
+    },
+    "n": {
+      "en": "The proper name of the One True God — unique to Him alone.",
+      "ar": "العَلَم على الذات الإلهية المستحق وحده للعبادة، اسم لا يُسمى به سواه."
+    }
+  },
+  {
+    "ar": "أَحَدٌ",
+    "tl": "",
+    "m": {
+      "en": "One (absolutely Unique)",
+      "ar": "الواحد المتفرد الذي لا نظير له"
+    },
+    "n": {
+      "en": "Singular in essence, attributes, and acts — admitting no partner, part, or peer.",
+      "ar": "المتوحد في ذاته وصفاته وأفعاله، لا شريك له ولا جزء ولا نظير. أبلغ من «واحد»."
+    }
+  },
+  {
+    "ar": "ٱلصَّمَدُ",
+    "tl": "",
+    "m": {
+      "en": "The Eternal Refuge sought by all",
+      "ar": "السيد الذي تَقصده الخلائق في حوائجها"
+    },
+    "n": {
+      "en": "The Master to whom all creation turns in need; perfect, self-sufficient, dependent on none.",
+      "ar": "السيد الكامل في سؤدده، المقصود في الحوائج، الغني عن كل أحد ومحتاج إليه كل شيء. (البغوي، الرازي، القرطبي)"
+    }
+  },
+  {
+    "ar": "لَمْ يَلِدْ",
+    "tl": "",
+    "m": {
+      "en": "He begets not",
+      "ar": "لم يتخذ ولدًا"
+    },
+    "n": {
+      "en": "Refutes the claims of those who attributed children to Allah; He is far above this.",
+      "ar": "ردٌّ على من نسب لله ولدًا من المشركين واليهود والنصارى؛ فالولد يقتضي المماثلة والحاجة، وهو منزَّه عنهما."
+    }
+  },
+  {
+    "ar": "وَلَمْ يُولَدْ",
+    "tl": "",
+    "m": {
+      "en": "Nor was He begotten",
+      "ar": "ولم يُولد من شيء"
+    },
+    "n": {
+      "en": "He is Eternal — has no origin, no beginning, no parent.",
+      "ar": "لم يَسبقه عدم ولا له أصل خرج منه، فهو الأول الذي ليس قبله شيء، الأزلي الذي لا بداية له."
+    }
+  },
+  {
+    "ar": "كُفُوًا",
+    "tl": "",
+    "m": {
+      "en": "Equal / Comparable",
+      "ar": "نَظير أو مكافئ أو مماثل"
+    },
+    "n": {
+      "en": "No one is similar, equal, or comparable to Allah in any way.",
+      "ar": "النظير والمثيل والمساوي، أي لا يماثله شيء في ذاته ولا صفاته ولا أفعاله. (التحرير والتنوير)"
+    }
+  },
+  {
+    "ar": "أَحَدٌۢ",
+    "tl": "",
+    "m": {
+      "en": "Anyone (at all)",
+      "ar": "أيُّ أحد"
+    },
+    "n": {
+      "en": "Sealing the surah: no being, ever, in any sense, resembles Allah.",
+      "ar": "نكرة في سياق النفي تُفيد العموم، أي لا يماثله أحدٌ من المخلوقات على الإطلاق."
+    }
+  }
+];
+
+const LESSONS = [
+  {
+    "ic": "☝️",
+    "t": {
+      "en": "Know Your Lord Correctly",
+      "ar": "اعرف ربك معرفة صحيحة"
+    },
+    "d": {
+      "en": "The first duty on every Muslim is to know Allah as He described Himself — One, Eternal, needing none, resembling none. Beliefs cannot be guessed; they are taken from revelation.",
+      "ar": "أول واجب على كل مكلَّف معرفة الله بما وَصَفَ به نفسه: أحد، صمد، لم يلد ولم يولد، لا مماثل له. والعقيدة لا تُؤخذ بالظن، بل من الوحي الصحيح."
+    }
+  },
+  {
+    "ic": "💎",
+    "t": {
+      "en": "Purify Your Worship",
+      "ar": "أخلِص عبادتك"
+    },
+    "d": {
+      "en": "The surah is named 'Al-Ikhlas' because it cleanses worship of any partner. Ask yourself before every act: am I doing this for Allah alone, or to be seen by people?",
+      "ar": "سُميت السورة بالإخلاص لأنها تُطهّر العبادة من كل شريك. اسأل نفسك قبل كل عمل: هل أعمله لله وحده، أم لأن يراني الناس ويمدحوني؟"
+    }
+  },
+  {
+    "ic": "🤲",
+    "t": {
+      "en": "Need Only Allah",
+      "ar": "احتج إلى الله وحده"
+    },
+    "d": {
+      "en": "He is As-Samad — the One every creature turns to in need. Make your heart depend on Allah first, before doctors, money, or people. They are means; He is the giver.",
+      "ar": "هو الصمد الذي تقصده الخلائق في حوائجها. علِّق قلبك بالله أولاً قبل الأطباء والمال والناس. فهم أسباب، والمعطي حقيقةً هو الله سبحانه."
+    }
+  },
+  {
+    "ic": "🛡️",
+    "t": {
+      "en": "Make It a Daily Companion",
+      "ar": "اجعلها رفيقًا يوميًا"
+    },
+    "d": {
+      "en": "The Prophet ﷺ recited it before sleep, after every fard prayer, in morning and evening adhkar. Reading it three times equals reciting a third of the Quran in reward — never let a day pass without it.",
+      "ar": "كان النبي ﷺ يقرؤها قبل النوم ودبر كل صلاة وفي أذكار الصباح والمساء. وقراءتها ثلاثًا تعدل ختمة من القرآن في الأجر؛ لا تدع يومًا يمر بلا تلاوتها."
+    }
+  },
+  {
+    "ic": "🚫",
+    "t": {
+      "en": "Reject Every Form of Shirk",
+      "ar": "ابتعد عن كل شرك"
+    },
+    "d": {
+      "en": "Shirk today wears modern clothes: blind devotion to celebrities, ideologies that replace religion, fearing creation more than the Creator. The surah trains us to filter every loyalty through tawheed.",
+      "ar": "الشرك اليوم يلبس ثيابًا حديثة: تقديس المشاهير، واتباع الأفكار التي تنازع الدين، والخوف من الخلق أكثر من الخالق. السورة تدرّبنا أن نزن كل ولاء بميزان التوحيد."
+    }
+  },
+  {
+    "ic": "❤️",
+    "t": {
+      "en": "Love Allah, He Loves You",
+      "ar": "أحبَّ الله يحبُّك"
+    },
+    "d": {
+      "en": "The companion who loved Al-Ikhlas was loved by Allah. The shortcut to Allah's love is loving His names, His attributes, and the chapters that describe Him. Build a heart that adores its Lord.",
+      "ar": "الصحابي الذي أحب سورة الإخلاص أحبه الله. وأقصر طريق إلى محبة الله أن تحب أسماءه وصفاته والسور التي تصفه. ابنِ قلبًا يَعشق ربه ويهفو إليه."
+    }
+  }
+];
+
+const MCQ = [
+  {
+    "q": {
+      "en": "Why was Surah Al-Ikhlas revealed?",
+      "ar": "لماذا نزلت سورة الإخلاص؟"
+    },
+    "o": {
+      "en": [
+        "As a story of the prophets",
+        "To answer the Quraysh who asked the Prophet ﷺ to describe his Lord",
+        "To describe Paradise",
+        "As a ruling on fasting"
+      ],
+      "ar": [
+        "قصة من قصص الأنبياء",
+        "جوابًا لقريش حين سألوا النبي ﷺ أن يصف ربه",
+        "لوصف الجنة",
+        "حكمًا في الصيام"
+      ]
+    },
+    "a": 1,
+    "ex": {
+      "en": "The Quraysh asked the Prophet ﷺ to describe his Lord, and Allah revealed Al-Ikhlas as the decisive answer.",
+      "ar": "سأل المشركون النبي ﷺ أن يصف لهم ربه، فأنزل الله سورة الإخلاص جوابًا قاطعًا."
+    }
+  },
+  {
+    "q": {
+      "en": "What does 'Ahad' mean?",
+      "ar": "ما معنى «أحد»؟"
+    },
+    "o": {
+      "en": [
+        "A great king",
+        "Absolutely One — admitting no partner, part, or peer",
+        "The first of many",
+        "A father"
+      ],
+      "ar": [
+        "ملك عظيم",
+        "الواحد المتفرد الذي لا شريك له ولا جزء ولا نظير",
+        "الأول من بين كثيرين",
+        "الأب"
+      ]
+    },
+    "a": 1,
+    "ex": {
+      "en": "'Ahad' is more emphatic than 'Wahid' and negates every form of multiplicity in Allah's essence.",
+      "ar": "«أحد» أبلغ من «واحد» وتنفي كل أشكال الكثرة والتركيب عن ذات الله."
+    }
+  },
+  {
+    "q": {
+      "en": "What does 'As-Samad' mean according to Ibn Abbas?",
+      "ar": "ما معنى «الصمد» عند ابن عباس؟"
+    },
+    "o": {
+      "en": [
+        "The Forgiver of sins",
+        "The Master complete in His mastery, to whom all turn in need",
+        "The Creator of food",
+        "The One who sleeps not"
+      ],
+      "ar": [
+        "الغفور للذنوب",
+        "السيد الذي كَمُل في سؤدده وتقصده الخلائق",
+        "خالق الطعام",
+        "الذي لا ينام"
+      ]
+    },
+    "a": 1,
+    "ex": {
+      "en": "Ibn Abbas defined As-Samad as 'the Master complete in His mastery' — perfect, self-sufficient, the refuge of all.",
+      "ar": "قال ابن عباس: «الصمد السيد الذي كَمُل في سؤدده»؛ فهو الكامل الغني المقصود في الحاجات."
+    }
+  },
+  {
+    "q": {
+      "en": "Why does the surah say 'He begets not, nor is He begotten'?",
+      "ar": "لماذا قال «لم يلد ولم يولد»؟"
+    },
+    "o": {
+      "en": [
+        "To describe humans",
+        "To refute those who attributed offspring or origin to Allah",
+        "To explain marriage rulings",
+        "To describe the angels"
+      ],
+      "ar": [
+        "لوصف البشر",
+        "ردًّا على من نسب لله ولدًا أو أصلًا",
+        "لشرح أحكام الزواج",
+        "لوصف الملائكة"
+      ]
+    },
+    "a": 1,
+    "ex": {
+      "en": "It refutes the polytheists, Christians, and Jews who claimed children for Allah; begetting implies need and likeness.",
+      "ar": "ردٌّ على المشركين والنصارى واليهود الذين نسبوا لله ولدًا؛ والولادة تستلزم الحاجة والمماثلة."
+    }
+  },
+  {
+    "q": {
+      "en": "According to the hadith, Al-Ikhlas equals…",
+      "ar": "بحسب الحديث، سورة الإخلاص تعدل…"
+    },
+    "o": {
+      "en": [
+        "A quarter of the Quran",
+        "Half of the Quran",
+        "A third of the Quran",
+        "The whole Quran"
+      ],
+      "ar": [
+        "ربع القرآن",
+        "نصف القرآن",
+        "ثلث القرآن",
+        "القرآن كله"
+      ]
+    },
+    "a": 2,
+    "ex": {
+      "en": "The Prophet ﷺ said: 'It equals a third of the Quran' because it comprehensively establishes the creed of tawheed.",
+      "ar": "قال النبي ﷺ: «إنها تعدل ثلث القرآن» لأنها تستوعب علم التوحيد كله."
+    }
+  },
+  {
+    "q": {
+      "en": "What are the three surahs called when recited together before sleep?",
+      "ar": "ماذا تُسمى السور الثلاث التي تُقرأ معًا قبل النوم؟"
+    },
+    "o": {
+      "en": [
+        "Az-Zahrawan",
+        "Al-Mu'awwidhat (Surahs of Protection)",
+        "Al-Mufassal",
+        "Al-Hawamim"
+      ],
+      "ar": [
+        "الزهراوان",
+        "المعوذات (سور التحصين)",
+        "المفصل",
+        "الحواميم"
+      ]
+    },
+    "a": 1,
+    "ex": {
+      "en": "Al-Ikhlas, Al-Falaq, and An-Nas are called Al-Mu'awwidhat — the surahs of seeking refuge and protection.",
+      "ar": "سور الإخلاص والفلق والناس تُسمى المعوذات؛ تُقرأ للحماية والاستعاذة بالله."
+    }
+  },
+  {
+    "q": {
+      "en": "What did the Prophet ﷺ say about the man who loved reciting Al-Ikhlas?",
+      "ar": "ماذا قال النبي ﷺ عن الرجل الذي أحب قراءة الإخلاص؟"
+    },
+    "o": {
+      "en": [
+        "'Tell him to stop'",
+        "'Tell him that Allah loves him'",
+        "'Tell him to recite another'",
+        "'Tell him to teach others'"
+      ],
+      "ar": [
+        "مُره أن يتوقف",
+        "أخبروه أن الله يحبه",
+        "مُره أن يقرأ غيرها",
+        "مُره أن يعلّمها الناس"
+      ]
+    },
+    "a": 1,
+    "ex": {
+      "en": "The Prophet ﷺ said: 'Tell him that Allah loves him' — loving the surah that describes Allah is a path to His love.",
+      "ar": "قال النبي ﷺ: «أخبروه أن الله يحبه»؛ فمحبة السورة التي تصف الله طريقٌ إلى محبته سبحانه."
+    }
+  }
+];
+
+const MATCH = [
+  {
+    "ar": "قُلْ",
+    "en": {
+      "en": "Say",
+      "ar": "قل"
+    }
+  },
+  {
+    "ar": "ٱللَّهُ",
+    "en": {
+      "en": "Allah",
+      "ar": "الله"
+    }
+  },
+  {
+    "ar": "أَحَدٌ",
+    "en": {
+      "en": "One (Absolutely Unique)",
+      "ar": "الواحد المتفرد"
+    }
+  },
+  {
+    "ar": "ٱلصَّمَدُ",
+    "en": {
+      "en": "Eternal Refuge",
+      "ar": "السيد المقصود في الحوائج"
+    }
+  },
+  {
+    "ar": "لَمْ يَلِدْ",
+    "en": {
+      "en": "He begets not",
+      "ar": "لم يتخذ ولدًا"
+    }
+  },
+  {
+    "ar": "وَلَمْ يُولَدْ",
+    "en": {
+      "en": "Nor was He begotten",
+      "ar": "ولم يُولد من شيء"
+    }
+  },
+  {
+    "ar": "كُفُوًا",
+    "en": {
+      "en": "Equal / Comparable",
+      "ar": "نظير ومماثل"
+    }
+  }
+];
+
+const FILL = [
+  {
+    "parts": [
+      "قُلْ هُوَ ",
+      ""
+    ],
+    "a": "ٱللَّهُ"
+  },
+  {
+    "parts": [
+      "ٱللَّهُ ",
+      ""
+    ],
+    "a": "ٱلصَّمَدُ"
+  },
+  {
+    "parts": [
+      "لَمْ يَلِدْ وَلَمْ ",
+      ""
+    ],
+    "a": "يُولَدْ"
+  },
+  {
+    "parts": [
+      "وَلَمْ يَكُن لَّهُۥ ",
+      ""
+    ],
+    "a": "كُفُوًا"
+  }
+];
+
+const ORDER_EN = [
+  "Say: He is Allah, the One.",
+  "Allah, the Eternal Refuge whom all creation needs.",
+  "He begets not, nor is He begotten.",
+  "And there is none comparable to Him."
+];
+const ORDER_AR = [
+  "قل: هو الله الأحد المتفرد.",
+  "الله الصمد الذي تقصده الخلائق.",
+  "لم يلد ولم يولد.",
+  "ولم يكن له كفوًا أحد."
+];
+
+function getOrder(){ return currentLang === 'ar' ? ORDER_AR : ORDER_EN; }
+
+/* ============= CHIME ============= */
+let AC;
+function chime(type){
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    const now = AC.currentTime;
+    if(type==='ok'){
+      o.frequency.setValueAtTime(660, now);
+      o.frequency.exponentialRampToValueAtTime(990, now+.15);
+    } else if(type==='err'){
+      o.frequency.setValueAtTime(220, now);
+      o.frequency.exponentialRampToValueAtTime(140, now+.2);
+    } else {
+      o.frequency.setValueAtTime(520, now);
+      o.frequency.exponentialRampToValueAtTime(720, now+.08);
+    }
+    g.gain.setValueAtTime(.12, now);
+    g.gain.exponentialRampToValueAtTime(.001, now+.25);
+    o.start(now); o.stop(now+.3);
+  }catch(e){}
+}
+
+/* ============= TABS ============= */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* ============= TOAST ============= */
+const toastEl = document.getElementById('toast');
+function toast(msg, kind=''){
+  toastEl.textContent = msg;
+  toastEl.className = 'toast show '+kind;
+  setTimeout(()=>toastEl.className='toast '+kind, 1800);
+}
+
+/* ============= RENDER FUNCTIONS ============= */
+function renderFlashcards(){
+  const deck = document.getElementById('deck');
+  deck.innerHTML = '';
+  AYAT.forEach(a=>{
+    const L = currentLang;
+    const card = document.createElement('div');
+    card.className = 'flip';
+    card.innerHTML = `
+      <div class="flip-inner">
+        <div class="face front">
+          <div class="ayah-num">${a.n}</div>
+          <div class="ayah-ar">${a.ar}</div>
+          <div class="flip-hint">${L==='ar'?'اضغط للقلب ↻':'Tap to flip ↻'}</div>
+        </div>
+        <div class="face back">
+          <h4>${L==='ar'?'الآية '+a.n+' · الشرح':'Ayah '+a.n+' · Explanation'}</h4>
+          <p class="trans">"${typeof a.tr==='object'?a.tr[L]:a.tr}"</p>
+          <h4>${L==='ar'?'التفسير':'Tafseer'}</h4>
+          <p class="tafsir">${typeof a.tafsir==='object'?a.tafsir[L]:a.tafsir}</p>
+          <h4>${L==='ar'?'معاني الكلمات':'Word-by-Word'}</h4>
+          <div class="words">
+            ${a.words.map(w=>`<span class="word"><span class="ar">${w.ar}</span><span class="en">${typeof w.en==='object'?w.en[L]:w.en}</span></span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=>{
+      card.classList.toggle('flipped');
+      chime('flip');
+    });
+    deck.appendChild(card);
+  });
+}
+
+function renderStory(){
+  const sl = document.getElementById('storyList');
+  sl.innerHTML = '';
+  const L = currentLang;
+  STORY.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'story-item';
+    const title = typeof s.t==='object'?s.t[L]:s.t;
+    const desc = typeof s.d==='object'?s.d[L]:s.d;
+    const tags = typeof s.tags==='object'&&!Array.isArray(s.tags)?s.tags[L]:s.tags;
+    el.innerHTML = `
+      <div class="step-no">${i+1}</div>
+      <div>
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <div class="badge-row">${tags.map(t=>`<span class="badge">${t}</span>`).join('')}</div>
+      </div>`;
+    sl.appendChild(el);
+  });
+}
+
+function renderCharacters(){
+  const cl = document.getElementById('charList');
+  cl.innerHTML = '';
+  const L = currentLang;
+  CHARS.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'char-card';
+    const name = typeof c.name==='object'?c.name[L]:c.name;
+    const role = typeof c.role==='object'?c.role[L]:c.role;
+    const desc = typeof c.d==='object'?c.d[L]:c.d;
+    el.innerHTML = `<div class="char-emoji">${c.e}</div><div class="role">${role}</div><h3>${name}</h3><p>${desc}</p>`;
+    cl.appendChild(el);
+  });
+}
+
+function renderVocab(){
+  const tbody = document.getElementById('vocabBody');
+  tbody.innerHTML = '';
+  const L = currentLang;
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m[L]:v.m;
+    const n = typeof v.n==='object'?v.n[L]:v.n;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="vocab-ar">${v.ar}</td><td class="vocab-tl-col">${v.tl||""}</td><td>${m}</td><td>${n}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderLessons(){
+  const lg = document.getElementById('lessonGrid');
+  lg.innerHTML = '';
+  const L = currentLang;
+  LESSONS.forEach(l=>{
+    const el = document.createElement('div');
+    el.className = 'lesson';
+    const t = typeof l.t==='object'?l.t[L]:l.t;
+    const d = typeof l.d==='object'?l.d[L]:l.d;
+    el.innerHTML = `<div class="ic">${l.ic}</div><h4>${t}</h4><p>${d}</p>`;
+    lg.appendChild(el);
+  });
+}
+
+/* ============= SCORE ============= */
+let score = 0, maxScore = 0;
+function updateScore(){ document.getElementById('scoreVal').textContent = score; document.getElementById('scoreMax').textContent = maxScore; }
+
+/* ============= MCQ ============= */
+function renderMCQ(){
+  const container = document.getElementById('mcqContainer');
+  container.innerHTML = '';
+  const L = currentLang;
+  MCQ.forEach((q,qi)=>{
+    maxScore++;
+    const div = document.createElement('div');
+    div.className = 'mcq';
+    const qText = typeof q.q==='object'?q.q[L]:q.q;
+    const opts = typeof q.o==='object'&&!Array.isArray(q.o)?q.o[L]:q.o;
+    const ex = typeof q.ex==='object'?q.ex[L]:q.ex;
+    div.innerHTML = `<p class="q">${qi+1}. ${qText}</p><div class="opts">${opts.map((o,i)=>`<div class="opt" data-qi="${qi}" data-i="${i}">${o}</div>`).join('')}</div><div class="feedback" id="fb-${qi}">${ex}</div>`;
+    container.appendChild(div);
+  });
+  updateScore();
+  container.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click', function(){
+      const qi = +this.dataset.qi, i = +this.dataset.i;
+      const parent = this.closest('.mcq');
+      if(parent.querySelector('.correct')) return;
+      if(i === MCQ[qi].a){ this.classList.add('correct'); score++; chime('ok'); }
+      else { this.classList.add('wrong'); chime('err'); parent.querySelectorAll('.opt')[MCQ[qi].a].classList.add('correct'); }
+      parent.querySelector('#fb-'+qi).classList.add('show');
+      updateScore();
+    });
+  });
+}
+
+/* ============= MATCHING ============= */
+let selAr = null, selEn = null;
+function renderMatch(){
+  const arDiv = document.getElementById('matchAr'), enDiv = document.getElementById('matchEn');
+  arDiv.innerHTML = ''; enDiv.innerHTML = '';
+  const L = currentLang;
+  const shuffledEn = [...MATCH].sort(()=>Math.random()-.5);
+  maxScore += MATCH.length;
+  MATCH.forEach(m=>{
+    const a = document.createElement('div');
+    a.className = 'match-item match-ar';
+    a.textContent = m.ar; a.dataset.key = m.ar;
+    a.addEventListener('click', ()=>handleMatchClick(a, 'ar'));
+    arDiv.appendChild(a);
+  });
+  shuffledEn.forEach(m=>{
+    const e = document.createElement('div');
+    e.className = 'match-item';
+    const enText = typeof m.en==='object'?m.en[L]:m.en;
+    e.textContent = enText; e.dataset.key = m.ar;
+    e.addEventListener('click', ()=>handleMatchClick(e, 'en'));
+    enDiv.appendChild(e);
+  });
+  updateScore();
+}
+
+function handleMatchClick(el, side){
+  if(el.classList.contains('matched')) return;
+  if(side==='ar'){ if(selAr){ selAr.classList.remove('selected'); } selAr=el; el.classList.add('selected'); }
+  else { if(selEn){ selEn.classList.remove('selected'); } selEn=el; el.classList.add('selected'); }
+  if(selAr && selEn){
+    if(selAr.dataset.key === selEn.dataset.key){
+      selAr.classList.remove('selected'); selEn.classList.remove('selected');
+      selAr.classList.add('matched'); selEn.classList.add('matched');
+      score++; chime('ok'); updateScore();
+    } else {
+      selAr.classList.add('error'); selEn.classList.add('error');
+      setTimeout(()=>{ selAr.classList.remove('selected','error'); selEn.classList.remove('selected','error'); selAr=null; selEn=null; }, 700);
+      chime('err'); return;
+    }
+    selAr=null; selEn=null;
+  }
+}
+
+/* ============= FILL IN BLANKS ============= */
+function renderFill(){
+  const container = document.getElementById('fillContainer');
+  container.innerHTML = '';
+  FILL.forEach((f,i)=>{
+    const div = document.createElement('div');
+    div.className = 'fill-card';
+    div.innerHTML = `<div class="fill-q arabic" style="direction:rtl;text-align:right;font-size:22px">${f.parts[0]}<input type="text" id="fill-${i}" class="arabic" style="font-size:22px;width:160px">${f.parts[1]}</div>`;
+    container.appendChild(div);
+    maxScore++;
+  });
+  updateScore();
+}
+
+document.getElementById('checkFill').addEventListener('click', ()=>{
+  FILL.forEach((f,i)=>{
+    const inp = document.getElementById('fill-'+i);
+    if(!inp.classList.contains('correct') && !inp.classList.contains('wrong')){
+      const val = inp.value.trim();
+      if(val === f.a){ inp.classList.add('correct'); score++; chime('ok'); }
+      else { inp.classList.add('wrong'); chime('err'); }
+      updateScore();
+    }
+  });
+});
+
+/* ============= ORDER ============= */
+let dragSrc = null;
+function renderOrder(){
+  const ol = document.getElementById('orderList');
+  ol.innerHTML = '';
+  const order = getOrder();
+  const shuffled = [...order].sort(()=>Math.random()-.5);
+  maxScore++;
+  shuffled.forEach(item=>{
+    const div = document.createElement('div');
+    div.className = 'order-item';
+    div.draggable = true;
+    div.dataset.val = item;
+    div.innerHTML = `<span class="order-handle">⠿</span>${item}`;
+    div.addEventListener('dragstart', ()=>{ dragSrc=div; div.classList.add('dragging'); });
+    div.addEventListener('dragend', ()=>div.classList.remove('dragging'));
+    div.addEventListener('dragover', e=>e.preventDefault());
+    div.addEventListener('drop', ()=>{
+      if(dragSrc && dragSrc!==div){
+        const items=[...ol.children];
+        const si=items.indexOf(dragSrc), di=items.indexOf(div);
+        if(si<di) ol.insertBefore(dragSrc, div.nextSibling); else ol.insertBefore(dragSrc, div);
+      }
+    });
+    ol.appendChild(div);
+  });
+  updateScore();
+}
+
+document.getElementById('checkOrder').addEventListener('click', ()=>{
+  const ol = document.getElementById('orderList');
+  const order = getOrder();
+  const items = [...ol.children].map(x=>x.dataset.val);
+  const correct = items.every((v,i)=>v===order[i]);
+  if(correct){ score++; chime('ok'); toast(currentLang==='ar'?'ترتيب صحيح! 🎉':'Correct order! 🎉','success'); }
+  else { chime('err'); toast(currentLang==='ar'?'ترتيب خاطئ — حاول مجدداً':'Wrong order — try again','error'); }
+  updateScore();
+});
+
+document.getElementById('resetQuiz').addEventListener('click', ()=>{
+  score=0; maxScore=0;
+  renderMCQ(); selAr=null; selEn=null; renderMatch();
+  renderFill(); renderOrder();
+  chime('flip');
+});
+
+document.getElementById('flipAll').addEventListener('click', ()=>{
+  const allFlipped = [...document.querySelectorAll('.flip')].every(c=>c.classList.contains('flipped'));
+  document.querySelectorAll('.flip').forEach(c=>{ allFlipped?c.classList.remove('flipped'):c.classList.add('flipped'); });
+  chime('flip');
+});
+
+document.getElementById('resetCards').addEventListener('click', ()=>{
+  document.querySelectorAll('.flip').forEach(c=>c.classList.remove('flipped'));
+  chime('flip');
+});
+
+/* ============= i18n ============= */
+const langToggle = document.getElementById('langToggle');
+const langLabel = document.getElementById('langLabel');
+
+function applyI18N(lang){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(I18N[key]) el.innerHTML = I18N[key][lang] || el.innerHTML;
+  });
+  const nameInput = document.getElementById('studentName');
+  if(nameInput){
+    nameInput.placeholder = lang==='ar' ? nameInput.dataset.placeholderAr : nameInput.dataset.placeholderEn;
+  }
+  document.querySelectorAll('textarea[data-placeholder-ar]').forEach(t=>{
+    t.placeholder = lang==='ar' ? t.dataset.placeholderAr : t.dataset.placeholderEn;
+  });
+}
+
+function setLanguage(lang){
+  currentLang = lang;
+  const html = document.documentElement;
+  if(lang === 'ar'){
+    html.setAttribute('lang','ar');
+    html.setAttribute('dir','rtl');
+    document.body.setAttribute('dir','rtl');
+    langLabel.textContent = 'English';
+  } else {
+    html.setAttribute('lang','en');
+    html.setAttribute('dir','ltr');
+    document.body.setAttribute('dir','ltr');
+    langLabel.textContent = 'العربية';
+  }
+  applyI18N(lang);
+  score = 0; maxScore = 0;
+  renderFlashcards();
+  renderStory();
+  renderCharacters();
+  renderVocab();
+  renderLessons();
+  renderMCQ();
+  renderMatch();
+  renderFill();
+  renderOrder();
+}
+
+langToggle.addEventListener('click', ()=>{
+  setLanguage(currentLang === 'en' ? 'ar' : 'en');
+  chime('flip');
+});
+
+/* ============= WHATSAPP EXPORT ============= */
+document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  let text = '';
+  text += '📖 *سورة الإخلاص — مذكرة تدبري للقرآن*\n';
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `👤 *اسم الطالب:* ${studentName}\n`;
+  text += `📅 *التاريخ:* ${dateStr}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  const q4 = document.getElementById('mudh-q4').value.trim();
+
+  text += '*أولاً: المحور العام (الفهم والتدبر)*\n\n';
+  text += '❓ *ما خلاصة الآيات في رأيك بأسلوبك البسيط؟*\n';
+  text += (q1 || '(لم يُجب)') + '\n\n';
+  text += '❓ *ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟*\n';
+  text += (q2 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثانياً: المحور الوجداني والشخصي*\n\n';
+  text += '❓ *هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟*\n';
+  text += (q3 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثالثاً: المحور التطبيقي*\n\n';
+  text += '❓ *حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.*\n';
+  text += (q4 || '(لم يُجب)') + '\n\n';
+
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `📊 *النتيجة في التمارين:* ${score} / ${maxScore}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+
+  const encoded = encodeURIComponent(text);
+  window.open('https://wa.me/?text=' + encoded, '_blank');
+});
+
+/* ============= PDF EXPORT ============= */
+document.getElementById('btnPDF').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  const container = document.getElementById('pdfContainer');
+  container.style.direction = 'rtl';
+
+  let html = '';
+  html += '<h1 style="text-align:center;font-family:Amiri,serif">📖 سورة الإخلاص — بوابة تعليمية تفاعلية</h1>';
+  html += `<div class="pdf-meta">👤 اسم الطالب: <strong>${studentName}</strong> &nbsp;|&nbsp; 📅 التاريخ: ${dateStr}</div>`;
+
+  html += '<h2 style="font-family:Amiri,serif">نص السورة الكريمة</h2>';
+  html += '<div class="arabic-block" style="font-family:\'Amiri Quran\',Amiri,serif">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
+  AYAT.forEach(a=>{
+    html += `<div class="arabic-block" style="font-family:'Amiri Quran',Amiri,serif;font-size:18px">${a.ar} ﴿${a.n}﴾</div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">الشرح والتفسير</h2>';
+  AYAT.forEach(a=>{
+    const tr = typeof a.tr==='object'?a.tr.ar:a.tr;
+    const tf = typeof a.tafsir==='object'?a.tafsir.ar:a.tafsir;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">الآية ${a.n}</h3>`;
+    html += `<p><em>${tr}</em></p>`;
+    html += `<p>${tf}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">القصة — نزول الفاتحة ومكانتها</h2>';
+  STORY.forEach((s,i)=>{
+    const title = typeof s.t==='object'?s.t.ar:s.t;
+    const desc = typeof s.d==='object'?s.d.ar:s.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${i+1}. ${title}</h3><p>${desc}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">المفردات</h2>';
+  html += '<table><tr><th style="font-family:Amiri,serif">الكلمة</th><th>المعنى</th><th>ملاحظات</th></tr>';
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m.ar:v.m;
+    const n = typeof v.n==='object'?v.n.ar:v.n;
+    html += `<tr><td style="font-family:Amiri,serif;font-size:16px">${v.ar}</td><td>${m}</td><td>${n}</td></tr>`;
+  });
+  html += '</table>';
+
+  html += '<h2 style="font-family:Amiri,serif">الدروس المستفادة</h2>';
+  LESSONS.forEach(l=>{
+    const t = typeof l.t==='object'?l.t.ar:l.t;
+    const d = typeof l.d==='object'?l.d.ar:l.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${l.ic} ${t}</h3><p>${d}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">📝 مذكرة تدبري للقرآن</h2>';
+  html += '<h3 style="font-family:Amiri,serif">أولاً: المحور العام (الفهم والتدبر)</h3>';
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  html += `<div class="pdf-qa"><label>ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</label><div class="answer">${q1||'(لم يُجب)'}</div></div>`;
+  html += `<div class="pdf-qa"><label>ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</label><div class="answer">${q2||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثانياً: المحور الوجداني والشخصي</h3>';
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  html += `<div class="pdf-qa"><label>هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</label><div class="answer">${q3||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثالثاً: المحور التطبيقي</h3>';
+  const q4 = document.getElementById('mudh-q4').value.trim();
+  html += `<div class="pdf-qa"><label>حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</label><div class="answer">${q4||'(لم يُجب)'}</div></div>`;
+
+  html += `<div style="text-align:center;margin-top:20px;font-size:16px;font-weight:700">📊 النتيجة في التمارين: ${score} / ${maxScore}</div>`;
+
+  container.innerHTML = html;
+
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     `سورة_الإخلاص_${studentName}_${now.toISOString().slice(0,10)}.pdf`,
+    image:        { type: 'jpeg', quality: 0.95 },
+    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['avoid-all','css','legacy'] }
+  };
+
+  toast(currentLang==='ar'?'جاري إنشاء الملف...':'Generating PDF...','');
+
+  html2pdf().set(opt).from(container).save().then(()=>{
+    toast(currentLang==='ar'?'تم تحميل الملف بنجاح!':'PDF downloaded!','success');
+    chime('ok');
+  }).catch(()=>{
+    toast(currentLang==='ar'?'حدث خطأ في إنشاء الملف':'PDF generation failed','error');
+    chime('err');
+  });
+});
+
+/* ============= INITIAL RENDER ============= */
+renderFlashcards();
+renderStory();
+renderCharacters();
+renderVocab();
+renderLessons();
+renderMCQ();
+renderMatch();
+renderFill();
+renderOrder();
+applyI18N(currentLang);
+
+
+/* ===== Verse Highlight on Click ===== */
+document.querySelectorAll('.verse-row').forEach(row => {
+  row.addEventListener('click', () => {
+    const wasActive = row.classList.contains('active');
+    document.querySelectorAll('.verse-row').forEach(r => r.classList.remove('active'));
+    if (!wasActive) row.classList.add('active');
+  });
+});
+
+</script>
+</body>
+</html>

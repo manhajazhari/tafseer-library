@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Surah As-Saff — Interactive Learning Portal</title>
+<meta name="description" content="An interactive educational portal for Surah As-Saff (Chapter 61) — the Surah of the Ranks, a Madani surah on truthfulness between word and deed, unity in solid ranks in Allah’s cause, the glad tidings of the Prophet Ahmad, the completion of Allah’s light, and the profitable trade of faith and striving. Tafseer, Tadabbur, flashcards, vocabulary, and exercises for young learners." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+</script>
+<style>
+  :root{
+    --bg:#f7f3ea;
+    --bg-2:#fbf8f1;
+    --paper:#ffffff;
+    --ink:#1f2330;
+    --ink-soft:#4a5063;
+    --muted:#8a8f9e;
+    --line:#e5dccb;
+    --gold:#b08833;
+    --gold-2:#d4a84a;
+    --teal:#0f6b6b;
+    --teal-soft:#e6f1f1;
+    --rose:#b04646;
+    --rose-soft:#fbe9e7;
+    --green:#2f7d4f;
+    --green-soft:#e6f4ec;
+    --indigo:#3b3f8c;
+    --indigo-soft:#ecedfb;
+    --shadow: 0 10px 30px -12px rgba(60,40,10,.18);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden;width:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 10% -10%, #fff7e0 0%, transparent 60%),
+      radial-gradient(900px 600px at 110% 20%, #eaf6f3 0%, transparent 60%),
+      var(--bg);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    max-width:100vw;
+  }
+  body[dir="rtl"]{
+    font-family:'Amiri','Inter',system-ui,sans-serif;
+  }
+  .arabic{font-family:'Amiri',serif; direction:rtl;}
+  .display{font-family:'Playfair Display',serif;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;
+    border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.6);
+    backdrop-filter: blur(8px);
+    position:sticky;top:0;z-index:20;
+    flex-wrap:wrap;gap:12px;
+    max-width:100vw;
+    overflow:hidden;
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .crest{
+    width:46px;height:46px;border-radius:14px;
+    background:linear-gradient(135deg,var(--teal) 0%,#1a9e9e 100%);
+    display:grid;place-items:center;color:#fff;font-weight:800;
+    box-shadow:var(--shadow);
+  }
+  .brand h1{margin:0;font-size:18px;letter-spacing:.2px}
+  .brand p{margin:0;color:var(--muted);font-size:12px}
+  .meta{display:flex;gap:10px;align-items:center;color:var(--ink-soft);font-size:13px;flex-wrap:wrap}
+  .pill{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff}
+
+  /* Language Toggle */
+  .lang-toggle{
+    cursor:pointer;
+    padding:8px 16px;
+    border-radius:999px;
+    border:2px solid var(--gold);
+    background:linear-gradient(135deg,#fffaf0,#fff);
+    color:var(--gold);
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;gap:8px;
+    transition:all .3s ease;
+    user-select:none;
+  }
+  .lang-toggle:hover{
+    background:linear-gradient(135deg,var(--gold),var(--gold-2));
+    color:#fff;
+    box-shadow:0 4px 14px rgba(176,136,51,.35);
+  }
+  .lang-toggle .globe{font-size:18px}
+
+  /* ===== Tabs ===== */
+  .wrap{max-width:1280px;margin:24px auto;padding:0 22px;overflow-x:hidden;width:100%;}
+  .tabs{
+    display:flex;flex-wrap:wrap;gap:8px;
+    background:#fff;padding:8px;border-radius:16px;border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .tab{
+    flex:1 1 auto;min-width:110px;
+    padding:12px 14px;border-radius:12px;cursor:pointer;
+    text-align:center;font-weight:600;color:var(--ink-soft);
+    border:1px solid transparent;
+    transition:all .25s ease;user-select:none;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:13px;
+  }
+  .tab .ic{font-size:18px}
+  .tab:hover{background:#faf6ee;color:var(--ink)}
+  .tab.active{
+    background:linear-gradient(135deg,#1f2330,#2a3144);
+    color:#fff;box-shadow:0 8px 18px -8px rgba(31,35,48,.45);
+  }
+
+  .panel{display:none;animation:fade .35s ease both;margin-top:22px}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);
+    max-width:100%;overflow-x:auto;
+  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  h2.section{font-family:'Playfair Display',serif;font-size:28px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 18px}
+
+  /* ===== Intro / Hero ===== */
+  .hero{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:22px;
+    max-width:100%;overflow:hidden;
+  }
+  @media(max-width:900px){.hero{grid-template-columns:1fr}}
+  .hero-card{
+    background:
+      radial-gradient(600px 300px at 100% 0%, #e0f0ff 0%, transparent 60%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    border:1px solid var(--line);border-radius:var(--radius);padding:28px;
+    box-shadow:var(--shadow);
+  }
+  .kicker{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:12px;letter-spacing:.6px}
+  .hero h2{font-family:'Playfair Display',serif;font-size:38px;margin:14px 0 6px;line-height:1.1}
+  .hero p.lead{font-size:15px;color:var(--ink-soft);line-height:1.7}
+  .quick-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .fact{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .fact .lbl{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .fact .val{font-weight:700;margin-top:4px}
+
+  .side-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow);
+    max-height:600px;overflow-y:auto;
+    max-width:100%;overflow-x:hidden;
+    word-wrap:break-word;
+  }
+  .side-card .arabic{font-size:26px;line-height:2.2;text-align:center;color:#2a2f44}
+  .bismillah{font-size:30px;text-align:center;color:var(--gold);margin-bottom:10px}
+
+  /* scrollbar for side-card */
+  .side-card::-webkit-scrollbar{width:6px}
+  .side-card::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  /* ===== Flashcards ===== */
+  .deck-controls{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+  .btn{
+    cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:10px 16px;border-radius:10px;font-weight:600;transition:all .2s;
+    display:inline-flex;align-items:center;gap:8px;font-size:14px;
+    font-family:inherit;
+  }
+  .btn:hover{background:#faf6ee;border-color:var(--gold)}
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn.primary:hover{background:#2a3144}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#fff;border-color:transparent}
+  .btn.teal-btn{background:linear-gradient(135deg,var(--teal),#1a9e9e);color:#fff;border-color:transparent}
+  .btn.teal-btn:hover{box-shadow:0 4px 16px rgba(15,107,107,.35)}
+  .btn.whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border-color:transparent}
+  .btn.whatsapp:hover{box-shadow:0 4px 16px rgba(37,211,102,.4)}
+  .btn.pdf-btn{background:linear-gradient(135deg,var(--rose),#d85050);color:#fff;border-color:transparent}
+  .btn.pdf-btn:hover{box-shadow:0 4px 16px rgba(176,70,70,.35)}
+
+  .deck{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:18px;
+  }
+  .flip{
+    perspective:1400px;height:360px;cursor:pointer;
+  }
+  .flip-inner{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .flip.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;border-radius:var(--radius);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid var(--line);box-shadow:var(--shadow);
+    padding:18px;display:flex;flex-direction:column;
+  }
+  .face.front{
+    background:
+      radial-gradient(400px 200px at 100% 0%, #e0f0ff 0%, transparent 70%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    align-items:center;justify-content:space-between;
+  }
+  .face.back{
+    background:#fffdf8;
+    transform:rotateY(180deg);
+    overflow-y:auto;
+  }
+  .ayah-num{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-weight:800;display:grid;place-items:center;
+    box-shadow:var(--shadow);font-size:14px;
+  }
+  .ayah-ar{
+    font-family:'Amiri',serif;direction:rtl;
+    font-size:26px;line-height:2;text-align:center;color:#2a2f44;
+    flex:1;display:flex;align-items:center;justify-content:center;padding:0 6px;
+  }
+  .flip-hint{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .back h4{margin:0 0 4px;font-family:'Playfair Display',serif;font-size:16px;color:var(--teal)}
+  .back .trans{font-size:13px;color:var(--ink-soft);line-height:1.6;font-style:italic;margin:0 0 10px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+  .back .tafsir{font-size:13px;color:var(--ink);line-height:1.6;margin:0 0 10px}
+  .words{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .word{
+    background:var(--teal-soft);color:var(--teal);
+    padding:4px 8px;border-radius:8px;font-size:12px;font-weight:600;
+    display:inline-flex;flex-direction:column;align-items:center;gap:2px;
+  }
+  .word .ar{font-family:'Amiri',serif;font-size:14px}
+  .word .en{font-size:10px;color:var(--ink-soft);font-weight:500}
+
+  /* ===== Story timeline ===== */
+  .story-list{display:grid;gap:14px}
+  .story-item{
+    display:grid;grid-template-columns:60px 1fr;gap:16px;
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow);transition:all .25s;
+  }
+  .story-item:hover{transform:translateY(-2px);border-color:var(--teal)}
+  .step-no{
+    width:48px;height:48px;border-radius:14px;background:var(--indigo-soft);color:var(--indigo);
+    display:grid;place-items:center;font-weight:800;font-size:20px;
+  }
+  .story-item h3{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:20px}
+  .story-item p{margin:0;color:var(--ink-soft);line-height:1.7;font-size:14px}
+  .badge-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .badge{font-size:11px;padding:4px 10px;border-radius:999px;background:#f3eee2;color:var(--ink-soft);font-weight:600}
+
+  /* ===== Characters ===== */
+  .char-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .char-card h3{margin:6px 0 4px;font-family:'Playfair Display',serif}
+  .char-emoji{font-size:36px}
+  .char-card .role{color:var(--teal);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .char-card p{color:var(--ink-soft);font-size:13px;line-height:1.6}
+
+  /* ===== Lessons (Tadabbur) ===== */
+  .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .lesson{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .lesson::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--teal),#1a9e9e)}
+  body[dir="rtl"] .lesson::before{left:auto;right:0}
+  .lesson .ic{font-size:28px;margin-bottom:8px}
+  .lesson h4{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:18px}
+  .lesson p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+  /* ===== Vocabulary ===== */
+  .vocab-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow)}
+  .vocab-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:500px}
+  .vocab-table th, .vocab-table td{padding:14px 16px;text-align:start;border-bottom:1px solid var(--line)}
+  .vocab-table th{background:#faf6ee;font-weight:700;font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.5px}
+  .vocab-table tr:last-child td{border-bottom:none}
+  .vocab-table tr:hover{background:#fbf8f1}
+  .vocab-ar{font-family:'Amiri',serif;font-size:22px;color:#2a2f44;direction:rtl;text-align:right}
+  .vocab-tl-col{font-style:italic;color:var(--ink-soft);font-size:14px;white-space:nowrap}
+  body[dir="rtl"] .vocab-tl-col{display:none}
+
+  /* ===== Exercises ===== */
+  .quiz-section{margin-bottom:22px}
+  .quiz-section h3{font-family:'Playfair Display',serif;margin:0 0 4px}
+  .quiz-section .desc{color:var(--muted);margin:0 0 14px;font-size:13px}
+
+  .mcq{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .mcq .q{font-weight:700;margin:0 0 12px;font-size:15px}
+  .mcq .opts{display:grid;gap:8px}
+  .opt{
+    padding:12px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;
+    transition:all .2s;background:#fff;font-size:14px;
+  }
+  .opt:hover{background:#faf6ee;border-color:var(--gold)}
+  .opt.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600}
+  .opt.wrong{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);font-weight:600}
+  .feedback{margin-top:10px;font-size:13px;color:var(--ink-soft);display:none}
+  .feedback.show{display:block}
+
+  /* Matching */
+  .match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:100%}
+  @media(max-width:700px){.match-wrap{grid-template-columns:1fr}}
+  .match-col h4{margin:0 0 8px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .match-item{
+    padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:14px;
+    user-select:none;
+  }
+  .match-item:hover{border-color:var(--gold)}
+  .match-item.selected{background:var(--teal-soft);border-color:var(--teal);color:var(--teal);font-weight:600}
+  .match-item.matched{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600;cursor:default;pointer-events:none}
+  .match-item.error{background:var(--rose-soft);border-color:var(--rose)}
+  .match-ar{font-family:'Amiri',serif;font-size:20px;direction:rtl;text-align:right}
+
+  /* Order */
+  .order-list{display:grid;gap:8px;margin-bottom:12px}
+  .order-item{
+    padding:14px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    cursor:grab;font-size:14px;display:flex;align-items:center;gap:12px;
+    transition:all .2s;
+  }
+  .order-item:hover{border-color:var(--gold)}
+  .order-item.dragging{opacity:.5}
+  .order-handle{color:var(--muted);font-size:18px}
+
+  /* Fill blanks */
+  .fill-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .fill-q{font-size:15px;line-height:1.9;margin-bottom:10px}
+  .fill-q input{
+    border:none;border-bottom:2px dashed var(--gold);background:transparent;
+    padding:4px 8px;font-size:15px;width:140px;text-align:center;font-family:inherit;
+    color:var(--ink);outline:none;
+  }
+  .fill-q input:focus{border-color:var(--teal)}
+  .fill-q input.correct{color:var(--green);border-color:var(--green);border-style:solid}
+  .fill-q input.wrong{color:var(--rose);border-color:var(--rose);border-style:solid}
+
+  /* Score */
+  .score-bar{
+    position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);
+    padding:14px 22px;display:flex;justify-content:space-between;align-items:center;
+    margin:30px -24px -24px;border-radius:0 0 var(--radius) var(--radius);
+    flex-wrap:wrap;gap:10px;
+  }
+  .score-bar .lbl{color:var(--muted);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+  .score-bar .v{font-size:24px;font-weight:800;color:var(--teal)}
+
+  /* ===== Mudhakkirah Tab ===== */
+  .mudhakkirah-section{margin-bottom:28px}
+  .mudhakkirah-section h3{
+    font-family:'Playfair Display','Amiri',serif;
+    font-size:22px;margin:0 0 6px;
+    color:var(--teal);
+    display:flex;align-items:center;gap:10px;
+  }
+  .mudhakkirah-section h3 .num-badge{
+    width:32px;height:32px;border-radius:10px;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-size:14px;font-weight:800;
+    display:grid;place-items:center;flex-shrink:0;
+  }
+  .mudhakkirah-question{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;box-shadow:var(--shadow);margin-bottom:14px;
+    position:relative;overflow:hidden;
+  }
+  .mudhakkirah-question::before{
+    content:"";position:absolute;top:0;right:0;bottom:0;width:5px;
+    background:linear-gradient(180deg,var(--teal),#1a9e9e);
+  }
+  body:not([dir="rtl"]) .mudhakkirah-question::before{right:auto;left:0}
+  .mudhakkirah-question label{
+    display:block;font-weight:700;font-size:15px;margin-bottom:10px;
+    color:var(--ink);line-height:1.6;
+  }
+  .mudhakkirah-question label .q-icon{margin-inline-end:8px;font-size:18px}
+  .mudhakkirah-question textarea{
+    width:100%;min-height:120px;
+    border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-size:14px;font-family:'Amiri','Inter',serif;
+    color:var(--ink);background:#faf9f6;
+    outline:none;resize:vertical;line-height:1.8;
+    direction:rtl;text-align:right;
+  }
+  .mudhakkirah-question textarea:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(15,107,107,.12);
+  }
+  .mudhakkirah-question textarea::placeholder{
+    color:var(--muted);font-style:italic;
+  }
+
+  /* ===== Export Bar ===== */
+  .export-bar{
+    display:flex;gap:12px;align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#f0f7ff,#f0f4eb);
+    border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-top:24px;
+    flex-wrap:wrap;
+  }
+  .export-bar .export-title{
+    font-weight:700;font-size:14px;color:var(--ink);
+    margin-inline-end:auto;display:flex;align-items:center;gap:8px;
+  }
+
+  /* Footer */
+  .footer{
+    text-align:center;color:var(--muted);font-size:12px;padding:30px 0 20px;
+  }
+
+  /* Scrollbar */
+  .face.back::-webkit-scrollbar{width:6px}
+  .face.back::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;right:auto;transform:translateX(-50%);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:10px;
+    font-size:14px;font-weight:600;opacity:0;transition:all .3s;
+    box-shadow:var(--shadow);z-index:50;pointer-events:none;
+    max-width:90vw;text-align:center;
+    direction:ltr;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+  .toast.success{background:var(--green)}
+  .toast.error{background:var(--rose)}
+
+  /* PDF Generation hidden container */
+  #pdfContainer{
+    position:fixed;left:-9999px;top:0;width:800px;
+    background:#fff;color:#1f2330;font-family:'Inter','Amiri',sans-serif;
+    padding:40px;
+    z-index:-9999;
+    opacity:0;
+    pointer-events:none;
+  }
+  #pdfContainer h1{font-size:22px;margin:0 0 4px;text-align:center}
+  #pdfContainer h2{font-size:18px;margin:20px 0 8px;color:var(--teal);border-bottom:2px solid var(--teal);padding-bottom:4px}
+  #pdfContainer h3{font-size:15px;margin:14px 0 4px;color:var(--gold)}
+  #pdfContainer p{font-size:13px;line-height:1.7;margin:4px 0}
+  #pdfContainer .pdf-meta{text-align:center;color:#8a8f9e;font-size:12px;margin-bottom:16px}
+  #pdfContainer .pdf-section{margin-bottom:16px;page-break-inside:avoid}
+  #pdfContainer .pdf-qa{background:#faf9f6;border:1px solid #e5dccb;border-radius:8px;padding:12px;margin:8px 0}
+  #pdfContainer .pdf-qa label{font-weight:700;display:block;margin-bottom:4px;font-size:13px}
+  #pdfContainer .pdf-qa .answer{font-size:13px;color:#4a5063;white-space:pre-wrap;min-height:20px}
+  #pdfContainer .arabic-block{font-family:'Amiri',serif;direction:rtl;text-align:center;font-size:20px;line-height:2.2;color:#2a2f44;margin:10px 0}
+  #pdfContainer table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+  #pdfContainer th,#pdfContainer td{border:1px solid #e5dccb;padding:8px;text-align:left}
+  #pdfContainer th{background:#faf6ee;font-weight:700}
+
+  /* Responsive refinements */
+  @media(max-width:600px){
+    .topbar{padding:14px 12px}
+    .brand h1{font-size:15px}
+    .wrap{padding:0 10px}
+    .tab{min-width:80px;font-size:12px;padding:10px 6px}
+    .hero h2{font-size:24px}
+    .hero-card{padding:18px}
+    .side-card{padding:14px}
+    .side-card .arabic{font-size:20px;line-height:2}
+    .export-bar{padding:14px}
+    .card{padding:16px}
+    .score-bar{margin:20px -16px -16px;padding:12px 14px}
+    .flip{height:320px}
+    .ayah-ar{font-size:22px;line-height:1.8}
+    .story-item{grid-template-columns:48px 1fr;gap:10px;padding:14px}
+    .mcq{padding:14px}
+    .fill-card{padding:14px}
+    .lesson{padding:16px}
+    .mudhakkirah-question{padding:16px}
+    .match-item{padding:10px}
+    .bismillah{font-size:22px}
+    .vocab-table th,.vocab-table td{padding:10px 8px;font-size:12px}
+    .vocab-ar{font-size:18px}
+  }
+
+  /* ===== Premium Unified Responsive Design ===== */
+  img, video, iframe, canvas, svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media(max-width: 768px) {
+    .topbar {
+      padding: 14px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .brand {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .meta {
+      width: 100%;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .lang-toggle {
+      margin-inline-start: auto;
+    }
+
+    .tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+      padding: 6px;
+    }
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .tab {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      padding: 10px 14px;
+    }
+
+    .side-card {
+      max-height: 400px;
+    }
+  }
+
+@media (max-width: 900px){
+  .topbar{padding:12px 14px;gap:8px}
+  .brand h1{font-size:15px}
+  .brand p{font-size:11px}
+  .pill{padding:4px 8px;font-size:11px}
+  .container, .wrap, main{padding-left:14px !important;padding-right:14px !important}
+  .tabs{gap:6px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+  .tabs::-webkit-scrollbar{height:0}
+  .tab{flex:0 0 auto;font-size:13px;padding:8px 12px}
+  .hero{display:block !important}
+  .hero-card, .side-card{width:100% !important;max-width:100% !important;margin-bottom:14px}
+  .quick-facts{grid-template-columns:repeat(2,1fr) !important;gap:8px}
+  .grid-3, .lesson-grid, .deck{grid-template-columns:1fr !important;gap:14px}
+  .vocab-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .vocab-table{min-width:520px;font-size:13px}
+  .match-wrap{grid-template-columns:1fr !important;gap:10px}
+  .export-bar{flex-direction:column;align-items:stretch}
+  .btn{font-size:14px;padding:10px 12px}
+  h2.section{font-size:20px}
+  .lead{font-size:15px;line-height:1.7}
+  .arabic{font-size:18px !important;line-height:2 !important}
+  .ayah-ar{font-size:22px !important}
+}
+@media (max-width: 600px){
+  .topbar{padding:10px 10px}
+  .brand{gap:8px}
+  .crest{width:38px;height:38px;border-radius:10px}
+  .tab .ic{font-size:15px}
+  .quick-facts{grid-template-columns:1fr !important}
+  .flip{min-height:340px}
+}
+@media (min-width:901px) and (max-width:1100px){
+  .grid-3, .lesson-grid{grid-template-columns:repeat(2,1fr) !important}
+}
+
+/* === Mushaf flipbook === */
+.mushaf-intro-hero{grid-template-columns:minmax(280px,1.15fr) minmax(360px,.85fr);align-items:start;} .mushaf-book{max-width:560px;margin-left:auto;margin-right:auto;}
+.mushaf-side-card{max-height:none!important;overflow:visible!important;padding:0!important;background:transparent!important;border:none!important;box-shadow:none!important;}
+.mushaf-book{position:relative;background:linear-gradient(180deg,#fbf6e8,#f4ecd6);
+  border:1px solid var(--line);border-radius:14px;padding:10px;
+  box-shadow:var(--shadow);overflow:hidden;user-select:none;-webkit-user-select:none;}
+.mushaf-stage{position:relative;perspective:2400px;min-height:690px;height:min(72vh,760px);max-height:760px;display:block;}
+.mushaf-page{position:absolute;inset:0;box-sizing:border-box;background:
+  radial-gradient(120% 60% at 50% 0%, #fffbe9 0%, #faf2dc 60%, #f1e6c4 100%);
+  border:1px solid #d8c89a;border-radius:10px;
+  padding:14px 16px 18px;overflow:hidden;direction:rtl;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transition:transform .65s cubic-bezier(.4,.05,.2,1), box-shadow .65s ease;
+  will-change:transform;cursor:grab;touch-action:pan-y;
+  transform-origin:right center;
+  box-shadow:inset 0 0 40px rgba(160,120,60,.10), 0 6px 14px -8px rgba(0,0,0,.18);}
+.mushaf-page.dragging{transition:none;cursor:grabbing;}
+.mushaf-page.is-top{z-index:5;}
+.mushaf-page.is-under{z-index:1;}
+.mushaf-page.is-hidden{visibility:hidden;}
+.mushaf-page.flipped{transform:rotateY(-180deg);box-shadow:-22px 0 50px -10px rgba(0,0,0,.35);}
+.mushaf-frame{height:100%;box-sizing:border-box;border:1px solid #cdb87a;border-radius:6px;
+  padding:10px 14px 14px;position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0));
+  display:flex;flex-direction:column;}
+.mushaf-frame::before, .mushaf-frame::after{
+  content:'';position:absolute;left:6px;right:6px;height:6px;
+  border-top:2px solid #b89a4a;border-bottom:1px solid #b89a4a;pointer-events:none;}
+.mushaf-frame::before{top:-2px;} .mushaf-frame::after{bottom:-2px;}
+.mushaf-head{text-align:center;font-family:'Amiri',serif;color:var(--gold);
+  font-size:13px;line-height:1.2;margin-bottom:5px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #d8c89a;padding-bottom:4px;flex:0 0 auto;}
+.mushaf-head .surah-name{font-weight:700;color:var(--teal);font-size:15px;}
+.mushaf-head .juz{color:#8a7a4f;font-size:11px;}
+.mushaf-bismillah{font-family:'Amiri',serif;text-align:center;
+  font-size:clamp(22px,2.1vw,27px);color:#1a1a1a;
+  margin:6px 0 14px;padding-bottom:14px;line-height:1.5;flex:0 0 auto;
+  border-bottom:1px solid #b89a4a;position:relative;}
+.mushaf-text{flex:1 1 auto;min-height:0;font-family:'Amiri',serif;
+  font-size:22px;line-height:1.92;color:#111;text-align:justify;
+  text-align-last:center;direction:rtl;letter-spacing:0;
+  overflow-y:scroll;overflow-x:hidden;padding:0 10px 20px 2px;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:#c8a84a #f3e6c0;}
+.mushaf-text::-webkit-scrollbar{width:10px;-webkit-appearance:none;}
+.mushaf-text::-webkit-scrollbar-track{background:#f3e6c0;border-radius:6px;}
+.mushaf-text::-webkit-scrollbar-thumb{background:#c8a84a;border-radius:6px;border:2px solid #f3e6c0;}
+.mushaf-text::-webkit-scrollbar-thumb:hover{background:#a07830;}
+.mushaf-text .ayah{display:inline;}
+.mushaf-text .ayah-end{display:inline-block;margin:0 3px;
+  font-family:'Amiri',serif;font-size:.78em;color:var(--gold);
+  background:transparent;position:relative;vertical-align:middle;}
+.mushaf-text .ayah-end::before{content:'\06DD';color:var(--gold);font-size:1.4em;}
+.mushaf-text .ayah-end span{position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);font-size:.55em;color:#7a5a16;font-weight:700;}
+.mushaf-foot{text-align:center;margin-top:4px;padding-top:4px;
+  border-top:1px solid #d8c89a;font-family:'Amiri',serif;
+  font-size:12px;line-height:1.2;color:#8a7a4f;font-weight:700;letter-spacing:0;flex:0 0 auto;}
+.mushaf-controls{display:flex;justify-content:center;gap:10px;margin-top:10px;}
+.mushaf-controls button{background:var(--teal);color:#fff;border:none;
+  width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:18px;
+  box-shadow:0 4px 10px -4px rgba(15,107,107,.5);transition:transform .2s;}
+.mushaf-controls button:hover{transform:translateY(-2px);}
+.mushaf-controls button:disabled{background:#bbb;cursor:not-allowed;
+  box-shadow:none;transform:none;}
+.mushaf-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.mushaf-counter{font-size:13px;color:var(--teal);font-weight:700;}
+@media(max-width:900px){
+  .mushaf-intro-hero{grid-template-columns:1fr;}
+}
+@media (max-width:600px){
+  .mushaf-stage{min-height:620px;height:620px;max-height:620px;}
+  .mushaf-book{padding:8px;}
+  .mushaf-page{padding:9px 10px 13px;}
+  .mushaf-frame{padding:8px 10px 12px;}
+  .mushaf-head{font-size:12px;margin-bottom:4px;padding-bottom:4px;}
+  .mushaf-head .surah-name{font-size:14px;}
+  .mushaf-bismillah{font-size:22px;margin:4px 0 10px;padding-bottom:10px;}
+  .mushaf-text{font-size:20px;line-height:1.86;padding-bottom:16px;}
+  .mushaf-foot{font-size:11px;margin-top:3px;padding-top:3px;}
+}
+.mushaf-page[data-page="1"] .mushaf-foot{margin-top:14px;}
+.mushaf-text .ayah{transition:background-color .15s ease, font-weight .15s ease;border-radius:3px;padding:0 2px;}
+.mushaf-text .ayah:hover{background:#b3e5fc;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="crest arabic">م</div>
+    <div>
+      <h1 data-i18n="brand-title">Surah As-Saff · Interactive Portal</h1>
+      <p data-i18n="brand-sub">Divorce · Tafseer & Tadabbur for Young Learners</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="pill" data-i18n="pill-chapter">Chapter 61</span>
+    <span class="pill" data-i18n="pill-verses">14 Verses</span>
+    <span class="pill" data-i18n="pill-period">Madaniyyah</span>
+    <div class="lang-toggle" id="langToggle" title="Switch language">
+      <span class="globe">🌐</span>
+      <span id="langLabel">العربية</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="intro"><span class="ic">📜</span> <span data-i18n="tab-intro">Introduction</span></div>
+    <div class="tab" data-tab="ayat"><span class="ic">🃏</span> <span data-i18n="tab-ayat">Ayat Flashcards</span></div>
+    <div class="tab" data-tab="story"><span class="ic">📖</span> <span data-i18n="tab-story">The Story</span></div>
+    <div class="tab" data-tab="characters"><span class="ic">👥</span> <span data-i18n="tab-chars">Surah Landmarks</span></div>
+    <div class="tab" data-tab="vocab"><span class="ic">🔤</span> <span data-i18n="tab-vocab">Vocabulary</span></div>
+    <div class="tab" data-tab="lessons"><span class="ic">💡</span> <span data-i18n="tab-lessons">Lessons</span></div>
+    <div class="tab" data-tab="exercises"><span class="ic">🧠</span> <span data-i18n="tab-exercises">Exercises</span></div>
+    <div class="tab" data-tab="mudhakkirah"><span class="ic">📝</span> <span data-i18n="tab-mudh">My Reflection Journal</span></div>
+  </div>
+
+  <!-- ============ INTRO ============ -->
+  <section class="panel active" id="panel-intro">
+    <div class="hero mushaf-intro-hero">
+      <div class="hero-card">
+        <span class="kicker" data-i18n="kicker">SURAH AS-SAFF · ٱلصَّفّ</span>
+        <h2 data-i18n="hero-title">Divorce — Justice, Taqwa & Allah's Provision</h2>
+        <p class="lead" data-i18n="hero-lead">
+          Surah As-Saff is a Madani surah devoted to the rulings of divorce — its proper
+          timing, the waiting period ('idda), housing, maintenance, and witnessing — all
+          surrounded by justice and mercy. Yet its luminous heart is a universal promise
+          repeated again and again: whoever fears Allah (taqwa), He makes for him a way out
+          of every hardship, provides for him from where he does not expect, eases his
+          affairs, effaces his sins, and magnifies his reward. The surah closes with a
+          warning from the rebellious nations, the gift of the Reminder and the Messenger who
+          leads from darkness into light, and the majesty of the Lord of the seven heavens.
+        </p>
+        <div class="quick-facts">
+          <div class="fact"><div class="lbl" data-i18n="fact-revealed">Revealed in</div><div class="val" data-i18n="fact-revealed-val">Madinah</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-order">Order of Revelation</div><div class="val" data-i18n="fact-order-val">109th</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-verses">Verses</div><div class="val" data-i18n="fact-verses-val">14 Ayat</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-theme">Theme</div><div class="val" data-i18n="fact-theme-val">Rulings of Divorce, Taqwa & Reliance on Allah</div></div>
+        </div>
+      </div>
+      <div class="side-card mushaf-side-card">
+        <div class="mushaf-book" id="mushafBook" aria-label="سورة الصف — مصحف المدينة">
+          <div class="mushaf-stage" id="mushafStage"></div>
+          <div class="mushaf-controls">
+            <button id="mushafPrev" aria-label="السابق" title="الصفحة السابقة">›</button>
+            <button id="mushafNext" aria-label="التالي" title="الصفحة التالية">‹</button>
+          </div>
+          <div class="mushaf-hint">
+            <span data-i18n="mushaf-hint">اسحب الصفحة من اليسار لتقليبها — Drag from the left to flip</span>
+            <span class="mushaf-counter"><span id="mushafIdx">١</span> / <span id="mushafTotal">?</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AYAT FLASHCARDS ============ -->
+  <section class="panel" id="panel-ayat">
+    <h2 class="section" data-i18n="section-ayat">Ayat Flashcards</h2>
+    <p class="sub" data-i18n="sub-ayat">Tap any card to flip — see translation, tafseer, and word-by-word meanings.</p>
+    <div class="deck-controls">
+      <button class="btn" id="flipAll"><span data-i18n="btn-flipall">🔄 Flip All</span></button>
+      <button class="btn" id="resetCards"><span data-i18n="btn-reset-cards">↺ Reset</span></button>
+    </div>
+    <div class="deck" id="deck"></div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section class="panel" id="panel-story">
+    <h2 class="section" data-i18n="section-story">The Story · The Surah of Divorce</h2>
+    <p class="sub" data-i18n="sub-story">How As-Saff legislates divorce with justice, and its timeless promise of taqwa, provision, and ease.</p>
+    <div class="story-list" id="storyList"></div>
+  </section>
+
+  <!-- ============ CHARACTERS ============ -->
+  <section class="panel" id="panel-characters">
+    <h2 class="section" data-i18n="section-chars">Surah Landmarks</h2>
+    <p class="sub" data-i18n="sub-chars">The major themes, rulings, and scenes of Surah As-Saff.</p>
+    <div class="grid-3" id="charList"></div>
+  </section>
+
+  <!-- ============ VOCABULARY ============ -->
+  <section class="panel" id="panel-vocab">
+    <h2 class="section" data-i18n="section-vocab">Word-by-Word Glossary</h2>
+    <p class="sub" data-i18n="sub-vocab">Every key Quranic word explained — root, meaning, and context.</p>
+    <div class="vocab-table-wrap">
+    <table class="vocab-table">
+      <thead>
+        <tr>
+          <th data-i18n="th-word">Word</th>
+          <th class="vocab-tl-col" data-i18n="th-translit">Transliteration</th>
+          <th data-i18n="th-meaning">Meaning</th>
+          <th data-i18n="th-notes">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="panel" id="panel-lessons">
+    <h2 class="section" data-i18n="section-lessons">Lessons for Modern Youth</h2>
+    <p class="sub" data-i18n="sub-lessons">Timeless principles drawn from the Surah of Divorce.</p>
+    <div class="lesson-grid" id="lessonGrid"></div>
+  </section>
+
+  <!-- ============ EXERCISES ============ -->
+  <section class="panel" id="panel-exercises">
+    <div class="card">
+    <h2 class="section" data-i18n="section-exercises">Deep Practice</h2>
+    <p class="sub" data-i18n="sub-exercises">Multiple-choice, matching, fill-in-the-blank, and chronological ordering.</p>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-mcq-title">① Comprehension — Multiple Choice</h3>
+      <p class="desc" data-i18n="quiz-mcq-desc">Choose the most accurate answer based on the Surah and its tafseer.</p>
+      <div id="mcqContainer"></div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-match-title">② Word Matching</h3>
+      <p class="desc" data-i18n="quiz-match-desc">Tap an Arabic word, then tap its English meaning.</p>
+      <div class="card">
+        <div class="match-wrap">
+          <div class="match-col">
+            <h4 data-i18n="match-arabic">Arabic</h4>
+            <div id="matchAr"></div>
+          </div>
+          <div class="match-col">
+            <h4 data-i18n="match-english">English</h4>
+            <div id="matchEn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-fill-title">③ Fill in the Blanks</h3>
+      <p class="desc" data-i18n="quiz-fill-desc">Complete the verses with the correct word.</p>
+      <div id="fillContainer"></div>
+      <button class="btn primary" id="checkFill"><span data-i18n="btn-check-answers">Check Answers</span></button>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-order-title">④ Order the Verses</h3>
+      <p class="desc" data-i18n="quiz-order-desc">Drag the verse summaries into the correct order.</p>
+      <div class="card">
+        <div class="order-list" id="orderList"></div>
+        <button class="btn primary" id="checkOrder"><span data-i18n="btn-check-order">Check Order</span></button>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <div>
+        <div class="lbl" data-i18n="score-label">Your Score</div>
+        <div class="v"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+      </div>
+      <button class="btn gold" id="resetQuiz"><span data-i18n="btn-reset-quiz">↺ Reset All</span></button>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============ MUDHAKKIRAH ============ -->
+  <section class="panel" id="panel-mudhakkirah">
+    <h2 class="section" data-i18n="mudh-title" style="font-family:'Amiri','Playfair Display',serif;">📝 مذكرة تدبري للقرآن</h2>
+    <p class="sub" data-i18n="mudh-sub" style="font-family:'Amiri',serif;font-size:15px;">تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.</p>
+
+    <div class="mudhakkirah-question" style="margin-bottom:22px;">
+      <label><span class="q-icon">👤</span> <span data-i18n="student-label">Student Name:</span></label>
+      <input type="text" id="studentName" data-placeholder-en="Enter your name..." data-placeholder-ar="اكتب اسمك هنا..." placeholder="Enter your name..."
+        style="width:100%;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:16px;font-family:'Amiri','Inter',serif;color:var(--ink);background:#faf9f6;outline:none;direction:rtl;text-align:right;" />
+    </div>
+
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-1">١</span> <span data-i18n="mudh-h1">أولاً: المحور العام (الفهم والتدبر)</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">📖</span> <span data-i18n="mudh-q1-label">ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</span></label>
+        <textarea id="mudh-q1" data-placeholder-ar="اكتب خلاصة الآيات بأسلوبك الخاص هنا..." data-placeholder-en="Write a summary of the verses in your own words..." placeholder="اكتب خلاصة الآيات بأسلوبك الخاص هنا..."></textarea>
+      </div>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">💡</span> <span data-i18n="mudh-q2-label">ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</span></label>
+        <textarea id="mudh-q2" data-placeholder-ar="اكتب أهم درس وكيف ستطبقه..." data-placeholder-en="Write the most important lesson and how you will apply it..." placeholder="اكتب أهم درس وكيف ستطبقه..."></textarea>
+      </div>
+    </div>
+
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-2">٢</span> <span data-i18n="mudh-h2">ثانياً: المحور الوجداني والشخصي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">❤️</span> <span data-i18n="mudh-q3-label">هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</span></label>
+        <textarea id="mudh-q3" data-placeholder-ar="اكتب عن الآية التي أثرت فيك ولماذا..." data-placeholder-en="Write about the verse that touched you and why..." placeholder="اكتب عن الآية التي أثرت فيك ولماذا..."></textarea>
+      </div>
+    </div>
+
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-3">٣</span> <span data-i18n="mudh-h3">ثالثاً: المحور التطبيقي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">🎯</span> <span data-i18n="mudh-q4-label">حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</span></label>
+        <textarea id="mudh-q4" data-placeholder-ar="اكتب هدفك العملي أو عهدك مع نفسك..." data-placeholder-en="Write your practical goal or commitment to yourself..." placeholder="اكتب هدفك العملي أو عهدك مع نفسك..."></textarea>
+      </div>
+    </div>
+
+    <div class="export-bar">
+      <div class="export-title">
+        <span>📤</span>
+        <span data-i18n="export-title">Share Your Work</span>
+      </div>
+      <button class="btn whatsapp" id="btnWhatsApp">
+        <span style="font-size:20px">💬</span>
+        <span data-i18n="btn-whatsapp">Send to my Teacher</span>
+      </button>
+      <button class="btn pdf-btn" id="btnPDF">
+        <span style="font-size:20px">📄</span>
+        <span data-i18n="btn-pdf">Download PDF</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="footer" data-i18n="footer">Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="pdfContainer"></div>
+
+<script>
+window.__MUSHAF_SURA_NAME_AR = "سورة الصف";
+window.__MUSHAF_JUZ_LABEL    = "الجزء الثامن والعشرون";
+window.__MUSHAF_BISMILLAH    = true;
+window.__MUSHAF_AYAT = [
+"سَبَّحَ لِلَّهِ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۖ وَهُوَ ٱلْعَزِيزُ ٱلْحَكِيمُ",
+"يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ لِمَ تَقُولُونَ مَا لَا تَفْعَلُونَ",
+"كَبُرَ مَقْتًا عِندَ ٱللَّهِ أَن تَقُولُوا۟ مَا لَا تَفْعَلُونَ",
+"إِنَّ ٱللَّهَ يُحِبُّ ٱلَّذِينَ يُقَٰتِلُونَ فِى سَبِيلِهِۦ صَفًّۭا كَأَنَّهُم بُنْيَٰنٌۭ مَّرْصُوصٌۭ",
+"وَإِذْ قَالَ مُوسَىٰ لِقَوْمِهِۦ يَٰقَوْمِ لِمَ تُؤْذُونَنِى وَقَد تَّعْلَمُونَ أَنِّى رَسُولُ ٱللَّهِ إِلَيْكُمْ ۖ فَلَمَّا زَاغُوٓا۟ أَزَاغَ ٱللَّهُ قُلُوبَهُمْ ۚ وَٱللَّهُ لَا يَهْدِى ٱلْقَوْمَ ٱلْفَٰسِقِينَ",
+"وَإِذْ قَالَ عِيسَى ٱبْنُ مَرْيَمَ يَٰبَنِىٓ إِسْرَٰٓءِيلَ إِنِّى رَسُولُ ٱللَّهِ إِلَيْكُم مُّصَدِّقًۭا لِّمَا بَيْنَ يَدَىَّ مِنَ ٱلتَّوْرَىٰةِ وَمُبَشِّرًۢا بِرَسُولٍۢ يَأْتِى مِنۢ بَعْدِى ٱسْمُهُۥٓ أَحْمَدُ ۖ فَلَمَّا جَآءَهُم بِٱلْبَيِّنَٰتِ قَالُوا۟ هَٰذَا سِحْرٌۭ مُّبِينٌۭ",
+"وَمَنْ أَظْلَمُ مِمَّنِ ٱفْتَرَىٰ عَلَى ٱللَّهِ ٱلْكَذِبَ وَهُوَ يُدْعَىٰٓ إِلَى ٱلْإِسْلَٰمِ ۚ وَٱللَّهُ لَا يَهْدِى ٱلْقَوْمَ ٱلظَّٰلِمِينَ",
+"يُرِيدُونَ لِيُطْفِـُٔوا۟ نُورَ ٱللَّهِ بِأَفْوَٰهِهِمْ وَٱللَّهُ مُتِمُّ نُورِهِۦ وَلَوْ كَرِهَ ٱلْكَٰفِرُونَ",
+"هُوَ ٱلَّذِىٓ أَرْسَلَ رَسُولَهُۥ بِٱلْهُدَىٰ وَدِينِ ٱلْحَقِّ لِيُظْهِرَهُۥ عَلَى ٱلدِّينِ كُلِّهِۦ وَلَوْ كَرِهَ ٱلْمُشْرِكُونَ",
+"يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ هَلْ أَدُلُّكُمْ عَلَىٰ تِجَٰرَةٍۢ تُنجِيكُم مِّنْ عَذَابٍ أَلِيمٍۢ",
+"تُؤْمِنُونَ بِٱللَّهِ وَرَسُولِهِۦ وَتُجَٰهِدُونَ فِى سَبِيلِ ٱللَّهِ بِأَمْوَٰلِكُمْ وَأَنفُسِكُمْ ۚ ذَٰلِكُمْ خَيْرٌۭ لَّكُمْ إِن كُنتُمْ تَعْلَمُونَ",
+"يَغْفِرْ لَكُمْ ذُنُوبَكُمْ وَيُدْخِلْكُمْ جَنَّٰتٍۢ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ وَمَسَٰكِنَ طَيِّبَةًۭ فِى جَنَّٰتِ عَدْنٍۢ ۚ ذَٰلِكَ ٱلْفَوْزُ ٱلْعَظِيمُ",
+"وَأُخْرَىٰ تُحِبُّونَهَا ۖ نَصْرٌۭ مِّنَ ٱللَّهِ وَفَتْحٌۭ قَرِيبٌۭ ۗ وَبَشِّرِ ٱلْمُؤْمِنِينَ",
+"يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ كُونُوٓا۟ أَنصَارَ ٱللَّهِ كَمَا قَالَ عِيسَى ٱبْنُ مَرْيَمَ لِلْحَوَارِيِّۦنَ مَنْ أَنصَارِىٓ إِلَى ٱللَّهِ ۖ قَالَ ٱلْحَوَارِيُّونَ نَحْنُ أَنصَارُ ٱللَّهِ ۖ فَـَٔامَنَت طَّآئِفَةٌۭ مِّنۢ بَنِىٓ إِسْرَٰٓءِيلَ وَكَفَرَت طَّآئِفَةٌۭ ۖ فَأَيَّدْنَا ٱلَّذِينَ ءَامَنُوا۟ عَلَىٰ عَدُوِّهِمْ فَأَصْبَحُوا۟ ظَٰهِرِينَ"
+];
+</script>
+
+<script>
+/* ============= LANGUAGE DATA ============= */
+let currentLang = 'en';
+
+const I18N = {
+  'brand-title':       { en: 'Surah As-Saff · Interactive Portal',   ar: 'سورة الصف · بوابة تعليمية تفاعلية' },
+  'brand-sub':         { en: 'As-Saff · The Ranks — Tafseer & Tadabbur for Young Learners', ar: 'الصف · الصدق والوحدة والجهاد — تفسير وتدبر للناشئة' },
+  'pill-chapter':      { en: 'Chapter 61',    ar: 'السورة ٦١' },
+  'pill-verses':       { en: '14 Verses',     ar: '١٤ آية' },
+  'pill-period':       { en: 'Madaniyyah',    ar: 'مدنيّة' },
+  'student-label':     { en: 'Student Name:',  ar: 'اسم الطالب:' },
+  'tab-intro':         { en: 'Introduction',   ar: 'المقدمة' },
+  'tab-ayat':          { en: 'Ayat Flashcards', ar: 'بطاقات الآيات' },
+  'tab-story':         { en: 'The Story',      ar: 'القصة' },
+  'tab-chars':         { en: 'Landmarks of the Surah', ar: 'معالم السورة' },
+  'tab-vocab':         { en: 'Vocabulary',     ar: 'المفردات' },
+  'tab-lessons':       { en: 'Lessons',        ar: 'الدروس' },
+  'tab-exercises':     { en: 'Exercises',      ar: 'التمارين' },
+  'tab-mudh':          { en: 'My Reflection Journal', ar: 'مذكرة تدبري' },
+  'kicker':            { en: 'SURAH AS-SAFF · ٱلصَّفّ', ar: 'سورة الصف · ٱلصَّفّ' },
+  'hero-title':        { en: 'The Ranks — Truthfulness, Unity & Striving for Allah', ar: 'الصف — الصدق والوحدة والجهاد في سبيل الله' },
+  'hero-lead':         { en: 'Surah As-Saff is a Madani surah that calls believers to truthfulness between word and deed, and to unity in solid, disciplined ranks in the cause of Allah — as though they are a structure joined firmly. It recalls how Musa was harmed by his people and how Isa confirmed the Torah and foretold the Messenger Ahmad, warns that none can extinguish Allah\'s light, and promises that He will make His religion prevail. Its luminous offer is a trade that saves from a painful punishment: faith and striving with wealth and lives, rewarded with forgiveness, eternal Gardens, and a near victory. It seals with a stirring call: be the helpers of Allah, as the disciples answered Isa — and the believers were made victorious.', ar: 'سورة الصف سورة مدنية تدعو المؤمنين إلى الصدق بين القول والعمل، وإلى الوحدة في صفٍّ مرصوص منضبط في سبيل الله — كأنهم بنيانٌ مرصوص. تذكر إيذاء قوم موسى له، وتصديق عيسى للتوراة وبشارته بالرسول أحمد ﷺ، وتحذّر من أن يُطفئ أحدٌ نور الله، وتعد بأن الله مُظهرٌ دينه. وعرضها المضيء تجارةٌ تنجي من عذابٍ أليم: إيمانٌ وجهادٌ بالأموال والأنفس، جزاؤه المغفرة وجنات الخلد والفتح القريب. وتختم بنداءٍ جليل: كونوا أنصار الله كما أجاب الحواريون عيسى — فنُصِر المؤمنون.' },
+  'fact-revealed':     { en: 'Revealed in',       ar: 'مكان النزول' },
+  'fact-revealed-val': { en: 'Madinah',           ar: 'المدينة المنورة' },
+  'fact-order':        { en: 'Order of Revelation', ar: 'ترتيب النزول' },
+  'fact-order-val':    { en: '109th',             ar: 'الـ ١٠٩' },
+  'fact-verses':       { en: 'Verses',             ar: 'الآيات' },
+  'fact-verses-val':   { en: '14 Ayat',            ar: '١٤ آية' },
+  'fact-theme':        { en: 'Theme',              ar: 'الموضوع' },
+  'fact-theme-val':    { en: 'Truthfulness, Unity & Striving in Allah\'s Cause', ar: 'الصدق والوحدة والجهاد في سبيل الله' },
+  'section-ayat':      { en: 'Ayat Flashcards',    ar: 'بطاقات الآيات' },
+  'sub-ayat':          { en: 'Tap any card to flip — see translation, tafseer, and word-by-word meanings.', ar: 'اضغط على أي بطاقة لقلبها — شاهد الشرح والتفسير ومعاني الكلمات.' },
+  'btn-flipall':       { en: '🔄 Flip All',        ar: '🔄 اقلب الكل' },
+  'btn-reset-cards':   { en: '↺ Reset',            ar: '↺ إعادة ضبط' },
+  'section-story':     { en: 'The Story · The Surah of the Ranks', ar: 'القصة · سورة الصف' },
+  'sub-story':         { en: 'How As-Saff calls to truthfulness, unity in solid ranks, and the profitable trade with Allah.', ar: 'كيف تدعو سورة الصف إلى الصدق والوحدة في صفٍّ مرصوص والتجارة الرابحة مع الله.' },
+  'section-chars':     { en: 'Landmarks of the Surah', ar: 'معالم السورة' },
+  'sub-chars':         { en: 'The major themes, scenes, and landmarks of Surah As-Saff.', ar: 'المحاور الكبرى والمشاهد والمعالم التي ترسو عليها سورة الصف.' },
+  'section-vocab':     { en: 'Word-by-Word Glossary', ar: 'معجم الكلمات' },
+  'sub-vocab':         { en: 'Every key Quranic word explained — root, meaning, and context.', ar: 'شرح كل كلمة قرآنية مهمة — الجذر والمعنى والسياق.' },
+  'th-word':           { en: 'Word',            ar: 'الكلمة' },
+  'th-translit':       { en: 'Transliteration', ar: 'النطق' },
+  'th-meaning':        { en: 'Meaning',         ar: 'المعنى' },
+  'th-notes':          { en: 'Notes',           ar: 'ملاحظات' },
+  'section-lessons':   { en: 'Lessons for Modern Youth', ar: 'دروس للشباب المعاصر' },
+  'sub-lessons':       { en: 'Timeless principles drawn from the Surah of the Ranks.', ar: 'مبادئ خالدة من سورة الصف.' },
+  'th-notes2':         { en: 'Notes',           ar: 'ملاحظات' },
+  'section-exercises': { en: 'Deep Practice',   ar: 'تمارين تطبيقية' },
+  'sub-exercises':     { en: 'Multiple-choice, matching, fill-in-the-blank, and ordering.', ar: 'اختيار من متعدد، مطابقة، ملء الفراغات، وترتيب.' },
+  'quiz-mcq-title':    { en: '① Comprehension — Multiple Choice', ar: '① الفهم — اختيار من متعدد' },
+  'quiz-mcq-desc':     { en: 'Choose the most accurate answer based on the Surah and its tafseer.', ar: 'اختر الإجابة الأدق بناءً على السورة وتفسيرها.' },
+  'quiz-match-title':  { en: '② Word Matching',  ar: '② مطابقة الكلمات' },
+  'quiz-match-desc':   { en: 'Tap an Arabic word, then tap its English meaning.', ar: 'اضغط على الكلمة العربية ثم اضغط على معناها.' },
+  'match-arabic':      { en: 'Arabic',           ar: 'عربي' },
+  'match-english':     { en: 'English',          ar: 'المعنى' },
+  'quiz-fill-title':   { en: '③ Fill in the Blanks', ar: '③ أكمل الفراغات' },
+  'quiz-fill-desc':    { en: 'Complete the verses with the correct word.', ar: 'أكمل الآيات بالكلمة الصحيحة.' },
+  'btn-check-answers': { en: 'Check Answers',     ar: 'تحقق من الإجابات' },
+  'quiz-order-title':  { en: '④ Order the Verses', ar: '④ رتّب الآيات' },
+  'quiz-order-desc':   { en: 'Drag the verse summaries into the correct order.', ar: 'اسحب ملخصات الآيات ورتّبها ترتيباً صحيحاً.' },
+  'btn-check-order':   { en: 'Check Order',       ar: 'تحقق من الترتيب' },
+  'score-label':       { en: 'Your Score',        ar: 'درجتك' },
+  'btn-reset-quiz':    { en: '↺ Reset All',       ar: '↺ إعادة ضبط الكل' },
+  'export-title':      { en: 'Share Your Work',   ar: 'شارك عملك' },
+  'btn-whatsapp':      { en: 'Send to my Teacher', ar: 'أرسل للمعلم' },
+  'btn-pdf':           { en: 'Download PDF',      ar: 'تحميل PDF' },
+  'footer':            { en: 'Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.', ar: 'تَمَّ بِتَوْفِيقٍ مِنَ اللهِ وِفْقَ مَرَاجِعِ المُفَسِّرِينَ مِنْ عُلَمَاءِ أهْلِ السُّنَّةِ، وَالْحَمْدُ للهِ رَبِّ العَالَمِينَ.' },
+  'mudh-title':        { en: '📝 Quran Reflection Journal', ar: '📝 مذكرة تدبري للقرآن' },
+  'mudh-sub':          { en: 'Written reflections that help the student understand the verses and apply them in daily life.', ar: 'تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.' },
+  'mudh-num-1':        { en: '1', ar: '١' },
+  'mudh-num-2':        { en: '2', ar: '٢' },
+  'mudh-num-3':        { en: '3', ar: '٣' },
+  'mudh-h1':           { en: 'First: General Axis (Understanding & Reflection)', ar: 'أولاً: المحور العام (الفهم والتدبر)' },
+  'mudh-h2':           { en: 'Second: Emotional & Personal Axis', ar: 'ثانياً: المحور الوجداني والشخصي' },
+  'mudh-h3':           { en: 'Third: Practical Axis', ar: 'ثالثاً: المحور التطبيقي' },
+  'mudh-q1-label':     { en: 'What is the summary of the verses in your own simple words?', ar: 'ما خلاصة الآيات في رأيك بأسلوبك البسيط؟' },
+  'mudh-q2-label':     { en: 'What is the most important lesson from the verses, and how will you apply it in your daily life?', ar: 'ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟' },
+  'mudh-q3-label':     { en: 'Is there a particular verse that touched your heart or affected you deeply, and why?', ar: 'هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟' },
+  'mudh-q4-label':     { en: 'Set a small practical goal or commitment to yourself to apply the verses.', ar: 'حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.' },
+};
+
+/* ============= CONTENT DATA ============= */
+const AYAT = [
+  { n:1, ar:"سَبَّحَ لِلَّهِ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۖ وَهُوَ ٱلْعَزِيزُ ٱلْحَكِيمُ",
+    tr:{ en:"Whatever is in the heavens and whatever is on the earth glorifies Allah, and He is the Exalted in Might, the Wise.", ar:"يُسبّح لله وينزّهه عن كل نقصٍ كل ما في السماوات والأرض، وهو العزيز الذي لا يُغالَب، الحكيم في خلقه وشرعه." },
+    tafsir:{ en:"Al-Baghawi & Al-Wasit: all creation declares Allah free of imperfection (tasbih). The surah opens with glorification to ready the heart for the command of sincerity and jihad; He is Al-'Aziz (none overcomes Him) and Al-Hakim (Wise in all He decrees).", ar:"قال البغوي والوسيط: كل الكون يُنزّه الله عن النقص. تُفتتح السورة بالتسبيح لتهيئة القلب لأمر الصدق والجهاد؛ وهو العزيز الذي لا يُغلَب، الحكيم في كل ما يُقدّر ويُشرّع." },
+    words:[ {ar:"سَبَّحَ", en:{en:"Glorifies",ar:"سبّح ونزّه"}}, {ar:"ٱلْعَزِيزُ", en:{en:"The Exalted in Might",ar:"الغالب الذي لا يُقهَر"}}, {ar:"ٱلْحَكِيمُ", en:{en:"The Wise",ar:"المُحكِم في خلقه وشرعه"}} ] },
+
+  { n:2, ar:"يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ لِمَ تَقُولُونَ مَا لَا تَفْعَلُونَ",
+    tr:{ en:"O you who have believed, why do you say what you do not do?", ar:"يا أيها الذين آمنوا، لِمَ تقولون قولاً لا تعملون به؟" },
+    tafsir:{ en:"Al-Qurtubi & Ar-Razi: a rebuke of the gap between word and deed. It was revealed about those who claimed deeds they did not perform, or wished for fighting then fell short. Faith requires truthfulness between tongue and action.", ar:"قال القرطبي والرازي: عتابٌ على التناقض بين القول والعمل. نزلت فيمن ادّعى أعمالاً لم يفعلها، أو تمنّى القتال ثم تخلّف. والإيمان يقتضي الصدق بين اللسان والفعل." },
+    words:[ {ar:"لِمَ", en:{en:"Why",ar:"لماذا"}}, {ar:"تَقُولُونَ", en:{en:"You say",ar:"تقولون"}}, {ar:"لَا تَفْعَلُونَ", en:{en:"You do not do",ar:"لا تعملون"}} ] },
+
+  { n:3, ar:"كَبُرَ مَقْتًا عِندَ ٱللَّهِ أَن تَقُولُوا۟ مَا لَا تَفْعَلُونَ",
+    tr:{ en:"Greatly hateful in the sight of Allah is that you say what you do not do.", ar:"عَظُمَ مقتاً وبُغضاً عند الله أن تقولوا ما لا تفعلون." },
+    tafsir:{ en:"At-Tahrir wa at-Tanwir: 'maqtan' is intense detestation. To promise or claim and then not fulfil is among the traits most hated by Allah — a stern warning against the hypocrisy of speech.", ar:"قال صاحب التحرير والتنوير: «مقتاً» بُغضٌ شديد. والوعد أو الادّعاء ثم عدم الوفاء من أبغض الخصال عند الله — تحذيرٌ شديد من نفاق القول." },
+    words:[ {ar:"كَبُرَ", en:{en:"Greatly / grievous",ar:"عَظُمَ واشتدّ"}}, {ar:"مَقْتًا", en:{en:"Hatefulness",ar:"بُغضاً شديداً"}}, {ar:"عِندَ ٱللَّهِ", en:{en:"In the sight of Allah",ar:"عند الله"}} ] },
+
+  { n:4, ar:"إِنَّ ٱللَّهَ يُحِبُّ ٱلَّذِينَ يُقَٰتِلُونَ فِى سَبِيلِهِۦ صَفًّۭا كَأَنَّهُم بُنْيَٰنٌۭ مَّرْصُوصٌۭ",
+    tr:{ en:"Indeed, Allah loves those who fight in His cause in a rank as though they are a structure joined firmly.", ar:"إن الله يحب الذين يقاتلون في سبيله صفّاً واحداً ثابتين، كأنهم بنيانٌ ملصقٌ بعضه ببعض لا فُرجة فيه." },
+    tafsir:{ en:"Al-Baghawi & Al-Maraghi: Allah loves the believers who stand united in ordered ranks (saff), firm like a wall whose bricks are cemented (marsus). This verse gives the surah its name and its core value: unity, discipline, and steadfastness in Allah's cause.", ar:"قال البغوي والمراغي: يحب الله المؤمنين الواقفين صفّاً منظّماً في القتال، ثابتين كالبنيان المرصوص الذي لُصِّق بعضه ببعض. ومنها اسم السورة وجوهرها: الوحدة والانضباط والثبات في سبيل الله." },
+    words:[ {ar:"يُقَٰتِلُونَ", en:{en:"They fight",ar:"يقاتلون"}}, {ar:"صَفًّۭا", en:{en:"In a rank",ar:"صفّاً منتظماً"}}, {ar:"بُنْيَٰنٌۭ", en:{en:"A structure",ar:"بناءٌ"}}, {ar:"مَّرْصُوصٌۭ", en:{en:"Firmly joined",ar:"مُلصَقٌ مُحكَم"}} ] },
+
+  { n:5, ar:"وَإِذْ قَالَ مُوسَىٰ لِقَوْمِهِۦ يَٰقَوْمِ لِمَ تُؤْذُونَنِى وَقَد تَّعْلَمُونَ أَنِّى رَسُولُ ٱللَّهِ إِلَيْكُمْ ۖ فَلَمَّا زَاغُوٓا۟ أَزَاغَ ٱللَّهُ قُلُوبَهُمْ ۚ وَٱللَّهُ لَا يَهْدِى ٱلْقَوْمَ ٱلْفَٰسِقِينَ",
+    tr:{ en:"And when Moses said to his people, 'O my people, why do you harm me while you certainly know that I am the messenger of Allah to you?' So when they deviated, Allah caused their hearts to deviate. And Allah does not guide the defiantly disobedient people.", ar:"واذكر إذ قال موسى لقومه: يا قوم لِمَ تؤذونني بالمخالفة وأنتم تعلمون أني رسول الله إليكم؟ فلما مالوا عن الحق أمال الله قلوبهم عنه، والله لا يهدي القوم الفاسقين الخارجين عن طاعته." },
+    tafsir:{ en:"Al-Qurtubi & Ar-Razi: Moses' people harmed him despite knowing his prophethood. When they persisted in turning away (zaaghu), Allah turned their hearts away as just recompense — a comfort to the Prophet and a warning that grieving God's messengers leads to misguidance.", ar:"قال القرطبي والرازي: آذى قومُ موسى نبيَّهم مع علمهم بنبوّته. فلما أصرّوا على الزيغ أزاغ الله قلوبهم جزاءً عدلاً — تسليةٌ للنبي ﷺ وتحذيرٌ أن إيذاء رسل الله يورث الضلال." },
+    words:[ {ar:"تُؤْذُونَنِى", en:{en:"You harm me",ar:"تؤذونني"}}, {ar:"زَاغُوٓا۟", en:{en:"They deviated",ar:"مالوا عن الحق"}}, {ar:"أَزَاغَ", en:{en:"Caused to deviate",ar:"أمال وصرف"}}, {ar:"ٱلْفَٰسِقِينَ", en:{en:"The disobedient",ar:"الخارجين عن الطاعة"}} ] },
+
+  { n:6, ar:"وَإِذْ قَالَ عِيسَى ٱبْنُ مَرْيَمَ يَٰبَنِىٓ إِسْرَٰٓءِيلَ إِنِّى رَسُولُ ٱللَّهِ إِلَيْكُم مُّصَدِّقًۭا لِّمَا بَيْنَ يَدَىَّ مِنَ ٱلتَّوْرَىٰةِ وَمُبَشِّرًۢا بِرَسُولٍۢ يَأْتِى مِنۢ بَعْدِى ٱسْمُهُۥٓ أَحْمَدُ ۖ فَلَمَّا جَآءَهُم بِٱلْبَيِّنَٰتِ قَالُوا۟ هَٰذَا سِحْرٌۭ مُّبِينٌۭ",
+    tr:{ en:"And when Jesus, son of Mary, said, 'O Children of Israel, indeed I am the messenger of Allah to you, confirming what came before me of the Torah and bringing good tidings of a messenger to come after me whose name is Ahmad.' But when he came to them with clear evidences, they said, 'This is obvious magic.'", ar:"واذكر إذ قال عيسى ابن مريم: يا بني إسرائيل إني رسول الله إليكم، مصدّقاً لما سبقني من التوراة، ومبشّراً برسولٍ يأتي بعدي اسمه أحمد. فلما جاءهم محمدٌ بالمعجزات الواضحة قالوا: هذا سحرٌ ظاهر." },
+    tafsir:{ en:"Al-Wasit & At-Tahrir: 'Isa confirmed the Torah and announced the final Messenger by name — Ahmad. Yet when the clear signs came, they called them plain magic. This proves the Prophet was foretold, and that denial is stubbornness, not lack of proof.", ar:"قال الوسيط والتحرير: صدّق عيسى التوراة وبشّر بالرسول الخاتم ﷺ باسمه «أحمد». فلما جاءت البيّنات الواضحة سمّوها سحراً مبيناً. وفي ذلك دليلٌ على البشارة بالنبي ﷺ، وأن التكذيب عنادٌ لا قصورٌ في الدليل." },
+    words:[ {ar:"مُصَدِّقًۭا", en:{en:"Confirming",ar:"مصدّقاً"}}, {ar:"ٱلتَّوْرَىٰةِ", en:{en:"The Torah",ar:"التوراة"}}, {ar:"مُبَشِّرًۢا", en:{en:"Giving glad tidings",ar:"مبشّراً"}}, {ar:"أَحْمَدُ", en:{en:"Ahmad",ar:"أحمد ﷺ"}} ] },
+
+  { n:7, ar:"وَمَنْ أَظْلَمُ مِمَّنِ ٱفْتَرَىٰ عَلَى ٱللَّهِ ٱلْكَذِبَ وَهُوَ يُدْعَىٰٓ إِلَى ٱلْإِسْلَٰمِ ۚ وَٱللَّهُ لَا يَهْدِى ٱلْقَوْمَ ٱلظَّٰلِمِينَ",
+    tr:{ en:"And who is more unjust than one who invents lies about Allah while he is being invited to Islam? And Allah does not guide the wrongdoing people.", ar:"ولا أحد أظلم ممن اختلق الكذب على الله — فسمّى الحق سحراً — وهو يُدعى إلى الإسلام والإيمان. والله لا يهدي القوم الظالمين." },
+    tafsir:{ en:"Al-Qurtubi: the gravest injustice is to fabricate lies against Allah — calling the truth magic — while being summoned to submission (Islam). By their own choice such wrongdoers shut themselves out of guidance.", ar:"قال القرطبي: أعظم الظلم افتراء الكذب على الله — كتسمية الحق سحراً — مع الدعوة إلى الإسلام. وبذلك يحرم الظالمون أنفسهم الهدايةَ باختيارهم." },
+    words:[ {ar:"أَظْلَمُ", en:{en:"More unjust",ar:"أشدّ ظلماً"}}, {ar:"ٱفْتَرَىٰ", en:{en:"Invents / fabricates",ar:"اختلق الكذب"}}, {ar:"يُدْعَىٰٓ", en:{en:"Is invited",ar:"يُدعى"}}, {ar:"ٱلْإِسْلَٰمِ", en:{en:"Islam",ar:"الإسلام"}} ] },
+
+  { n:8, ar:"يُرِيدُونَ لِيُطْفِـُٔوا۟ نُورَ ٱللَّهِ بِأَفْوَٰهِهِمْ وَٱللَّهُ مُتِمُّ نُورِهِۦ وَلَوْ كَرِهَ ٱلْكَٰفِرُونَ",
+    tr:{ en:"They want to extinguish the light of Allah with their mouths, but Allah will perfect His light, although the disbelievers dislike it.", ar:"يريدون أن يُطفئوا دين الله ونوره بأقوالهم وافترائهم، والله متمٌّ نوره ومُظهرٌ دينه ولو كره الكافرون." },
+    tafsir:{ en:"Al-Baghawi & Al-Muntakhab: a vivid image — blowing at the sun to put it out. Their slanders ('with their mouths') can never extinguish Allah's light (Islam and the Qur'an); Allah guarantees to complete and spread it, however the disbelievers hate it.", ar:"قال البغوي والمنتخب: صورةٌ بليغة — كمن ينفخ في الشمس ليطفئها. لن تُطفئ أقوالهم وافتراؤهم نور الله (الإسلام والقرآن)، والله ضامنٌ إتمامه ونشره ولو كره الكافرون." },
+    words:[ {ar:"لِيُطْفِـُٔوا۟", en:{en:"To extinguish",ar:"ليطفئوا"}}, {ar:"نُورَ ٱللَّهِ", en:{en:"The light of Allah",ar:"نور الله ودينه"}}, {ar:"بِأَفْوَٰهِهِمْ", en:{en:"With their mouths",ar:"بأقوالهم"}}, {ar:"مُتِمُّ", en:{en:"One who perfects",ar:"مُتمٌّ ومُكمِل"}} ] },
+
+  { n:9, ar:"هُوَ ٱلَّذِىٓ أَرْسَلَ رَسُولَهُۥ بِٱلْهُدَىٰ وَدِينِ ٱلْحَقِّ لِيُظْهِرَهُۥ عَلَى ٱلدِّينِ كُلِّهِۦ وَلَوْ كَرِهَ ٱلْمُشْرِكُونَ",
+    tr:{ en:"It is He who sent His Messenger with guidance and the religion of truth to manifest it over all religion, although those who associate others with Allah dislike it.", ar:"هو الذي أرسل رسوله محمداً ﷺ بالهدى ودين الحق ليُعليه ويُظهره على كل الأديان، ولو كره المشركون ذلك." },
+    tafsir:{ en:"At-Tahrir & Ar-Razi: Allah sent Muhammad with guidance (true knowledge) and the religion of truth (right action) to make it prevail over every religion — a promise of Islam's ultimate triumph, however the polytheists resent it.", ar:"قال التحرير والرازي: أرسل الله محمداً ﷺ بالهدى (العلم النافع) ودين الحق (العمل الصالح) ليُظهره على كل دين — وعدٌ بانتصار الإسلام النهائي ولو كره المشركون." },
+    words:[ {ar:"ٱلْهُدَىٰ", en:{en:"The guidance",ar:"الهدى"}}, {ar:"دِينِ ٱلْحَقِّ", en:{en:"The religion of truth",ar:"دين الحق"}}, {ar:"لِيُظْهِرَهُۥ", en:{en:"To make it prevail",ar:"ليُعليه ويُظهره"}}, {ar:"ٱلْمُشْرِكُونَ", en:{en:"The polytheists",ar:"المشركون"}} ] },
+
+  { n:10, ar:"يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ هَلْ أَدُلُّكُمْ عَلَىٰ تِجَٰرَةٍۢ تُنجِيكُم مِّنْ عَذَابٍ أَلِيمٍۢ",
+    tr:{ en:"O you who have believed, shall I guide you to a transaction that will save you from a painful punishment?", ar:"يا أيها الذين آمنوا، هل أدلّكم على تجارةٍ رابحة تُنجيكم من عذابٍ مؤلم؟" },
+    tafsir:{ en:"Al-Wasit & Al-Maraghi: Allah offers the believers a 'trade' (tijara) — the most profitable bargain of all — that rescues them from the Fire. The gentle style of a loving teacher: 'shall I guide you?' precedes the great offer.", ar:"قال الوسيط والمراغي: يعرض الله على المؤمنين «تجارة» — أربح صفقةٍ على الإطلاق — تُنجيهم من النار. وأسلوب المعلّم الرحيم: «هل أدلّكم؟» يسبق العرض العظيم." },
+    words:[ {ar:"تِجَٰرَةٍۢ", en:{en:"A transaction / trade",ar:"تجارة وصفقة"}}, {ar:"تُنجِيكُم", en:{en:"Saves you",ar:"تُنجيكم"}}, {ar:"عَذَابٍ", en:{en:"Punishment",ar:"عذاب"}}, {ar:"أَلِيمٍۢ", en:{en:"Painful",ar:"مؤلم"}} ] },
+
+  { n:11, ar:"تُؤْمِنُونَ بِٱللَّهِ وَرَسُولِهِۦ وَتُجَٰهِدُونَ فِى سَبِيلِ ٱللَّهِ بِأَمْوَٰلِكُمْ وَأَنفُسِكُمْ ۚ ذَٰلِكُمْ خَيْرٌۭ لَّكُمْ إِن كُنتُمْ تَعْلَمُونَ",
+    tr:{ en:"It is that you believe in Allah and His Messenger and strive in the cause of Allah with your wealth and your lives. That is best for you, if you should know.", ar:"هي أن تؤمنوا بالله ورسوله، وتجاهدوا في سبيل الله بأموالكم وأنفسكم. ذلكم خيرٌ لكم إن كنتم تعلمون." },
+    tafsir:{ en:"Al-Qurtubi & Ar-Razi: the terms of the trade — faith joined with striving by wealth and self. Its capital is iman, its labour is jihad, its profit is salvation and Paradise: 'that is best for you, if only you knew.'", ar:"قال القرطبي والرازي: شروط التجارة — إيمانٌ مقرونٌ بالجهاد بالمال والنفس. رأس مالها الإيمان، وعملها الجهاد، وربحها النجاة والجنة: «ذلكم خيرٌ لكم إن كنتم تعلمون»." },
+    words:[ {ar:"تُؤْمِنُونَ", en:{en:"You believe",ar:"تؤمنون"}}, {ar:"تُجَٰهِدُونَ", en:{en:"You strive",ar:"تجاهدون"}}, {ar:"بِأَمْوَٰلِكُمْ", en:{en:"With your wealth",ar:"بأموالكم"}}, {ar:"وَأَنفُسِكُمْ", en:{en:"And your lives",ar:"وأنفسكم"}} ] },
+
+  { n:12, ar:"يَغْفِرْ لَكُمْ ذُنُوبَكُمْ وَيُدْخِلْكُمْ جَنَّٰتٍۢ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ وَمَسَٰكِنَ طَيِّبَةًۭ فِى جَنَّٰتِ عَدْنٍۢ ۚ ذَٰلِكَ ٱلْفَوْزُ ٱلْعَظِيمُ",
+    tr:{ en:"He will forgive your sins and admit you to gardens beneath which rivers flow and pleasant dwellings in gardens of perpetual residence. That is the great attainment.", ar:"يغفر لكم ذنوبكم، ويُدخلكم جناتٍ تجري من تحتها الأنهار، ومساكن طيبة في جنات إقامةٍ دائمة. ذلك هو الفوز العظيم." },
+    tafsir:{ en:"Al-Baghawi: the profit of the trade — forgiveness of sins, eternal Gardens, and goodly dwellings in 'Adn. This is al-fawz al-'azim, the supreme success that crowns faith and striving.", ar:"قال البغوي: ربح التجارة — مغفرة الذنوب، وجناتٌ خالدة، ومساكن طيبة في جنات عدن. وهو الفوز العظيم الذي يُتوّج الإيمان والجهاد." },
+    words:[ {ar:"يَغْفِرْ", en:{en:"He forgives",ar:"يغفر"}}, {ar:"ذُنُوبَكُمْ", en:{en:"Your sins",ar:"ذنوبكم"}}, {ar:"مَسَٰكِنَ", en:{en:"Dwellings",ar:"مساكن"}}, {ar:"ٱلْفَوْزُ ٱلْعَظِيمُ", en:{en:"The great attainment",ar:"الفوز العظيم"}} ] },
+
+  { n:13, ar:"وَأُخْرَىٰ تُحِبُّونَهَا ۖ نَصْرٌۭ مِّنَ ٱللَّهِ وَفَتْحٌۭ قَرِيبٌۭ ۗ وَبَشِّرِ ٱلْمُؤْمِنِينَ",
+    tr:{ en:"And another favour that you love — victory from Allah and an imminent conquest; and give good tidings to the believers.", ar:"ولكم نعمة أخرى تحبّونها معجّلة في الدنيا — نصرٌ من الله وفتحٌ قريب. وبشّر المؤمنين بذلك." },
+    tafsir:{ en:"Al-Wasit & At-Tahrir: besides the reward of the Hereafter, Allah adds a worldly gift the believers love — His help (nasr) and a near victory (fath qarib), understood as the conquest of Makkah and the triumph of Islam: 'so give the believers glad tidings.'", ar:"قال الوسيط والتحرير: زيادةً على أجر الآخرة، يهب الله عطيةً دنيويةً يحبّها المؤمنون — نصرٌ منه وفتحٌ قريب، فُسّر بفتح مكة وانتصار الإسلام: «وبشّر المؤمنين»." },
+    words:[ {ar:"أُخْرَىٰ", en:{en:"Another (favour)",ar:"نعمة أخرى"}}, {ar:"نَصْرٌۭ", en:{en:"Victory / help",ar:"نصرٌ وتأييد"}}, {ar:"فَتْحٌۭ قَرِيبٌۭ", en:{en:"An imminent conquest",ar:"فتحٌ قريب"}}, {ar:"بَشِّرِ", en:{en:"Give glad tidings",ar:"بشّر"}} ] },
+
+  { n:14, ar:"يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ كُونُوٓا۟ أَنصَارَ ٱللَّهِ كَمَا قَالَ عِيسَى ٱبْنُ مَرْيَمَ لِلْحَوَارِيِّۦنَ مَنْ أَنصَارِىٓ إِلَى ٱللَّهِ ۖ قَالَ ٱلْحَوَارِيُّونَ نَحْنُ أَنصَارُ ٱللَّهِ ۖ فَـَٔامَنَت طَّآئِفَةٌۭ مِّنۢ بَنِىٓ إِسْرَٰٓءِيلَ وَكَفَرَت طَّآئِفَةٌۭ ۖ فَأَيَّدْنَا ٱلَّذِينَ ءَامَنُوا۟ عَلَىٰ عَدُوِّهِمْ فَأَصْبَحُوا۟ ظَٰهِرِينَ",
+    tr:{ en:"O you who have believed, be supporters of Allah, as when Jesus, son of Mary, said to the disciples, 'Who are my supporters for Allah?' The disciples said, 'We are supporters of Allah.' And a faction of the Children of Israel believed and a faction disbelieved. So We supported those who believed against their enemy, and they became dominant.", ar:"يا أيها الذين آمنوا كونوا أنصار دين الله كما قال عيسى ابن مريم للحواريين: من أنصاري متوجّهاً إلى الله؟ قال الحواريون: نحن أنصار الله. فآمنت طائفة من بني إسرائيل وكفرت طائفة، فقوّينا الذين آمنوا على عدوّهم فصاروا غالبين ظاهرين." },
+    tafsir:{ en:"Al-Qurtubi & Al-Baghawi: the surah closes by calling believers to be Ansar Allah — Allah's helpers — like the disciples (hawariyyun) who answered 'Isa. When one group believed and another disbelieved, Allah aided the believers until they prevailed. So too will the helpers of the Prophet be made victorious.", ar:"قال القرطبي والبغوي: تُختم السورة بالدعوة إلى أن نكون أنصار الله — كالحواريين الذين أجابوا عيسى. ولمّا آمنت طائفة وكفرت أخرى، أيّد الله المؤمنين حتى ظهروا. وكذلك يُنصَر أنصار النبي ﷺ." },
+    words:[ {ar:"أَنصَارَ ٱللَّهِ", en:{en:"Helpers of Allah",ar:"أنصار الله ودينه"}}, {ar:"ٱلْحَوَارِيُّونَ", en:{en:"The disciples",ar:"الحواريون"}}, {ar:"فَأَيَّدْنَا", en:{en:"We supported",ar:"قوّينا وأيّدنا"}}, {ar:"ظَٰهِرِينَ", en:{en:"Dominant / victorious",ar:"غالبين ظاهرين"}} ] },
+
+];
+
+const STORY = [
+  {t:{en:"A Madani Surah — The Banner of Truth & Striving",ar:"سورة مدنية — راية الصدق والجهاد"}, d:{en:"Surah As-Saff is a Madani surah of fourteen verses. It summons the believers to truthfulness between word and deed, to unity in solid ranks in Allah's cause, and to the profitable trade with Allah: faith and striving in exchange for forgiveness, Paradise, and a near victory.",ar:"سورة الصف سورة مدنية في أربع عشرة آية. تدعو المؤمنين إلى الصدق بين القول والعمل، وإلى الوحدة في صفٍّ مرصوص في سبيل الله، وإلى التجارة الرابحة مع الله: إيمانٌ وجهادٌ مقابل المغفرة والجنة والفتح القريب."}, tags:{en:["Madinah","Truthfulness","Jihad"], ar:["المدينة","الصدق","الجهاد"]}},
+  {t:{en:"The Name: As-Saff · The Ranks",ar:"اسمها: الصف"}, d:{en:"The surah takes its name from verse 4: Allah loves those who fight in His cause 'in a rank (saff) as though they are a structure joined firmly.' The name celebrates discipline, order, and unbreakable unity.",ar:"سُمّيت السورة من الآية الرابعة: يحب الله الذين يقاتلون في سبيله «صفّاً كأنهم بنيانٌ مرصوص». والاسم يُمجّد الانضباط والنظام والوحدة التي لا تنكسر."}, tags:{en:["As-Saff","The Ranks","Unity"], ar:["الصف","الصفوف","الوحدة"]}},
+  {t:{en:"Opening Glorification & A Call to Sincerity",ar:"افتتاح بالتسبيح ودعوة إلى الصدق"}, d:{en:"Verses 1–3: all that is in the heavens and earth glorifies Allah. Then the believers are rebuked: 'why do you say what you do not do?' It is greatly hateful to Allah that words contradict deeds.",ar:"الآيات ١–٣: كل ما في السماوات والأرض يسبّح الله. ثم يُعاتَب المؤمنون: «لِمَ تقولون ما لا تفعلون؟» وكَبُر مقتاً عند الله أن يخالف القولُ العملَ."}, tags:{en:["Tasbih","Word & Deed","No Hypocrisy"], ar:["التسبيح","القول والعمل","لا نفاق"]}},
+  {t:{en:"The Solid Rank — Allah Loves the United",ar:"الصف المرصوص — الله يحب المتّحدين"}, d:{en:"Verse 4: the surah's heart — Allah loves those who fight in His cause in ordered ranks, firm like a cemented wall. Strength lies in unity, discipline, and steadfastness, not in numbers alone.",ar:"الآية ٤: قلب السورة — يحب الله الذين يقاتلون في سبيله صفّاً منظّماً، ثابتين كالبنيان المرصوص. القوة في الوحدة والانضباط والثبات، لا في الكثرة وحدها."}, tags:{en:["The Rank","Discipline","Steadfastness"], ar:["الصف","الانضباط","الثبات"]}},
+  {t:{en:"Lessons from Musa & the Glad Tidings of 'Isa",ar:"عِبَرٌ من موسى وبشارة عيسى"}, d:{en:"Verses 5–7: Moses' people harmed him though they knew his truth, so Allah turned their hearts away. 'Isa confirmed the Torah and foretold a messenger after him named Ahmad — yet the clear signs were branded 'magic'.",ar:"الآيات ٥–٧: آذى قومُ موسى نبيَّهم مع علمهم بصدقه فأزاغ الله قلوبهم. وصدّق عيسى التوراة وبشّر برسولٍ بعده اسمه أحمد — فسُمّيت البيّنات الواضحة «سحراً»."}, tags:{en:["Musa","'Isa","Ahmad"], ar:["موسى","عيسى","أحمد ﷺ"]}},
+  {t:{en:"Allah's Light Cannot Be Extinguished",ar:"نور الله لا يُطفأ"}, d:{en:"Verses 8–9: the disbelievers wish to blow out Allah's light with their mouths, but He will perfect it. He sent His Messenger with guidance and the religion of truth to prevail over all religion.",ar:"الآيتان ٨–٩: يريد الكافرون إطفاء نور الله بأفواههم، والله متمٌّ نوره. أرسل رسوله ﷺ بالهدى ودين الحق ليُظهره على كل الأديان."}, tags:{en:["Light","Triumph of Islam","Guidance"], ar:["النور","ظهور الإسلام","الهدى"]}},
+  {t:{en:"The Profitable Trade & The Helpers of Allah",ar:"التجارة الرابحة وأنصار الله"}, d:{en:"Verses 10–14: 'shall I show you a trade that saves you from a painful punishment?' Believe and strive with wealth and lives — the reward is forgiveness, Gardens, and a near victory. The seal: 'Be the helpers of Allah,' as the disciples answered 'Isa, and the believers prevailed.",ar:"الآيات ١٠–١٤: «هل أدلّكم على تجارةٍ تنجيكم من عذابٍ أليم؟» آمِنوا وجاهِدوا بالأموال والأنفس — والجزاء مغفرةٌ وجناتٌ وفتحٌ قريب. والختام: «كونوا أنصار الله» كما أجاب الحواريون عيسى، فظهر المؤمنون."}, tags:{en:["The Trade","Forgiveness","Ansar Allah"], ar:["التجارة","المغفرة","أنصار الله"]}},
+];
+
+const CHARS = [
+  {e:"🕌", role:{en:"Glorification — All Creation Praises Allah",ar:"التسبيح — الكون كله يسبّح الله"}, name:{en:"'Whatever Is in the Heavens & Earth Glorifies Allah'",ar:"«سبّح لله ما في السماوات وما في الأرض»"}, d:{en:"Verse 1: the surah opens with universal tasbih. All things declare Allah free of imperfection; He is Al-'Aziz, Al-Hakim. This glorification prepares the heart to receive the commands of sincerity and striving.",ar:"الآية ١: تُفتتح السورة بالتسبيح الشامل. كل شيءٍ ينزّه الله عن النقص؛ وهو العزيز الحكيم. وهذا التسبيح يُهيّئ القلب لتلقّي أوامر الصدق والجهاد."}},
+  {e:"🗣️", role:{en:"Truthfulness — Match Word with Deed",ar:"الصدق — توافق القول والعمل"}, name:{en:"'Why Do You Say What You Do Not Do?'",ar:"«لِمَ تقولون ما لا تفعلون؟»"}, d:{en:"Verses 2–3: a sharp rebuke. It is greatly hateful to Allah that a believer's tongue promises what his actions deny. Integrity means our words and works are one.",ar:"الآيتان ٢–٣: عتابٌ شديد. كَبُر مقتاً عند الله أن يَعِد لسانُ المؤمن بما تُكذّبه أفعاله. والاستقامة أن يتطابق القول مع العمل."}},
+  {e:"🧱", role:{en:"The Solid Rank — Unity in Allah's Cause",ar:"الصف المرصوص — الوحدة في سبيل الله"}, name:{en:"'As Though They Are a Structure Joined Firmly'",ar:"«كأنهم بنيانٌ مرصوص»"}, d:{en:"Verse 4: Allah loves those who fight in His cause in disciplined ranks, firm like a cemented wall. The believing community is strongest when united, ordered, and steadfast.",ar:"الآية ٤: يحب الله الذين يقاتلون في سبيله صفّاً منضبطاً، ثابتين كالبنيان المرصوص. والأمة المؤمنة أقوى ما تكون حين تتّحد وتنتظم وتثبت."}},
+  {e:"🌿", role:{en:"Musa & 'Isa — Prophets Harmed, Ahmad Foretold",ar:"موسى وعيسى — أذى الأنبياء والبشارة بأحمد"}, name:{en:"'A Messenger After Me Whose Name Is Ahmad'",ar:"«مبشّراً برسولٍ يأتي من بعدي اسمه أحمد»"}, d:{en:"Verses 5–7: Moses' people harmed him and Allah turned their hearts away; 'Isa confirmed the Torah and gave glad tidings of Ahmad. To deny clear signs and call truth 'magic' is the gravest injustice.",ar:"الآيات ٥–٧: آذى قومُ موسى نبيَّهم فأزاغ الله قلوبهم؛ وصدّق عيسى التوراة وبشّر بأحمد ﷺ. وتكذيب البيّنات وتسمية الحق «سحراً» أعظم الظلم."}},
+  {e:"💡", role:{en:"Allah's Light Will Be Completed",ar:"نور الله سيتمّ"}, name:{en:"'Allah Will Perfect His Light'",ar:"«والله متمٌّ نوره»"}, d:{en:"Verses 8–9: enemies try to blow out Allah's light with their mouths, but He guarantees to complete it, sending His Messenger with guidance and truth to prevail over all religion.",ar:"الآيتان ٨–٩: يحاول الأعداء إطفاء نور الله بأفواههم، والله ضامنٌ إتمامه، أرسل رسوله ﷺ بالهدى والحق ليُظهره على كل الأديان."}},
+  {e:"🤝", role:{en:"The Trade & The Helpers of Allah",ar:"التجارة وأنصار الله"}, name:{en:"'Be Supporters of Allah'",ar:"«كونوا أنصار الله»"}, d:{en:"Verses 10–14: Allah offers the saving trade — faith and jihad in exchange for forgiveness, Gardens, and a near victory — and seals the surah by calling believers to be Ansar Allah, like the disciples of 'Isa who were made victorious.",ar:"الآيات ١٠–١٤: يعرض الله التجارة المنجية — إيمانٌ وجهادٌ مقابل المغفرة والجنة والفتح القريب — ويختم السورة بالدعوة إلى أن نكون أنصار الله، كحواريي عيسى الذين نُصِروا."}},
+];
+
+const VOCAB = [
+  {ar:"سَبَّحَ", tl:"Sabbaha", m:{en:"Glorifies / declares perfect",ar:"سبّح ونزّه"}, n:{en:"All creation declares Allah free of every imperfection.",ar:"كل المخلوقات تنزّه الله عن كل نقص."}},
+  {ar:"ٱلْعَزِيزُ", tl:"Al-'Aziz", m:{en:"The Exalted in Might",ar:"الغالب الذي لا يُقهَر"}, n:{en:"Allah, the Almighty whom none can overcome.",ar:"الله الغالب الذي لا يغلبه شيء."}},
+  {ar:"ٱلْحَكِيمُ", tl:"Al-Hakim", m:{en:"The All-Wise",ar:"المُحكِم"}, n:{en:"Wise and perfect in His creation and legislation.",ar:"الحكيم في خلقه وشرعه."}},
+  {ar:"لِمَ", tl:"Lima", m:{en:"Why",ar:"لماذا"}, n:{en:"An interrogative of rebuke: why the contradiction?",ar:"استفهام إنكاري: لماذا التناقض؟"}},
+  {ar:"تَقُولُونَ", tl:"Taquluun", m:{en:"You say",ar:"تقولون"}, n:{en:"Words not matched by action.",ar:"قولٌ لا يطابقه عمل."}},
+  {ar:"لَا تَفْعَلُونَ", tl:"Laa taf'aluun", m:{en:"You do not do",ar:"لا تعملون"}, n:{en:"Failing to act on what one claims or promises.",ar:"عدم العمل بما يُدّعى أو يُوعَد به."}},
+  {ar:"كَبُرَ", tl:"Kabura", m:{en:"Greatly / grievous",ar:"عَظُمَ"}, n:{en:"Intensely serious before Allah.",ar:"عظيمٌ شديدٌ عند الله."}},
+  {ar:"مَقْتًا", tl:"Maqtan", m:{en:"Hatefulness / detestation",ar:"بُغضاً شديداً"}, n:{en:"The strongest degree of hatred.",ar:"أشدّ درجات البُغض."}},
+  {ar:"يُحِبُّ", tl:"Yuhibbu", m:{en:"Loves",ar:"يحب"}, n:{en:"Allah's love for the steadfast, united believers.",ar:"محبة الله للمؤمنين الثابتين المتّحدين."}},
+  {ar:"يُقَٰتِلُونَ", tl:"Yuqaatiluun", m:{en:"They fight",ar:"يقاتلون"}, n:{en:"Striving in battle for the sake of Allah.",ar:"الجهاد في القتال في سبيل الله."}},
+  {ar:"صَفًّۭا", tl:"Saffan", m:{en:"In a rank / row",ar:"صفّاً منتظماً"}, n:{en:"Standing in ordered, disciplined ranks.",ar:"الوقوف صفّاً منظّماً منضبطاً."}},
+  {ar:"بُنْيَٰنٌۭ", tl:"Bunyaan", m:{en:"A structure / building",ar:"بناءٌ"}, n:{en:"A solid edifice — image of unity.",ar:"بناءٌ متماسك — صورةُ الوحدة."}},
+  {ar:"مَّرْصُوصٌۭ", tl:"Marsuus", m:{en:"Firmly joined / cemented",ar:"مُلصَقٌ مُحكَم"}, n:{en:"Bricks cemented with no gaps — perfect cohesion.",ar:"لبناتٌ مُلصقة لا فُرجة بينها — تماسكٌ تام."}},
+  {ar:"تُؤْذُونَنِى", tl:"Tu'dhuunani", m:{en:"You harm me",ar:"تؤذونني"}, n:{en:"To grieve or injure the messenger of Allah.",ar:"إيذاء رسول الله بالمخالفة والأذى."}},
+  {ar:"زَاغُوٓا۟", tl:"Zaaghu", m:{en:"They deviated / swerved",ar:"مالوا عن الحق"}, n:{en:"Turned away from the truth deliberately.",ar:"الميل عن الحق عمداً."}},
+  {ar:"أَزَاغَ", tl:"Azaagha", m:{en:"Caused to deviate",ar:"أمال وصرف"}, n:{en:"Allah's just recompense for persistent turning away.",ar:"جزاء الله العدل على الإصرار على الزيغ."}},
+  {ar:"ٱلْفَٰسِقِينَ", tl:"Al-Faasiqiin", m:{en:"The defiantly disobedient",ar:"الخارجين عن الطاعة"}, n:{en:"Those who break out of obedience to Allah.",ar:"الخارجون عن طاعة الله."}},
+  {ar:"مُصَدِّقًۭا", tl:"Musaddiqan", m:{en:"Confirming",ar:"مصدّقاً"}, n:{en:"'Isa confirming the Torah revealed before him.",ar:"تصديق عيسى للتوراة السابقة."}},
+  {ar:"ٱلتَّوْرَىٰةِ", tl:"At-Tawraah", m:{en:"The Torah",ar:"التوراة"}, n:{en:"The scripture revealed to Musa.",ar:"الكتاب المُنزَّل على موسى."}},
+  {ar:"مُبَشِّرًۢا", tl:"Mubashshiran", m:{en:"Giving glad tidings",ar:"مبشّراً"}, n:{en:"Announcing the coming Messenger.",ar:"البشارة بالرسول الخاتم ﷺ."}},
+  {ar:"أَحْمَدُ", tl:"Ahmad", m:{en:"Ahmad",ar:"أحمد"}, n:{en:"A name of the Prophet Muhammad ﷺ.",ar:"اسمٌ للنبي محمد ﷺ."}},
+  {ar:"سِحْرٌۭ مُّبِينٌۭ", tl:"Sihrun mubin", m:{en:"Obvious magic",ar:"سحرٌ واضح"}, n:{en:"Their false label for the clear signs.",ar:"تسميتهم الباطلة للبيّنات الواضحة."}},
+  {ar:"أَظْلَمُ", tl:"Azlam", m:{en:"More unjust",ar:"أشدّ ظلماً"}, n:{en:"No one wrongs more than the fabricator against Allah.",ar:"لا أحد أظلم ممن يفتري على الله."}},
+  {ar:"ٱفْتَرَىٰ", tl:"Iftaraa", m:{en:"Invents / fabricates",ar:"اختلق الكذب"}, n:{en:"To forge lies against Allah.",ar:"اختلاق الكذب على الله."}},
+  {ar:"يُدْعَىٰٓ", tl:"Yud'aa", m:{en:"Is invited / called",ar:"يُدعى"}, n:{en:"Being summoned to Islam and faith.",ar:"الدعوة إلى الإسلام والإيمان."}},
+  {ar:"ٱلْإِسْلَٰمِ", tl:"Al-Islaam", m:{en:"Islam",ar:"الإسلام"}, n:{en:"Submission to Allah — the religion of truth.",ar:"الاستسلام لله — دين الحق."}},
+  {ar:"لِيُطْفِـُٔوا۟", tl:"Liyutfi'uu", m:{en:"To extinguish",ar:"ليطفئوا"}, n:{en:"Their futile wish to put out Allah's light.",ar:"رغبتهم العابثة في إطفاء نور الله."}},
+  {ar:"نُورَ ٱللَّهِ", tl:"Nur Allah", m:{en:"The light of Allah",ar:"نور الله"}, n:{en:"Islam, the Qur'an, and its guidance.",ar:"الإسلام والقرآن وهداه."}},
+  {ar:"بِأَفْوَٰهِهِمْ", tl:"Bi-afwaahihim", m:{en:"With their mouths",ar:"بأقوالهم"}, n:{en:"Mere words and slander — powerless against truth.",ar:"مجرّد أقوالٍ وافتراء لا تضرّ الحق."}},
+  {ar:"مُتِمُّ", tl:"Mutimm", m:{en:"One who perfects / completes",ar:"مُتمٌّ ومُكمِل"}, n:{en:"Allah guarantees the completion of His light.",ar:"الله ضامنٌ إتمام نوره."}},
+  {ar:"ٱلْهُدَىٰ", tl:"Al-Hudaa", m:{en:"Guidance",ar:"الهدى"}, n:{en:"True knowledge that the Messenger brought.",ar:"العلم النافع الذي جاء به الرسول ﷺ."}},
+  {ar:"دِينِ ٱلْحَقِّ", tl:"Din al-haqq", m:{en:"The religion of truth",ar:"دين الحق"}, n:{en:"Right belief and right action — Islam.",ar:"العقيدة الصحيحة والعمل الصالح — الإسلام."}},
+  {ar:"لِيُظْهِرَهُۥ", tl:"Liyuzhirahu", m:{en:"To make it prevail",ar:"ليُعليه ويُظهره"}, n:{en:"To raise Islam above every religion.",ar:"لإعلاء الإسلام على كل دين."}},
+  {ar:"ٱلْمُشْرِكُونَ", tl:"Al-Mushrikuun", m:{en:"The polytheists",ar:"المشركون"}, n:{en:"Those who associate partners with Allah.",ar:"الذين يجعلون مع الله شركاء."}},
+  {ar:"تِجَٰرَةٍۢ", tl:"Tijaarah", m:{en:"A trade / transaction",ar:"تجارة"}, n:{en:"The saving bargain Allah offers.",ar:"الصفقة المنجية التي يعرضها الله."}},
+  {ar:"تُنجِيكُم", tl:"Tunjiikum", m:{en:"Saves you",ar:"تُنجيكم"}, n:{en:"Rescues from the painful punishment.",ar:"تُنقذكم من العذاب الأليم."}},
+  {ar:"عَذَابٍ أَلِيمٍۢ", tl:"'Adhabin alim", m:{en:"A painful punishment",ar:"عذابٌ مؤلم"}, n:{en:"The torment from which faith and jihad save.",ar:"العذاب الذي يُنجي منه الإيمان والجهاد."}},
+  {ar:"تُؤْمِنُونَ", tl:"Tu'minuun", m:{en:"You believe",ar:"تؤمنون"}, n:{en:"Faith in Allah and His Messenger.",ar:"الإيمان بالله ورسوله."}},
+  {ar:"تُجَٰهِدُونَ", tl:"Tujaahiduun", m:{en:"You strive",ar:"تجاهدون"}, n:{en:"Striving with wealth and self in Allah's cause.",ar:"الجهاد بالمال والنفس في سبيل الله."}},
+  {ar:"بِأَمْوَٰلِكُمْ", tl:"Bi-amwaalikum", m:{en:"With your wealth",ar:"بأموالكم"}, n:{en:"Spending one's property for Allah.",ar:"بذل المال في سبيل الله."}},
+  {ar:"وَأَنفُسِكُمْ", tl:"Wa-anfusikum", m:{en:"And your lives",ar:"وأنفسكم"}, n:{en:"Offering one's self in Allah's cause.",ar:"بذل النفس في سبيل الله."}},
+  {ar:"يَغْفِرْ", tl:"Yaghfir", m:{en:"He forgives",ar:"يغفر"}, n:{en:"Allah's forgiveness for sins of the strivers.",ar:"مغفرة الله لذنوب المجاهدين."}},
+  {ar:"ذُنُوبَكُمْ", tl:"Dhunubakum", m:{en:"Your sins",ar:"ذنوبكم"}, n:{en:"The wrongs wiped away by faith and jihad.",ar:"الذنوب التي يمحوها الإيمان والجهاد."}},
+  {ar:"مَسَٰكِنَ طَيِّبَةًۭ", tl:"Masaakina tayyibah", m:{en:"Pleasant dwellings",ar:"مساكن طيبة"}, n:{en:"Goodly homes in the Gardens of 'Adn.",ar:"مساكن طيبة في جنات عدن."}},
+  {ar:"ٱلْفَوْزُ ٱلْعَظِيمُ", tl:"Al-fawz al-'azim", m:{en:"The great attainment",ar:"الفوز العظيم"}, n:{en:"The supreme success of Paradise and Allah's pleasure.",ar:"الفوز الأعظم بالجنة ورضوان الله."}},
+  {ar:"نَصْرٌۭ", tl:"Nasr", m:{en:"Victory / help",ar:"نصرٌ وتأييد"}, n:{en:"Allah's aid granted to the believers.",ar:"تأييد الله ونصره للمؤمنين."}},
+  {ar:"فَتْحٌۭ قَرِيبٌۭ", tl:"Fathun qarib", m:{en:"An imminent conquest",ar:"فتحٌ قريب"}, n:{en:"A near victory — the conquest of Makkah.",ar:"فتحٌ قريب — فتح مكة."}},
+  {ar:"بَشِّرِ", tl:"Bashshir", m:{en:"Give glad tidings",ar:"بشّر"}, n:{en:"Announce good news to the believers.",ar:"إبلاغ المؤمنين البشرى."}},
+  {ar:"أَنصَارَ ٱللَّهِ", tl:"Ansar Allah", m:{en:"Helpers of Allah",ar:"أنصار الله"}, n:{en:"Those who support Allah's religion and Messenger.",ar:"الناصرون لدين الله ورسوله."}},
+  {ar:"ٱلْحَوَارِيُّونَ", tl:"Al-Hawariyyuun", m:{en:"The disciples",ar:"الحواريون"}, n:{en:"The sincere followers of 'Isa.",ar:"أتباع عيسى المخلصون."}},
+  {ar:"فَأَيَّدْنَا", tl:"Fa-ayyadnaa", m:{en:"We supported / strengthened",ar:"قوّينا وأيّدنا"}, n:{en:"Allah strengthened the believers over their foe.",ar:"قوّى الله المؤمنين على عدوّهم."}},
+  {ar:"ظَٰهِرِينَ", tl:"Zaahiriin", m:{en:"Dominant / victorious",ar:"غالبين ظاهرين"}, n:{en:"Made prevailing and triumphant by Allah.",ar:"جعلهم الله غالبين منتصرين."}},
+];
+
+const LESSONS = [
+  {ic:"🗣️", t:{en:"Let Your Actions Match Your Words",ar:"ليُطابق فعلُك قولَك"}, d:{en:"'Why do you say what you do not do?' (2). A believer's integrity is that tongue and deed agree. Promise little and deliver; claim nothing you will not fulfil.",ar:"«لِمَ تقولون ما لا تفعلون؟» (٢). استقامة المؤمن أن يتوافق لسانه مع عمله. عِدْ قليلاً وأوفِ، ولا تدّعِ ما لا تُحقّق."}},
+  {ic:"🧱", t:{en:"Strength Lies in Unity & Discipline",ar:"القوة في الوحدة والانضباط"}, d:{en:"Allah loves those who stand 'as though they are a structure joined firmly' (4). Like cemented bricks, believers are strongest when ordered, united, and steadfast.",ar:"يحب الله من يقفون «كأنهم بنيانٌ مرصوص» (٤). كاللبنات المُلصقة، يكون المؤمنون أقوى ما يكونون حين ينتظمون ويتّحدون ويثبتون."}},
+  {ic:"🚫", t:{en:"Do Not Harm Those Who Guide You",ar:"لا تؤذِ من يدلّك على الخير"}, d:{en:"Moses' people harmed him though they knew his truth (5). Honour your teachers and guides; harming the people of truth invites the heart's deviation.",ar:"آذى قومُ موسى نبيَّهم مع علمهم بصدقه (٥). أكرِم معلّميك وهُداتك؛ فإيذاء أهل الحق يجلب زيغ القلب."}},
+  {ic:"📜", t:{en:"The Prophet Was Foretold by Name",ar:"البشارة بالنبي ﷺ باسمه"}, d:{en:"'Isa announced a messenger after him 'whose name is Ahmad' (6). The coming of Muhammad was glad tidings in earlier scripture — a proof of his truth.",ar:"بشّر عيسى برسولٍ بعده «اسمه أحمد» (٦). فمجيء محمد ﷺ بشارةٌ في الكتب السابقة — دليلٌ على صدقه."}},
+  {ic:"💡", t:{en:"Truth Cannot Be Extinguished",ar:"الحق لا يُطفأ"}, d:{en:"'They want to extinguish Allah's light with their mouths, but Allah will perfect His light' (8). Slander and mockery never put out the truth — stand firm with it.",ar:"«يريدون ليُطفئوا نور الله بأفواههم والله متمٌّ نوره» (٨). لن يُطفئ السخريةُ والافتراءُ الحقَّ — فاثبت عليه."}},
+  {ic:"🌍", t:{en:"Islam Is Destined to Prevail",ar:"الإسلام ظاهرٌ لا محالة"}, d:{en:"Allah sent His Messenger 'to make it prevail over all religion' (9). However the world resists, the religion of truth will rise — so be of its sincere people.",ar:"أرسل الله رسوله «ليُظهره على الدين كله» (٩). ومهما قاوم العالم، فدين الحق ظاهر — فكن من أهله المخلصين."}},
+  {ic:"💰", t:{en:"The Best Trade: Faith + Striving",ar:"أربح تجارة: إيمانٌ وجهاد"}, d:{en:"'Believe in Allah and His Messenger and strive with your wealth and lives' (11). The greatest investment yields forgiveness and Paradise — give your best to Allah.",ar:"«تؤمنون بالله ورسوله وتجاهدون بأموالكم وأنفسكم» (١١). أعظم استثمارٍ ربحُه المغفرة والجنة — فابذل خيرك لله."}},
+  {ic:"🤝", t:{en:"Be a Helper of Allah (Ansar Allah)",ar:"كن من أنصار الله"}, d:{en:"'Be supporters of Allah, as the disciples said: We are supporters of Allah' (14). Answer the call of truth with your effort, and Allah will make His helpers victorious.",ar:"«كونوا أنصار الله كما قال الحواريون نحن أنصار الله» (١٤). لبِّ نداء الحق بجهدك، وسينصر الله أنصاره ويُظهرهم."}},
+];
+
+const MCQ = [
+  {q:{en:"How many verses does Surah As-Saff contain?",ar:"كم عدد آيات سورة الصف؟"}, o:{en:["12","13","14","19"],ar:["١٢","١٣","١٤","١٩"]}, a:2, ex:{en:"Surah As-Saff consists of 14 verses, revealed in Madinah.",ar:"سورة الصف ١٤ آية، نزلت بالمدينة."}},
+  {q:{en:"Where was Surah As-Saff revealed?",ar:"أين نزلت سورة الصف؟"}, o:{en:["Makkah","Madinah","Taif","Abyssinia"],ar:["مكة","المدينة","الطائف","الحبشة"]}, a:1, ex:{en:"It is a Madani surah, revealed after the Hijrah.",ar:"هي سورة مدنية، نزلت بعد الهجرة."}},
+  {q:{en:"Whom does Allah love, according to verse 4?",ar:"مَن يحب الله بحسب الآية الرابعة؟"}, o:{en:["The wealthy","Those who fight in His cause in a solid rank like a firm structure","Poets","Travellers"],ar:["الأغنياء","الذين يقاتلون في سبيله صفّاً كالبنيان المرصوص","الشعراء","المسافرين"]}, a:1, ex:{en:"'Allah loves those who fight in His cause in a rank as though they are a structure joined firmly' (4).",ar:"«إن الله يحب الذين يقاتلون في سبيله صفّاً كأنهم بنيانٌ مرصوص» (٤)."}},
+  {q:{en:"Why are the believers rebuked in verses 2–3?",ar:"لماذا عُوتب المؤمنون في الآيتين ٢–٣؟"}, o:{en:["For sleeping","For saying what they do not do","For travelling","For fasting"],ar:["للنوم","لقولهم ما لا يفعلون","للسفر","للصيام"]}, a:1, ex:{en:"'Why do you say what you do not do? Greatly hateful is it to Allah...' — a warning against word contradicting deed.",ar:"«لِمَ تقولون ما لا تفعلون؟ كَبُر مقتاً...» — تحذيرٌ من مخالفة القول للعمل."}},
+  {q:{en:"What did 'Isa foretell in verse 6?",ar:"بماذا بشّر عيسى في الآية ٦؟"}, o:{en:["A king","A messenger after him named Ahmad","A great flood","A new Torah"],ar:["ملكاً","برسولٍ بعده اسمه أحمد","طوفاناً","توراةً جديدة"]}, a:1, ex:{en:"'...bringing good tidings of a messenger to come after me whose name is Ahmad' — the Prophet Muhammad.",ar:"«ومبشّراً برسولٍ يأتي من بعدي اسمه أحمد» — هو النبي محمد ﷺ."}},
+  {q:{en:"What do the disbelievers want to do in verse 8?",ar:"ماذا يريد الكافرون في الآية ٨؟"}, o:{en:["To extinguish Allah's light with their mouths","To build mosques","To migrate","To make peace"],ar:["إطفاء نور الله بأفواههم","بناء المساجد","الهجرة","الصلح"]}, a:0, ex:{en:"'They want to extinguish the light of Allah with their mouths, but Allah will perfect His light.'",ar:"«يريدون ليُطفئوا نور الله بأفواههم والله متمٌّ نوره»."}},
+  {q:{en:"What is the saving 'trade' in verses 10–11?",ar:"ما هي «التجارة» المنجية في الآيتين ١٠–١١؟"}, o:{en:["Buying and selling gold","Faith in Allah & His Messenger and striving with wealth and lives","Farming","Sea trade"],ar:["بيع الذهب وشراؤه","الإيمان بالله ورسوله والجهاد بالأموال والأنفس","الزراعة","التجارة البحرية"]}, a:1, ex:{en:"'You believe in Allah and His Messenger and strive in His cause with your wealth and your lives' (11).",ar:"«تؤمنون بالله ورسوله وتجاهدون في سبيل الله بأموالكم وأنفسكم» (١١)."}},
+];
+
+const MATCH = [
+  {ar:"صَفًّۭا", tl:"Saffan", en:{en:"In a rank",ar:"صفّاً منتظماً"}},
+  {ar:"مَّرْصُوصٌۭ", tl:"Marsuus", en:{en:"Firmly joined",ar:"مُلصَقٌ مُحكَم"}},
+  {ar:"أَحْمَدُ", tl:"Ahmad", en:{en:"Ahmad (the Prophet ﷺ)",ar:"أحمد ﷺ"}},
+  {ar:"مُتِمُّ نُورِهِۦ", tl:"Mutimmu nurihi", en:{en:"Perfecter of His light",ar:"متمُّ نوره"}},
+  {ar:"تِجَٰرَةٍۢ", tl:"Tijaarah", en:{en:"A trade / transaction",ar:"تجارة"}},
+  {ar:"ٱلْفَوْزُ ٱلْعَظِيمُ", tl:"Al-fawz al-'azim", en:{en:"The great attainment",ar:"الفوز العظيم"}},
+  {ar:"أَنصَارَ ٱللَّهِ", tl:"Ansar Allah", en:{en:"Helpers of Allah",ar:"أنصار الله"}},
+  {ar:"فَتْحٌۭ قَرِيبٌۭ", tl:"Fathun qarib", en:{en:"An imminent conquest",ar:"فتحٌ قريب"}},
+];
+
+const FILL = [
+  {parts:["إِنَّ ٱللَّهَ يُحِبُّ ٱلَّذِينَ يُقَٰتِلُونَ فِى سَبِيلِهِۦ ",""], a:"صَفًّۭا"},
+  {parts:["كَأَنَّهُم بُنْيَٰنٌۭ ",""], a:"مَّرْصُوصٌۭ"},
+  {parts:["وَٱللَّهُ مُتِمُّ ",""], a:"نُورِهِۦ"},
+  {parts:["بِرَسُولٍۢ يَأْتِى مِنۢ بَعْدِى ٱسْمُهُۥٓ ",""], a:"أَحْمَدُ"},
+  {parts:["هَلْ أَدُلُّكُمْ عَلَىٰ "," تُنجِيكُم مِّنْ عَذَابٍ أَلِيمٍۢ"], a:"تِجَٰرَةٍۢ"},
+  {parts:["كُونُوٓا۟ أَنصَارَ ",""], a:"ٱللَّهِ"},
+];
+
+const ORDER_EN = [
+  "Opening glorification: whatever is in the heavens and earth glorifies Allah, the Exalted in Might, the Wise.",
+  "O believers, why do you say what you do not do? It is greatly hateful to Allah to say what you do not do.",
+  "Indeed, Allah loves those who fight in His cause in a rank, as though they are a structure joined firmly.",
+  "Moses said: O my people, why do you harm me though you know I am Allah's messenger? When they deviated, Allah turned their hearts away.",
+  "Jesus said: O Children of Israel, I confirm the Torah and give glad tidings of a messenger after me whose name is Ahmad — yet they called the clear signs magic.",
+  "Who is more unjust than one who invents lies about Allah while he is being invited to Islam?",
+  "They want to extinguish Allah's light with their mouths, but Allah will perfect His light though the disbelievers hate it.",
+  "He sent His Messenger with guidance and the religion of truth to make it prevail over all religion.",
+  "O believers, shall I show you a trade that saves from a painful punishment? Believe in Allah and His Messenger and strive with your wealth and lives.",
+  "He will forgive your sins and admit you to Gardens, with a near victory you love. So be the helpers of Allah, as the disciples were, and the believers prevailed.",
+];
+const ORDER_AR = [
+  "افتتاحٌ بالتسبيح: سبّح لله ما في السماوات والأرض، وهو العزيز الحكيم.",
+  "يا أيها الذين آمنوا لِمَ تقولون ما لا تفعلون؟ كَبُر مقتاً عند الله أن تقولوا ما لا تفعلون.",
+  "إن الله يحب الذين يقاتلون في سبيله صفّاً كأنهم بنيانٌ مرصوص.",
+  "قال موسى: يا قوم لِمَ تؤذونني وقد تعلمون أني رسول الله إليكم؟ فلما زاغوا أزاغ الله قلوبهم.",
+  "قال عيسى: يا بني إسرائيل إني مصدّقٌ للتوراة ومبشّرٌ برسولٍ بعدي اسمه أحمد — فسمّوا البيّنات سحراً.",
+  "ومن أظلم ممن افترى على الله الكذب وهو يُدعى إلى الإسلام؟",
+  "يريدون ليُطفئوا نور الله بأفواههم، والله متمٌّ نوره ولو كره الكافرون.",
+  "هو الذي أرسل رسوله بالهدى ودين الحق ليُظهره على الدين كله.",
+  "يا أيها الذين آمنوا هل أدلّكم على تجارةٍ تنجيكم من عذابٍ أليم؟ تؤمنون بالله ورسوله وتجاهدون بأموالكم وأنفسكم.",
+  "يغفر لكم ذنوبكم ويُدخلكم جناتٍ، ولكم فتحٌ قريبٌ تحبّونه. فكونوا أنصار الله كما كان الحواريون، فظهر المؤمنون.",
+];
+
+function getOrder(){ return currentLang === 'ar' ? ORDER_AR : ORDER_EN; }
+
+/* ============= CHIME ============= */
+let AC;
+function chime(type){
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    const now = AC.currentTime;
+    if(type==='ok'){
+      o.frequency.setValueAtTime(660, now);
+      o.frequency.exponentialRampToValueAtTime(990, now+.15);
+    } else if(type==='err'){
+      o.frequency.setValueAtTime(220, now);
+      o.frequency.exponentialRampToValueAtTime(140, now+.2);
+    } else {
+      o.frequency.setValueAtTime(520, now);
+      o.frequency.exponentialRampToValueAtTime(720, now+.08);
+    }
+    g.gain.setValueAtTime(.12, now);
+    g.gain.exponentialRampToValueAtTime(.001, now+.25);
+    o.start(now); o.stop(now+.3);
+  }catch(e){}
+}
+
+/* ============= TABS ============= */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* ============= TOAST ============= */
+const toastEl = document.getElementById('toast');
+function toast(msg, kind=''){
+  toastEl.textContent = msg;
+  toastEl.className = 'toast show '+kind;
+  setTimeout(()=>toastEl.className='toast '+kind, 1800);
+}
+
+/* ============= RENDER FUNCTIONS ============= */
+function renderFlashcards(){
+  const deck = document.getElementById('deck');
+  deck.innerHTML = '';
+  AYAT.forEach(a=>{
+    const L = currentLang;
+    const card = document.createElement('div');
+    card.className = 'flip';
+    card.innerHTML = `
+      <div class="flip-inner">
+        <div class="face front">
+          <div class="ayah-num">${a.n}</div>
+          <div class="ayah-ar">${a.ar}</div>
+          <div class="flip-hint">${L==='ar'?'اضغط للقلب ↻':'Tap to flip ↻'}</div>
+        </div>
+        <div class="face back">
+          <h4>${L==='ar'?'الآية '+a.n+' · الشرح':'Ayah '+a.n+' · Explanation'}</h4>
+          <p class="trans">"${typeof a.tr==='object'?a.tr[L]:a.tr}"</p>
+          <h4>${L==='ar'?'التفسير':'Tafseer'}</h4>
+          <p class="tafsir">${typeof a.tafsir==='object'?a.tafsir[L]:a.tafsir}</p>
+          <h4>${L==='ar'?'معاني الكلمات':'Word-by-Word'}</h4>
+          <div class="words">
+            ${a.words.map(w=>`<span class="word"><span class="ar">${w.ar}</span><span class="en">${typeof w.en==='object'?w.en[L]:w.en}</span></span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=>{
+      card.classList.toggle('flipped');
+      chime('flip');
+    });
+    deck.appendChild(card);
+  });
+}
+
+function renderStory(){
+  const sl = document.getElementById('storyList');
+  sl.innerHTML = '';
+  const L = currentLang;
+  STORY.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'story-item';
+    const title = typeof s.t==='object'?s.t[L]:s.t;
+    const desc = typeof s.d==='object'?s.d[L]:s.d;
+    const tags = typeof s.tags==='object'&&!Array.isArray(s.tags)?s.tags[L]:s.tags;
+    el.innerHTML = `
+      <div class="step-no">${i+1}</div>
+      <div>
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <div class="badge-row">${tags.map(t=>`<span class="badge">${t}</span>`).join('')}</div>
+      </div>`;
+    sl.appendChild(el);
+  });
+}
+
+function renderCharacters(){
+  const cl = document.getElementById('charList');
+  cl.innerHTML = '';
+  const L = currentLang;
+  CHARS.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'char-card';
+    const name = typeof c.name==='object'?c.name[L]:c.name;
+    const role = typeof c.role==='object'?c.role[L]:c.role;
+    const desc = typeof c.d==='object'?c.d[L]:c.d;
+    el.innerHTML = `<div class="char-emoji">${c.e}</div><div class="role">${role}</div><h3>${name}</h3><p>${desc}</p>`;
+    cl.appendChild(el);
+  });
+}
+
+function renderVocab(){
+  const tbody = document.getElementById('vocabBody');
+  tbody.innerHTML = '';
+  const L = currentLang;
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m[L]:v.m;
+    const n = typeof v.n==='object'?v.n[L]:v.n;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="vocab-ar">${v.ar}</td><td class="vocab-tl-col">${v.tl||""}</td><td>${m}</td><td>${n}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderLessons(){
+  const lg = document.getElementById('lessonGrid');
+  lg.innerHTML = '';
+  const L = currentLang;
+  LESSONS.forEach(l=>{
+    const el = document.createElement('div');
+    el.className = 'lesson';
+    const t = typeof l.t==='object'?l.t[L]:l.t;
+    const d = typeof l.d==='object'?l.d[L]:l.d;
+    el.innerHTML = `<div class="ic">${l.ic}</div><h4>${t}</h4><p>${d}</p>`;
+    lg.appendChild(el);
+  });
+}
+
+/* ============= SCORE ============= */
+let score = 0, maxScore = 0;
+function updateScore(){ document.getElementById('scoreVal').textContent = score; document.getElementById('scoreMax').textContent = maxScore; }
+
+/* ============= MCQ ============= */
+function renderMCQ(){
+  const container = document.getElementById('mcqContainer');
+  container.innerHTML = '';
+  const L = currentLang;
+  MCQ.forEach((q,qi)=>{
+    maxScore++;
+    const div = document.createElement('div');
+    div.className = 'mcq';
+    const qText = typeof q.q==='object'?q.q[L]:q.q;
+    const opts = typeof q.o==='object'&&!Array.isArray(q.o)?q.o[L]:q.o;
+    const ex = typeof q.ex==='object'?q.ex[L]:q.ex;
+    div.innerHTML = `<p class="q">${qi+1}. ${qText}</p><div class="opts">${opts.map((o,i)=>`<div class="opt" data-qi="${qi}" data-i="${i}">${o}</div>`).join('')}</div><div class="feedback" id="fb-${qi}">${ex}</div>`;
+    container.appendChild(div);
+  });
+  updateScore();
+  container.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click', function(){
+      const qi = +this.dataset.qi, i = +this.dataset.i;
+      const parent = this.closest('.mcq');
+      if(parent.querySelector('.correct')) return;
+      if(i === MCQ[qi].a){ this.classList.add('correct'); score++; chime('ok'); }
+      else { this.classList.add('wrong'); chime('err'); parent.querySelectorAll('.opt')[MCQ[qi].a].classList.add('correct'); }
+      parent.querySelector('#fb-'+qi).classList.add('show');
+      updateScore();
+    });
+  });
+}
+
+/* ============= MATCHING ============= */
+let selAr = null, selEn = null;
+function renderMatch(){
+  const arDiv = document.getElementById('matchAr'), enDiv = document.getElementById('matchEn');
+  arDiv.innerHTML = ''; enDiv.innerHTML = '';
+  const L = currentLang;
+  const shuffledEn = [...MATCH].sort(()=>Math.random()-.5);
+  maxScore += MATCH.length;
+  MATCH.forEach(m=>{
+    const a = document.createElement('div');
+    a.className = 'match-item match-ar';
+    a.textContent = m.ar; a.dataset.key = m.ar;
+    a.addEventListener('click', ()=>handleMatchClick(a, 'ar'));
+    arDiv.appendChild(a);
+  });
+  shuffledEn.forEach(m=>{
+    const e = document.createElement('div');
+    e.className = 'match-item';
+    const enText = typeof m.en==='object'?m.en[L]:m.en;
+    e.textContent = enText; e.dataset.key = m.ar;
+    e.addEventListener('click', ()=>handleMatchClick(e, 'en'));
+    enDiv.appendChild(e);
+  });
+  updateScore();
+}
+
+function handleMatchClick(el, side){
+  if(el.classList.contains('matched')) return;
+  if(side==='ar'){ if(selAr){ selAr.classList.remove('selected'); } selAr=el; el.classList.add('selected'); }
+  else { if(selEn){ selEn.classList.remove('selected'); } selEn=el; el.classList.add('selected'); }
+  if(selAr && selEn){
+    if(selAr.dataset.key === selEn.dataset.key){
+      selAr.classList.remove('selected'); selEn.classList.remove('selected');
+      selAr.classList.add('matched'); selEn.classList.add('matched');
+      score++; chime('ok'); updateScore();
+    } else {
+      selAr.classList.add('error'); selEn.classList.add('error');
+      setTimeout(()=>{ selAr.classList.remove('selected','error'); selEn.classList.remove('selected','error'); selAr=null; selEn=null; }, 700);
+      chime('err'); return;
+    }
+    selAr=null; selEn=null;
+  }
+}
+
+/* ============= FILL IN BLANKS ============= */
+function renderFill(){
+  const container = document.getElementById('fillContainer');
+  container.innerHTML = '';
+  FILL.forEach((f,i)=>{
+    const div = document.createElement('div');
+    div.className = 'fill-card';
+    div.innerHTML = `<div class="fill-q arabic" style="direction:rtl;text-align:right;font-size:22px">${f.parts[0]}<input type="text" id="fill-${i}" class="arabic" style="font-size:22px;width:160px">${f.parts[1]}</div>`;
+    container.appendChild(div);
+    maxScore++;
+  });
+  updateScore();
+}
+
+document.getElementById('checkFill').addEventListener('click', ()=>{
+  FILL.forEach((f,i)=>{
+    const inp = document.getElementById('fill-'+i);
+    if(!inp.classList.contains('correct') && !inp.classList.contains('wrong')){
+      const val = inp.value.trim();
+      if(val === f.a){ inp.classList.add('correct'); score++; chime('ok'); }
+      else { inp.classList.add('wrong'); chime('err'); }
+      updateScore();
+    }
+  });
+});
+
+/* ============= ORDER ============= */
+let dragSrc = null;
+function renderOrder(){
+  const ol = document.getElementById('orderList');
+  ol.innerHTML = '';
+  const order = getOrder();
+  const shuffled = [...order].sort(()=>Math.random()-.5);
+  maxScore++;
+  shuffled.forEach(item=>{
+    const div = document.createElement('div');
+    div.className = 'order-item';
+    div.draggable = true;
+    div.dataset.val = item;
+    div.innerHTML = `<span class="order-handle">⠿</span>${item}`;
+    div.addEventListener('dragstart', ()=>{ dragSrc=div; div.classList.add('dragging'); });
+    div.addEventListener('dragend', ()=>div.classList.remove('dragging'));
+    div.addEventListener('dragover', e=>e.preventDefault());
+    div.addEventListener('drop', ()=>{
+      if(dragSrc && dragSrc!==div){
+        const items=[...ol.children];
+        const si=items.indexOf(dragSrc), di=items.indexOf(div);
+        if(si<di) ol.insertBefore(dragSrc, div.nextSibling); else ol.insertBefore(dragSrc, div);
+      }
+    });
+    ol.appendChild(div);
+  });
+  updateScore();
+}
+
+document.getElementById('checkOrder').addEventListener('click', ()=>{
+  const ol = document.getElementById('orderList');
+  const order = getOrder();
+  const items = [...ol.children].map(x=>x.dataset.val);
+  const correct = items.every((v,i)=>v===order[i]);
+  if(correct){ score++; chime('ok'); toast(currentLang==='ar'?'ترتيب صحيح! 🎉':'Correct order! 🎉','success'); }
+  else { chime('err'); toast(currentLang==='ar'?'ترتيب خاطئ — حاول مجدداً':'Wrong order — try again','error'); }
+  updateScore();
+});
+
+document.getElementById('resetQuiz').addEventListener('click', ()=>{
+  score=0; maxScore=0;
+  renderMCQ(); selAr=null; selEn=null; renderMatch();
+  renderFill(); renderOrder();
+  chime('flip');
+});
+
+document.getElementById('flipAll').addEventListener('click', ()=>{
+  const allFlipped = [...document.querySelectorAll('.flip')].every(c=>c.classList.contains('flipped'));
+  document.querySelectorAll('.flip').forEach(c=>{ allFlipped?c.classList.remove('flipped'):c.classList.add('flipped'); });
+  chime('flip');
+});
+
+document.getElementById('resetCards').addEventListener('click', ()=>{
+  document.querySelectorAll('.flip').forEach(c=>c.classList.remove('flipped'));
+  chime('flip');
+});
+
+/* ============= i18n ============= */
+const langToggle = document.getElementById('langToggle');
+const langLabel = document.getElementById('langLabel');
+
+function applyI18N(lang){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(I18N[key]) el.innerHTML = I18N[key][lang] || el.innerHTML;
+  });
+  const nameInput = document.getElementById('studentName');
+  if(nameInput){
+    nameInput.placeholder = lang==='ar' ? nameInput.dataset.placeholderAr : nameInput.dataset.placeholderEn;
+  }
+  document.querySelectorAll('textarea[data-placeholder-ar]').forEach(t=>{
+    t.placeholder = lang==='ar' ? t.dataset.placeholderAr : t.dataset.placeholderEn;
+  });
+}
+
+function setLanguage(lang){
+  currentLang = lang;
+  const html = document.documentElement;
+  if(lang === 'ar'){
+    html.setAttribute('lang','ar');
+    html.setAttribute('dir','rtl');
+    document.body.setAttribute('dir','rtl');
+    langLabel.textContent = 'English';
+  } else {
+    html.setAttribute('lang','en');
+    html.setAttribute('dir','ltr');
+    document.body.setAttribute('dir','ltr');
+    langLabel.textContent = 'العربية';
+  }
+  applyI18N(lang);
+  score = 0; maxScore = 0;
+  renderFlashcards();
+  renderStory();
+  renderCharacters();
+  renderVocab();
+  renderLessons();
+  renderMCQ();
+  renderMatch();
+  renderFill();
+  renderOrder();
+}
+
+langToggle.addEventListener('click', ()=>{
+  setLanguage(currentLang === 'en' ? 'ar' : 'en');
+  chime('flip');
+});
+
+/* ============= WHATSAPP EXPORT ============= */
+document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  let text = '';
+  text += '📖 *سورة الصف — مذكرة تدبري للقرآن*\n';
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `👤 *اسم الطالب:* ${studentName}\n`;
+  text += `📅 *التاريخ:* ${dateStr}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  const q4 = document.getElementById('mudh-q4').value.trim();
+
+  text += '*أولاً: المحور العام (الفهم والتدبر)*\n\n';
+  text += '❓ *ما خلاصة الآيات في رأيك بأسلوبك البسيط؟*\n';
+  text += (q1 || '(لم يُجب)') + '\n\n';
+  text += '❓ *ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟*\n';
+  text += (q2 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثانياً: المحور الوجداني والشخصي*\n\n';
+  text += '❓ *هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟*\n';
+  text += (q3 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثالثاً: المحور التطبيقي*\n\n';
+  text += '❓ *حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.*\n';
+  text += (q4 || '(لم يُجب)') + '\n\n';
+
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `📊 *النتيجة في التمارين:* ${score} / ${maxScore}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+
+  const encoded = encodeURIComponent(text);
+  window.open('https://wa.me/?text=' + encoded, '_blank');
+});
+
+/* ============= PDF EXPORT ============= */
+document.getElementById('btnPDF').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  const container = document.getElementById('pdfContainer');
+  container.style.direction = 'rtl';
+
+  let html = '';
+  html += '<h1 style="text-align:center;font-family:Amiri,serif">📖 سورة الصف — بوابة تعليمية تفاعلية</h1>';
+  html += `<div class="pdf-meta">👤 اسم الطالب: <strong>${studentName}</strong> &nbsp;|&nbsp; 📅 التاريخ: ${dateStr}</div>`;
+
+  html += '<h2 style="font-family:Amiri,serif">نص السورة الكريمة</h2>';
+  html += '<div class="arabic-block" style="font-family:\'Amiri\',Amiri,serif">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
+  AYAT.forEach(a=>{
+    html += `<div class="arabic-block" style="font-family:'Amiri',Amiri,serif;font-size:18px">${a.ar} ﴿${a.n}﴾</div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">الشرح والتفسير</h2>';
+  AYAT.forEach(a=>{
+    const tr = typeof a.tr==='object'?a.tr.ar:a.tr;
+    const tf = typeof a.tafsir==='object'?a.tafsir.ar:a.tafsir;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">الآية ${a.n}</h3>`;
+    html += `<p><em>${tr}</em></p>`;
+    html += `<p>${tf}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">القصة — سورة الصف ومكانتها</h2>';
+  STORY.forEach((s,i)=>{
+    const title = typeof s.t==='object'?s.t.ar:s.t;
+    const desc = typeof s.d==='object'?s.d.ar:s.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${i+1}. ${title}</h3><p>${desc}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">المفردات</h2>';
+  html += '<table><tr><th style="font-family:Amiri,serif">الكلمة</th><th>المعنى</th><th>ملاحظات</th></tr>';
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m.ar:v.m;
+    const n = typeof v.n==='object'?v.n.ar:v.n;
+    html += `<tr><td style="font-family:Amiri,serif;font-size:16px">${v.ar}</td><td>${m}</td><td>${n}</td></tr>`;
+  });
+  html += '</table>';
+
+  html += '<h2 style="font-family:Amiri,serif">الدروس المستفادة</h2>';
+  LESSONS.forEach(l=>{
+    const t = typeof l.t==='object'?l.t.ar:l.t;
+    const d = typeof l.d==='object'?l.d.ar:l.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${l.ic} ${t}</h3><p>${d}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">📝 مذكرة تدبري للقرآن</h2>';
+  html += '<h3 style="font-family:Amiri,serif">أولاً: المحور العام (الفهم والتدبر)</h3>';
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  html += `<div class="pdf-qa"><label>ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</label><div class="answer">${q1||'(لم يُجب)'}</div></div>`;
+  html += `<div class="pdf-qa"><label>ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</label><div class="answer">${q2||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثانياً: المحور الوجداني والشخصي</h3>';
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  html += `<div class="pdf-qa"><label>هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</label><div class="answer">${q3||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثالثاً: المحور التطبيقي</h3>';
+  const q4 = document.getElementById('mudh-q4').value.trim();
+  html += `<div class="pdf-qa"><label>حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</label><div class="answer">${q4||'(لم يُجب)'}</div></div>`;
+
+  html += `<div style="text-align:center;margin-top:20px;font-size:16px;font-weight:700">📊 النتيجة في التمارين: ${score} / ${maxScore}</div>`;
+
+  container.innerHTML = html;
+
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     `سورة_الصف_${studentName}_${now.toISOString().slice(0,10)}.pdf`,
+    image:        { type: 'jpeg', quality: 0.95 },
+    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['avoid-all','css','legacy'] }
+  };
+
+  toast(currentLang==='ar'?'جاري إنشاء الملف...':'Generating PDF...','');
+
+  html2pdf().set(opt).from(container).save().then(()=>{
+    toast(currentLang==='ar'?'تم تحميل الملف بنجاح!':'PDF downloaded!','success');
+    chime('ok');
+  }).catch(()=>{
+    toast(currentLang==='ar'?'حدث خطأ في إنشاء الملف':'PDF generation failed','error');
+    chime('err');
+  });
+});
+
+/* ============= INITIAL RENDER ============= */
+
+/* === Verse-card word meanings: synchronized verbatim with VOCAB table === */
+(function(){
+  if(typeof AYAT==='undefined' || typeof VOCAB==='undefined') return;
+  function norm(s){
+    if(!s) return '';
+    return String(s)
+      .normalize('NFD')
+      .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g,'')
+      .replace(/[\u0622\u0623\u0625\u0671]/g,'\u0627')
+      .replace(/\u0649/g,'\u064A')
+      .replace(/\u0629/g,'\u0647')
+      .replace(/\s+/g,'')
+      .trim();
+  }
+  const vmap = {};
+  VOCAB.forEach(v=>{
+    if(!v || !v.ar) return;
+    const key = norm(v.ar);
+    if(!key) return;
+    vmap[key] = v.m;
+    String(v.ar).split(/\s+/).forEach(tok=>{
+      const k = norm(tok);
+      if(k && !vmap[k]) vmap[k] = v.m;
+    });
+  });
+  AYAT.forEach(a=>{
+    const matched = [];
+    (a.words||[]).forEach(w=>{
+      const k = norm(w.ar);
+      if(vmap[k]){
+        matched.push({ar:w.ar, en:vmap[k]});
+      }
+    });
+    a.words = matched.length ? matched : a.words;
+  });
+})();
+
+/* Initial language application so translations appear immediately on first load */
+applyI18N(currentLang);
+
+renderFlashcards();
+renderStory();
+renderCharacters();
+renderVocab();
+renderLessons();
+renderMCQ();
+renderMatch();
+renderFill();
+renderOrder();
+
+
+/* === Mushaf flipbook controller === */
+(function(){
+  const book = document.getElementById('mushafBook');
+  if(!book) return;
+  const stage = document.getElementById('mushafStage');
+  const idxEl = document.getElementById('mushafIdx');
+  const totalEl = document.getElementById('mushafTotal');
+  const btnPrev = document.getElementById('mushafPrev');
+  const btnNext = document.getElementById('mushafNext');
+
+  const SURA_NAME_AR = window.__MUSHAF_SURA_NAME_AR || 'السورة';
+  const JUZ_LABEL    = window.__MUSHAF_JUZ_LABEL    || '';
+  const SHOW_BISMILLAH_ON_FIRST = window.__MUSHAF_BISMILLAH !== false;
+  const AYAT_M = window.__MUSHAF_AYAT || [];
+  const PAGE_LABELS = window.__MUSHAF_PAGE_LABELS || null;
+
+  function arDigits(n){
+    const map = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    return String(n).split('').map(d=> map[+d] ?? d).join('');
+  }
+
+  // Page boundaries for Surah As-Saff (14 verses) — 2 pages: 1–7 and 8–14.
+  //   Page 1 -> ayat 1 - 5
+  //   Page 2 -> ayat 6 - 12
+  const PAGE_BREAKS = [7];
+  const groups = [];
+  let pageGroup = [];
+  AYAT_M.forEach((t, i) => {
+    const ayahNum = i + 1;
+    pageGroup.push({ n: ayahNum, t });
+    if (PAGE_BREAKS.includes(ayahNum) || ayahNum === AYAT_M.length) {
+      groups.push(pageGroup);
+      pageGroup = [];
+    }
+  });
+  if (pageGroup.length) groups.push(pageGroup);
+  groups.forEach((grp, pi)=>{
+    const pg = document.createElement('div');
+    pg.className = 'mushaf-page';
+    pg.dataset.page = pi;
+
+    const isFirst = pi===0;
+    const ayatHtml = grp.map(a =>
+      `<span class="ayah">${a.t} </span>` +
+      `<span class="ayah-end" aria-label="آية ${a.n}"><span>${arDigits(a.n)}</span></span> `
+    ).join('');
+
+    const labelTxt = PAGE_LABELS && PAGE_LABELS[pi]
+      ? `صفحة ${PAGE_LABELS[pi]} — ${SURA_NAME_AR}`
+      : `صفحة ${arDigits(pi+1)} من ${arDigits(groups.length)} — ${SURA_NAME_AR}`;
+
+    pg.innerHTML = `
+      <div class="mushaf-frame">
+        <div class="mushaf-head">
+          <span class="surah-name">${SURA_NAME_AR}</span>
+          <span class="juz">${JUZ_LABEL}</span>
+        </div>
+        ${isFirst && SHOW_BISMILLAH_ON_FIRST ? '<div class="mushaf-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>' : ''}
+        <div class="mushaf-text">${ayatHtml}</div>
+        <div class="mushaf-foot">${labelTxt}</div>
+      </div>`;
+    stage.appendChild(pg);
+  });
+
+
+  function fitMushafText(){
+    const isSmall = window.matchMedia && window.matchMedia('(max-width:600px)').matches;
+    pages.forEach(pg => {
+      const text = pg.querySelector('.mushaf-text');
+      if(!text) return;
+      const maxSize = isSmall ? 36 : 50;
+      const minSize = isSmall ? 18 : 22;
+      let size = isSmall ? 26 : 34;
+      let lineHeight = 2.0;
+      text.style.fontSize = size + 'px';
+      text.style.lineHeight = String(lineHeight);
+      text.style.paddingBottom = isSmall ? '16px' : '20px';
+
+      for(let i=0;i<54;i++){
+        const available = text.clientHeight;
+        const used = text.scrollHeight;
+        if(!available) break;
+        if(used > available - 8 && size > minSize){
+          size -= 0.5;
+          if(lineHeight > 2.0) lineHeight -= 0.025;
+          text.style.fontSize = size + 'px';
+          text.style.lineHeight = String(lineHeight);
+        } else if(used < available * 0.92 && size < maxSize){
+          size += 0.5;
+          if(lineHeight < 2.45) lineHeight += 0.02;
+          text.style.fontSize = size + 'px';
+          text.style.lineHeight = String(lineHeight);
+        } else if(used < available * 0.97 && lineHeight < 2.5){
+          lineHeight += 0.02;
+          text.style.lineHeight = String(lineHeight);
+        } else {
+          break;
+        }
+      }
+      while(text.scrollHeight > text.clientHeight - 10 && size > minSize){
+        size -= 0.5;
+        text.style.fontSize = size + 'px';
+      }
+    });
+  }
+
+  const pages = [...stage.querySelectorAll('.mushaf-page')];
+  fitMushafText();
+  fitMushafText();
+  let mushafResizeTimer;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(mushafResizeTimer);
+    mushafResizeTimer = setTimeout(()=>{ fitMushafText(); }, 120);
+  });
+  if(totalEl) totalEl.textContent = arDigits(pages.length);
+  let curPage = 0;
+
+  function render(){
+    pages.forEach((p,i)=>{
+      p.classList.remove('is-top','is-under','is-hidden','flipped','dragging');
+      p.style.transform = '';
+      p.style.boxShadow = '';
+      if(i < curPage){ p.classList.add('flipped','is-under'); }
+      else if(i === curPage){ p.classList.add('is-top'); }
+      else if(i === curPage+1){ p.classList.add('is-under'); }
+      else { p.classList.add('is-hidden'); }
+    });
+    if(idxEl) idxEl.textContent = arDigits(curPage+1);
+    if(btnPrev) btnPrev.disabled = curPage===0;
+    if(btnNext) btnNext.disabled = curPage>=pages.length-1;
+  }
+  render();
+
+  function goNext(){
+    if(curPage >= pages.length-1) return;
+    const top = pages[curPage];
+    top.style.transition = 'transform .7s cubic-bezier(.4,.05,.2,1), box-shadow .7s ease';
+    top.style.transform = 'rotateY(-180deg)';
+    top.style.boxShadow = '-22px 0 50px -10px rgba(0,0,0,.35)';
+    setTimeout(()=>{ curPage++; render(); }, 700);
+  }
+  function goPrev(){
+    if(curPage <= 0) return;
+    const prev = pages[curPage-1];
+    prev.classList.remove('is-hidden','is-under','flipped');
+    prev.classList.add('is-top');
+    prev.style.transition = 'none';
+    prev.style.transform = 'rotateY(-180deg)';
+    prev.style.boxShadow = '-22px 0 50px -10px rgba(0,0,0,.35)';
+    pages[curPage].classList.remove('is-top'); pages[curPage].classList.add('is-under');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      prev.style.transition = 'transform .7s cubic-bezier(.4,.05,.2,1), box-shadow .7s ease';
+      prev.style.transform = 'rotateY(0deg)';
+      prev.style.boxShadow = '';
+    }));
+    setTimeout(()=>{ curPage--; render(); }, 720);
+  }
+
+  if(btnNext) btnNext.addEventListener('click', goNext);
+  if(btnPrev) btnPrev.addEventListener('click', goPrev);
+
+  let drag = null;
+  function onDown(e){
+    if(e.target.closest('button,a,.mushaf-text')) return;
+    const top = pages[curPage];
+    if(!top) return;
+    const rect = stage.getBoundingClientRect();
+    drag = { x0:e.clientX, y0:e.clientY, w:rect.width, page:top, moved:false, dir:0 };
+    try{ top.setPointerCapture && top.setPointerCapture(e.pointerId); }catch(_){}
+  }
+  function onMove(e){
+    if(!drag) return;
+    const dx = e.clientX - drag.x0;
+    const dy = e.clientY - drag.y0;
+    if(!drag.moved){
+      if(Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      if(Math.abs(dy) > Math.abs(dx)*1.4){ drag = null; return; }
+      drag.moved = true;
+      drag.page.classList.add('dragging');
+    }
+    const ratio = Math.max(-1, Math.min(1, dx / (drag.w * 0.7)));
+    if(dx < 0){
+      if(curPage >= pages.length-1){ return; }
+      const ang = ratio * 180;
+      drag.page.style.transform = `rotateY(${ang}deg)`;
+      drag.page.style.boxShadow = `${ang*0.15}px 0 50px -10px rgba(0,0,0,.35)`;
+      drag.dir = +1;
+    } else {
+      if(curPage <= 0){ return; }
+      const prev = pages[curPage-1];
+      prev.classList.remove('is-hidden','is-under','flipped');
+      prev.classList.add('is-top','dragging');
+      drag.page.classList.remove('is-top'); drag.page.classList.add('is-under');
+      const ang = 180 - ratio*180;
+      prev.style.transform = `rotateY(-${ang}deg)`;
+      prev.style.boxShadow = `-${ang*0.15}px 0 50px -10px rgba(0,0,0,.35)`;
+      drag.prevPage = prev;
+      drag.dir = -1;
+    }
+  }
+  function onUp(e){
+    if(!drag) return;
+    const dx = e.clientX - drag.x0;
+    const threshold = drag.w * 0.18;
+    const passed = Math.abs(dx) > threshold;
+    const wasDir = drag.dir;
+    const page = drag.page;
+    const prevPage = drag.prevPage;
+    drag = null;
+    page.classList.remove('dragging');
+    if(prevPage) prevPage.classList.remove('dragging');
+
+    if(wasDir === +1 && passed && curPage < pages.length-1){
+      page.style.transition = 'transform .35s ease-out, box-shadow .35s ease-out';
+      page.style.transform = 'rotateY(-180deg)';
+      setTimeout(()=>{ curPage++; render(); }, 360);
+    } else if(wasDir === -1 && passed && curPage > 0){
+      prevPage.style.transition = 'transform .35s ease-out, box-shadow .35s ease-out';
+      prevPage.style.transform = 'rotateY(0deg)';
+      prevPage.style.boxShadow = '';
+      setTimeout(()=>{ curPage--; render(); }, 360);
+    } else {
+      if(wasDir === +1){
+        page.style.transition = 'transform .35s ease-out, box-shadow .35s ease-out';
+        page.style.transform = 'rotateY(0deg)';
+        page.style.boxShadow = '';
+      } else if(wasDir === -1 && prevPage){
+        prevPage.style.transition = 'transform .35s ease-out, box-shadow .35s ease-out';
+        prevPage.style.transform = 'rotateY(-180deg)';
+        setTimeout(()=>{ render(); }, 360);
+      }
+    }
+  }
+  stage.addEventListener('pointerdown', onDown);
+  stage.addEventListener('pointermove', onMove);
+  stage.addEventListener('pointerup', onUp);
+  stage.addEventListener('pointercancel', onUp);
+
+  document.addEventListener('keydown', e=>{
+    const intro = document.getElementById('panel-intro');
+    if(!intro || !intro.classList.contains('active')) return;
+    if(e.key==='ArrowLeft') goNext();
+    else if(e.key==='ArrowRight') goPrev();
+  });
+})();
+</script>
+</body>
+</html>

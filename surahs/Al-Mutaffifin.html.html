@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Surah Al-Mutaffifeen — Interactive Learning Portal</title>
+<meta name="description" content="An interactive educational portal for Surah Al-Mutaffifeen (Chapter 83) — The Defrauders. Tafseer, Tadabbur, flashcards, vocabulary, and exercises for young learners." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f3ea;
+    --bg-2:#fbf8f1;
+    --paper:#ffffff;
+    --ink:#1f2330;
+    --ink-soft:#4a5063;
+    --muted:#8a8f9e;
+    --line:#e5dccb;
+    --gold:#b08833;
+    --gold-2:#d4a84a;
+    --teal:#0f6b6b;
+    --teal-soft:#e6f1f1;
+    --rose:#b04646;
+    --rose-soft:#fbe9e7;
+    --green:#2f7d4f;
+    --green-soft:#e6f4ec;
+    --indigo:#3b3f8c;
+    --indigo-soft:#ecedfb;
+    --shadow: 0 10px 30px -12px rgba(60,40,10,.18);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden;width:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 10% -10%, #fff7e0 0%, transparent 60%),
+      radial-gradient(900px 600px at 110% 20%, #eaf6f3 0%, transparent 60%),
+      var(--bg);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    max-width:100vw;
+  }
+  body[dir="rtl"]{
+    font-family:'Amiri','Inter',system-ui,sans-serif;
+  }
+  .arabic{font-family:'Amiri Quran','Amiri',serif; direction:rtl;}
+  .display{font-family:'Playfair Display',serif;}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;
+    border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.6);
+    backdrop-filter: blur(8px);
+    position:sticky;top:0;z-index:20;
+    flex-wrap:wrap;gap:12px;
+    max-width:100vw;
+    overflow:hidden;
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .crest{
+    width:46px;height:46px;border-radius:14px;
+    background:linear-gradient(135deg,var(--teal) 0%,#1a9e9e 100%);
+    display:grid;place-items:center;color:#fff;font-weight:800;
+    box-shadow:var(--shadow);
+  }
+  .brand h1{margin:0;font-size:18px;letter-spacing:.2px}
+  .brand p{margin:0;color:var(--muted);font-size:12px}
+  .meta{display:flex;gap:10px;align-items:center;color:var(--ink-soft);font-size:13px;flex-wrap:wrap}
+  .pill{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff}
+
+  /* Language Toggle */
+  .lang-toggle{
+    cursor:pointer;
+    padding:8px 16px;
+    border-radius:999px;
+    border:2px solid var(--gold);
+    background:linear-gradient(135deg,#fffaf0,#fff);
+    color:var(--gold);
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;gap:8px;
+    transition:all .3s ease;
+    user-select:none;
+  }
+  .lang-toggle:hover{
+    background:linear-gradient(135deg,var(--gold),var(--gold-2));
+    color:#fff;
+    box-shadow:0 4px 14px rgba(176,136,51,.35);
+  }
+  .lang-toggle .globe{font-size:18px}
+
+  /* ===== Tabs ===== */
+  .wrap{max-width:1280px;margin:24px auto;padding:0 22px;overflow-x:hidden;width:100%;}
+  .tabs{
+    display:flex;flex-wrap:wrap;gap:8px;
+    background:#fff;padding:8px;border-radius:16px;border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .tab{
+    flex:1 1 auto;min-width:110px;
+    padding:12px 14px;border-radius:12px;cursor:pointer;
+    text-align:center;font-weight:600;color:var(--ink-soft);
+    border:1px solid transparent;
+    transition:all .25s ease;user-select:none;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:13px;
+  }
+  .tab .ic{font-size:18px}
+  .tab:hover{background:#faf6ee;color:var(--ink)}
+  .tab.active{
+    background:linear-gradient(135deg,#1f2330,#2a3144);
+    color:#fff;box-shadow:0 8px 18px -8px rgba(31,35,48,.45);
+  }
+
+  .panel{display:none;animation:fade .35s ease both;margin-top:22px}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);
+    max-width:100%;overflow-x:auto;
+  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+  h2.section{font-family:'Playfair Display',serif;font-size:28px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 18px}
+
+  /* ===== Intro / Hero ===== */
+  .hero{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:22px;
+    max-width:100%;overflow:hidden;
+  }
+  @media(max-width:900px){.hero{grid-template-columns:1fr}}
+  .hero-card{
+    background:
+      radial-gradient(600px 300px at 100% 0%, #e0f0ff 0%, transparent 60%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    border:1px solid var(--line);border-radius:var(--radius);padding:28px;
+    box-shadow:var(--shadow);
+  }
+  .kicker{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:12px;letter-spacing:.6px}
+  .hero h2{font-family:'Playfair Display',serif;font-size:38px;margin:14px 0 6px;line-height:1.1}
+  .hero p.lead{font-size:15px;color:var(--ink-soft);line-height:1.7}
+  .quick-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .fact{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .fact .lbl{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .fact .val{font-weight:700;margin-top:4px}
+
+  .side-card{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow);
+    max-height:600px;overflow-y:auto;
+    max-width:100%;overflow-x:hidden;
+    word-wrap:break-word;
+  }
+  .side-card .arabic{font-size:26px;line-height:2.2;text-align:center;color:#2a2f44}
+  .bismillah{font-size:30px;text-align:center;color:var(--gold);margin-bottom:10px}
+
+  /* scrollbar for side-card */
+  .side-card::-webkit-scrollbar{width:6px}
+  .side-card::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  /* ===== Flashcards ===== */
+  .deck-controls{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+  .btn{
+    cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:10px 16px;border-radius:10px;font-weight:600;transition:all .2s;
+    display:inline-flex;align-items:center;gap:8px;font-size:14px;
+    font-family:inherit;
+  }
+  .btn:hover{background:#faf6ee;border-color:var(--gold)}
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn.primary:hover{background:#2a3144}
+  .btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#fff;border-color:transparent}
+  .btn.teal-btn{background:linear-gradient(135deg,var(--teal),#1a9e9e);color:#fff;border-color:transparent}
+  .btn.teal-btn:hover{box-shadow:0 4px 16px rgba(15,107,107,.35)}
+  .btn.whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border-color:transparent}
+  .btn.whatsapp:hover{box-shadow:0 4px 16px rgba(37,211,102,.4)}
+  .btn.pdf-btn{background:linear-gradient(135deg,var(--rose),#d85050);color:#fff;border-color:transparent}
+  .btn.pdf-btn:hover{box-shadow:0 4px 16px rgba(176,70,70,.35)}
+
+  .deck{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:18px;
+  }
+  .flip{
+    perspective:1400px;height:360px;cursor:pointer;
+  }
+  .flip-inner{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .flip.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;border-radius:var(--radius);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border:1px solid var(--line);box-shadow:var(--shadow);
+    padding:18px;display:flex;flex-direction:column;
+  }
+  .face.front{
+    background:
+      radial-gradient(400px 200px at 100% 0%, #e0f0ff 0%, transparent 70%),
+      linear-gradient(180deg,#f0f7ff,#fff);
+    align-items:center;justify-content:space-between;
+  }
+  .face.back{
+    background:#fffdf8;
+    transform:rotateY(180deg);
+    overflow-y:auto;
+  }
+  .ayah-num{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-weight:800;display:grid;place-items:center;
+    box-shadow:var(--shadow);font-size:14px;
+  }
+  .ayah-ar{
+    font-family:'Amiri Quran',serif;direction:rtl;
+    font-size:26px;line-height:2;text-align:center;color:#2a2f44;
+    flex:1;display:flex;align-items:center;justify-content:center;padding:0 6px;
+  }
+  .flip-hint{font-size:11px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .back h4{margin:0 0 4px;font-family:'Playfair Display',serif;font-size:16px;color:var(--teal)}
+  .back .trans{font-size:13px;color:var(--ink-soft);line-height:1.6;font-style:italic;margin:0 0 10px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+  .back .tafsir{font-size:13px;color:var(--ink);line-height:1.6;margin:0 0 10px}
+  .words{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .word{
+    background:var(--teal-soft);color:var(--teal);
+    padding:4px 8px;border-radius:8px;font-size:12px;font-weight:600;
+    display:inline-flex;flex-direction:column;align-items:center;gap:2px;
+  }
+  .word .ar{font-family:'Amiri',serif;font-size:14px}
+  .word .en{font-size:10px;color:var(--ink-soft);font-weight:500}
+
+  /* ===== Story timeline ===== */
+  .story-list{display:grid;gap:14px}
+  .story-item{
+    display:grid;grid-template-columns:60px 1fr;gap:16px;
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow);transition:all .25s;
+  }
+  .story-item:hover{transform:translateY(-2px);border-color:var(--teal)}
+  .step-no{
+    width:48px;height:48px;border-radius:14px;background:var(--indigo-soft);color:var(--indigo);
+    display:grid;place-items:center;font-weight:800;font-size:20px;
+  }
+  .story-item h3{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:20px}
+  .story-item p{margin:0;color:var(--ink-soft);line-height:1.7;font-size:14px}
+  .badge-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .badge{font-size:11px;padding:4px 10px;border-radius:999px;background:#f3eee2;color:var(--ink-soft);font-weight:600}
+
+  /* ===== Characters ===== */
+  .char-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .char-card h3{margin:6px 0 4px;font-family:'Playfair Display',serif}
+  .char-emoji{font-size:36px}
+  .char-card .role{color:var(--teal);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+  .char-card p{color:var(--ink-soft);font-size:13px;line-height:1.6}
+
+  /* ===== Lessons (Tadabbur) ===== */
+  .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .lesson{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .lesson::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--teal),#1a9e9e)}
+  body[dir="rtl"] .lesson::before{left:auto;right:0}
+  .lesson .ic{font-size:28px;margin-bottom:8px}
+  .lesson h4{margin:0 0 6px;font-family:'Playfair Display',serif;font-size:18px}
+  .lesson p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+  /* ===== Vocabulary ===== */
+  .vocab-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow)}
+  .vocab-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:500px}
+  .vocab-table th, .vocab-table td{padding:14px 16px;text-align:start;border-bottom:1px solid var(--line)}
+  .vocab-table th{background:#faf6ee;font-weight:700;font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.5px}
+  .vocab-table tr:last-child td{border-bottom:none}
+  .vocab-table tr:hover{background:#fbf8f1}
+  .vocab-ar{font-family:'Amiri',serif;font-size:22px;color:#2a2f44;direction:rtl;text-align:right}
+  .vocab-tl-col{font-style:italic;color:var(--ink-soft);font-size:14px;white-space:nowrap}
+  body[dir="rtl"] .vocab-tl-col{display:none}
+
+  /* ===== Exercises ===== */
+  .quiz-section{margin-bottom:22px}
+  .quiz-section h3{font-family:'Playfair Display',serif;margin:0 0 4px}
+  .quiz-section .desc{color:var(--muted);margin:0 0 14px;font-size:13px}
+
+  .mcq{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .mcq .q{font-weight:700;margin:0 0 12px;font-size:15px}
+  .mcq .opts{display:grid;gap:8px}
+  .opt{
+    padding:12px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;
+    transition:all .2s;background:#fff;font-size:14px;
+  }
+  .opt:hover{background:#faf6ee;border-color:var(--gold)}
+  .opt.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600}
+  .opt.wrong{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);font-weight:600}
+  .feedback{margin-top:10px;font-size:13px;color:var(--ink-soft);display:none}
+  .feedback.show{display:block}
+
+  /* Matching */
+  .match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:100%}
+  @media(max-width:700px){.match-wrap{grid-template-columns:1fr}}
+  .match-col h4{margin:0 0 8px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .match-item{
+    padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:14px;
+    user-select:none;
+  }
+  .match-item:hover{border-color:var(--gold)}
+  .match-item.selected{background:var(--teal-soft);border-color:var(--teal);color:var(--teal);font-weight:600}
+  .match-item.matched{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600;cursor:default;pointer-events:none}
+  .match-item.error{background:var(--rose-soft);border-color:var(--rose)}
+  .match-ar{font-family:'Amiri',serif;font-size:20px;direction:rtl;text-align:right}
+
+  /* Order */
+  .order-list{display:grid;gap:8px;margin-bottom:12px}
+  .order-item{
+    padding:14px;background:#fff;border:1px solid var(--line);border-radius:10px;
+    cursor:grab;font-size:14px;display:flex;align-items:center;gap:12px;
+    transition:all .2s;
+  }
+  .order-item:hover{border-color:var(--gold)}
+  .order-item.dragging{opacity:.5}
+  .order-handle{color:var(--muted);font-size:18px}
+
+  /* Fill blanks */
+  .fill-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .fill-q{font-size:15px;line-height:1.9;margin-bottom:10px}
+  .fill-q input{
+    border:none;border-bottom:2px dashed var(--gold);background:transparent;
+    padding:4px 8px;font-size:15px;width:140px;text-align:center;font-family:inherit;
+    color:var(--ink);outline:none;
+  }
+  .fill-q input:focus{border-color:var(--teal)}
+  .fill-q input.correct{color:var(--green);border-color:var(--green);border-style:solid}
+  .fill-q input.wrong{color:var(--rose);border-color:var(--rose);border-style:solid}
+
+  /* Score */
+  .score-bar{
+    position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);
+    padding:14px 22px;display:flex;justify-content:space-between;align-items:center;
+    margin:30px -24px -24px;border-radius:0 0 var(--radius) var(--radius);
+    flex-wrap:wrap;gap:10px;
+  }
+  .score-bar .lbl{color:var(--muted);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+  .score-bar .v{font-size:24px;font-weight:800;color:var(--teal)}
+
+  /* ===== Mudhakkirah Tab ===== */
+  .mudhakkirah-section{margin-bottom:28px}
+  .mudhakkirah-section h3{
+    font-family:'Playfair Display','Amiri',serif;
+    font-size:22px;margin:0 0 6px;
+    color:var(--teal);
+    display:flex;align-items:center;gap:10px;
+  }
+  .mudhakkirah-section h3 .num-badge{
+    width:32px;height:32px;border-radius:10px;
+    background:linear-gradient(135deg,var(--teal),#1a9e9e);
+    color:#fff;font-size:14px;font-weight:800;
+    display:grid;place-items:center;flex-shrink:0;
+  }
+  .mudhakkirah-question{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;box-shadow:var(--shadow);margin-bottom:14px;
+    position:relative;overflow:hidden;
+  }
+  .mudhakkirah-question::before{
+    content:"";position:absolute;top:0;right:0;bottom:0;width:5px;
+    background:linear-gradient(180deg,var(--teal),#1a9e9e);
+  }
+  body:not([dir="rtl"]) .mudhakkirah-question::before{right:auto;left:0}
+  .mudhakkirah-question label{
+    display:block;font-weight:700;font-size:15px;margin-bottom:10px;
+    color:var(--ink);line-height:1.6;
+  }
+  .mudhakkirah-question label .q-icon{margin-inline-end:8px;font-size:18px}
+  .mudhakkirah-question textarea{
+    width:100%;min-height:120px;
+    border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-size:14px;font-family:'Amiri','Inter',serif;
+    color:var(--ink);background:#faf9f6;
+    outline:none;resize:vertical;line-height:1.8;
+    direction:rtl;text-align:right;
+  }
+  .mudhakkirah-question textarea:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(15,107,107,.12);
+  }
+  .mudhakkirah-question textarea::placeholder{
+    color:var(--muted);font-style:italic;
+  }
+
+  /* ===== Export Bar ===== */
+  .export-bar{
+    display:flex;gap:12px;align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#f0f7ff,#f0f4eb);
+    border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-top:24px;
+    flex-wrap:wrap;
+  }
+  .export-bar .export-title{
+    font-weight:700;font-size:14px;color:var(--ink);
+    margin-inline-end:auto;display:flex;align-items:center;gap:8px;
+  }
+
+  /* Footer */
+  .footer{
+    text-align:center;color:var(--muted);font-size:12px;padding:30px 0 20px;
+  }
+
+  /* Scrollbar */
+  .face.back::-webkit-scrollbar{width:6px}
+  .face.back::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;right:auto;transform:translateX(-50%);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:10px;
+    font-size:14px;font-weight:600;opacity:0;transition:all .3s;
+    box-shadow:var(--shadow);z-index:50;pointer-events:none;
+    max-width:90vw;text-align:center;
+    direction:ltr;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+  .toast.success{background:var(--green)}
+  .toast.error{background:var(--rose)}
+
+  /* PDF Generation hidden container */
+  #pdfContainer{
+    position:fixed;left:-9999px;top:0;width:800px;
+    background:#fff;color:#1f2330;font-family:'Inter','Amiri',sans-serif;
+    padding:40px;
+    z-index:-9999;
+    opacity:0;
+    pointer-events:none;
+  }
+  #pdfContainer h1{font-size:22px;margin:0 0 4px;text-align:center}
+  #pdfContainer h2{font-size:18px;margin:20px 0 8px;color:var(--teal);border-bottom:2px solid var(--teal);padding-bottom:4px}
+  #pdfContainer h3{font-size:15px;margin:14px 0 4px;color:var(--gold)}
+  #pdfContainer p{font-size:13px;line-height:1.7;margin:4px 0}
+  #pdfContainer .pdf-meta{text-align:center;color:#8a8f9e;font-size:12px;margin-bottom:16px}
+  #pdfContainer .pdf-section{margin-bottom:16px;page-break-inside:avoid}
+  #pdfContainer .pdf-qa{background:#faf9f6;border:1px solid #e5dccb;border-radius:8px;padding:12px;margin:8px 0}
+  #pdfContainer .pdf-qa label{font-weight:700;display:block;margin-bottom:4px;font-size:13px}
+  #pdfContainer .pdf-qa .answer{font-size:13px;color:#4a5063;white-space:pre-wrap;min-height:20px}
+  #pdfContainer .arabic-block{font-family:'Amiri Quran','Amiri',serif;direction:rtl;text-align:center;font-size:20px;line-height:2.2;color:#2a2f44;margin:10px 0}
+  #pdfContainer table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+  #pdfContainer th,#pdfContainer td{border:1px solid #e5dccb;padding:8px;text-align:left}
+  #pdfContainer th{background:#faf6ee;font-weight:700}
+
+  /* Responsive refinements */
+  @media(max-width:600px){
+    .topbar{padding:14px 12px}
+    .brand h1{font-size:15px}
+    .wrap{padding:0 10px}
+    .tab{min-width:80px;font-size:12px;padding:10px 6px}
+    .hero h2{font-size:24px}
+    .hero-card{padding:18px}
+    .side-card{padding:14px}
+    .side-card .arabic{font-size:20px;line-height:2}
+    .export-bar{padding:14px}
+    .card{padding:16px}
+    .score-bar{margin:20px -16px -16px;padding:12px 14px}
+    .flip{height:320px}
+    .ayah-ar{font-size:22px;line-height:1.8}
+    .story-item{grid-template-columns:48px 1fr;gap:10px;padding:14px}
+    .mcq{padding:14px}
+    .fill-card{padding:14px}
+    .lesson{padding:16px}
+    .mudhakkirah-question{padding:16px}
+    .match-item{padding:10px}
+    .bismillah{font-size:22px}
+    .vocab-table th,.vocab-table td{padding:10px 8px;font-size:12px}
+    .vocab-ar{font-size:18px}
+  }
+
+  /* ===== Premium Unified Responsive Design ===== */
+  img, video, iframe, canvas, svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media(max-width: 768px) {
+    .topbar {
+      padding: 14px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .brand {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .meta {
+      width: 100%;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .lang-toggle {
+      margin-inline-start: auto;
+    }
+
+    .tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+      padding: 6px;
+    }
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .tab {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      padding: 10px 14px;
+    }
+
+    .side-card {
+      max-height: 400px;
+    }
+  }
+
+  /* ===== Verse Highlight Feature ===== */
+  .verse-row {
+    display: inline;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 2px 4px;
+    transition: background .25s ease;
+    user-select: none;
+  }
+  .verse-row:hover {
+    background: rgba(173, 216, 230, 0.4);
+  }
+  .verse-row.active {
+    background: #b3e0f7;
+    font-weight: 800;
+  }
+  .verse-num {
+    font-size: 0.72em;
+    color: #0f6b6b;
+    vertical-align: middle;
+    font-family: 'Amiri', serif;
+    user-select: none;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="crest arabic">ط</div>
+    <div>
+      <h1 data-i18n="brand-title">Surah Al-Mutaffifeen · Interactive Portal</h1>
+      <p data-i18n="brand-sub">The Defrauders · Tafseer & Tadabbur for Young Learners</p>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="pill" data-i18n="pill-chapter">Chapter 83</span>
+    <span class="pill" data-i18n="pill-verses">36 Verses</span>
+    <span class="pill" data-i18n="pill-period">Makkiyyah</span>
+    <div class="lang-toggle" id="langToggle" title="Switch language">
+      <span class="globe">🌐</span>
+      <span id="langLabel">العربية</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="intro"><span class="ic">📜</span> <span data-i18n="tab-intro">Introduction</span></div>
+    <div class="tab" data-tab="ayat"><span class="ic">🃏</span> <span data-i18n="tab-ayat">Ayat Flashcards</span></div>
+    <div class="tab" data-tab="story"><span class="ic">📖</span> <span data-i18n="tab-story">The Story</span></div>
+    <div class="tab" data-tab="characters"><span class="ic">👥</span> <span data-i18n="tab-chars">Landmarks</span></div>
+    <div class="tab" data-tab="vocab"><span class="ic">🔤</span> <span data-i18n="tab-vocab">Vocabulary</span></div>
+    <div class="tab" data-tab="lessons"><span class="ic">💡</span> <span data-i18n="tab-lessons">Lessons</span></div>
+    <div class="tab" data-tab="exercises"><span class="ic">🧠</span> <span data-i18n="tab-exercises">Exercises</span></div>
+    <div class="tab" data-tab="mudhakkirah"><span class="ic">📝</span> <span data-i18n="tab-mudh">Reflection Journal</span></div>
+  </div>
+
+  <!-- ============ INTRO ============ -->
+  <section class="panel active" id="panel-intro">
+    <div class="hero">
+      <div class="hero-card">
+        <span class="kicker" data-i18n="kicker">SURAH AL-MUTAFFIFEEN · ٱلْمُطَفِّفِين</span>
+        <h2 data-i18n="hero-title">The Defrauders — A Warning About Honesty and the Day of Reckoning</h2>
+        <p class="lead" data-i18n="hero-lead">
+          Surah Al-Mutaffifeen opens with a severe warning — "Woe to those who give short measure" —
+          condemning those who demand full measure for themselves yet cheat others. From this seemingly
+          small social sin, the Surah expands into the great realities of the Hereafter: two written
+          records (Sijjeen for the wicked, ʿIlliyyeen for the righteous), the veiling of the deniers from
+          their Lord, and the eternal delight of the Abrār in Paradise. It closes by reversing the
+          mockery of the disbelievers: the believers, who were laughed at in the world, will laugh on
+          the Day of Judgment.
+        </p>
+        <div class="quick-facts">
+          <div class="fact"><div class="lbl" data-i18n="fact-revealed">Revealed in</div><div class="val" data-i18n="fact-revealed-val">Makkah</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-order">Order of Revelation</div><div class="val" data-i18n="fact-order-val">86th</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-verses">Verses</div><div class="val" data-i18n="fact-verses-val">36 Ayat</div></div>
+          <div class="fact"><div class="lbl" data-i18n="fact-theme">Theme</div><div class="val" data-i18n="fact-theme-val">Honesty, Accountability & the Hereafter</div></div>
+        </div>
+      </div>
+      <div class="side-card">
+        <div class="bismillah arabic">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+        <div class="arabic" style="font-size:22px;line-height:2.2;text-align:center;color:#2a2f44">
+<span class="verse-row" title="Verse 1">وَيْلٌ لِّلْمُطَفِّفِينَ <span class="verse-num">۝١</span></span>
+<span class="verse-row" title="Verse 2">ٱلَّذِينَ إِذَا ٱكْتَالُوا۟ عَلَى ٱلنَّاسِ يَسْتَوْفُونَ <span class="verse-num">۝٢</span></span>
+<span class="verse-row" title="Verse 3">وَإِذَا كَالُوهُمْ أَو وَّزَنُوهُمْ يُخْسِرُونَ <span class="verse-num">۝٣</span></span>
+<span class="verse-row" title="Verse 4">أَلَا يَظُنُّ أُو۟لَٰٓئِكَ أَنَّهُم مَّبْعُوثُونَ <span class="verse-num">۝٤</span></span>
+<span class="verse-row" title="Verse 5">لِيَوْمٍ عَظِيمٍ <span class="verse-num">۝٥</span></span>
+<span class="verse-row" title="Verse 6">يَوْمَ يَقُومُ ٱلنَّاسُ لِرَبِّ ٱلْعَٰلَمِينَ <span class="verse-num">۝٦</span></span>
+<span class="verse-row" title="Verse 7">كَلَّآ إِنَّ كِتَٰبَ ٱلْفُجَّارِ لَفِى سِجِّينٍ <span class="verse-num">۝٧</span></span>
+<span class="verse-row" title="Verse 8">وَمَآ أَدْرَىٰكَ مَا سِجِّينٌ <span class="verse-num">۝٨</span></span>
+<span class="verse-row" title="Verse 9">كِتَٰبٌ مَّرْقُومٌ <span class="verse-num">۝٩</span></span>
+<span class="verse-row" title="Verse 10">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ <span class="verse-num">۝١٠</span></span>
+<span class="verse-row" title="Verse 11">ٱلَّذِينَ يُكَذِّبُونَ بِيَوْمِ ٱلدِّينِ <span class="verse-num">۝١١</span></span>
+<span class="verse-row" title="Verse 12">وَمَا يُكَذِّبُ بِهِۦٓ إِلَّا كُلُّ مُعْتَدٍ أَثِيمٍ <span class="verse-num">۝١٢</span></span>
+<span class="verse-row" title="Verse 13">إِذَا تُتْلَىٰ عَلَيْهِ ءَايَٰتُنَا قَالَ أَسَٰطِيرُ ٱلْأَوَّلِينَ <span class="verse-num">۝١٣</span></span>
+<span class="verse-row" title="Verse 14">كَلَّا ۖ بَلْ رَانَ عَلَىٰ قُلُوبِهِم مَّا كَانُوا۟ يَكْسِبُونَ <span class="verse-num">۝١٤</span></span>
+<span class="verse-row" title="Verse 15">كَلَّآ إِنَّهُمْ عَن رَّبِّهِمْ يَوْمَئِذٍ لَّمَحْجُوبُونَ <span class="verse-num">۝١٥</span></span>
+<span class="verse-row" title="Verse 16">ثُمَّ إِنَّهُمْ لَصَالُوا۟ ٱلْجَحِيمِ <span class="verse-num">۝١٦</span></span>
+<span class="verse-row" title="Verse 17">ثُمَّ يُقَالُ هَٰذَا ٱلَّذِى كُنتُم بِهِۦ تُكَذِّبُونَ <span class="verse-num">۝١٧</span></span>
+<span class="verse-row" title="Verse 18">كَلَّآ إِنَّ كِتَٰبَ ٱلْأَبْرَارِ لَفِى عِلِّيِّينَ <span class="verse-num">۝١٨</span></span>
+<span class="verse-row" title="Verse 19">وَمَآ أَدْرَىٰكَ مَا عِلِّيُّونَ <span class="verse-num">۝١٩</span></span>
+<span class="verse-row" title="Verse 20">كِتَٰبٌ مَّرْقُومٌ <span class="verse-num">۝٢٠</span></span>
+<span class="verse-row" title="Verse 21">يَشْهَدُهُ ٱلْمُقَرَّبُونَ <span class="verse-num">۝٢١</span></span>
+<span class="verse-row" title="Verse 22">إِنَّ ٱلْأَبْرَارَ لَفِى نَعِيمٍ <span class="verse-num">۝٢٢</span></span>
+<span class="verse-row" title="Verse 23">عَلَى ٱلْأَرَآئِكِ يَنظُرُونَ <span class="verse-num">۝٢٣</span></span>
+<span class="verse-row" title="Verse 24">تَعْرِفُ فِى وُجُوهِهِمْ نَضْرَةَ ٱلنَّعِيمِ <span class="verse-num">۝٢٤</span></span>
+<span class="verse-row" title="Verse 25">يُسْقَوْنَ مِن رَّحِيقٍ مَّخْتُومٍ <span class="verse-num">۝٢٥</span></span>
+<span class="verse-row" title="Verse 26">خِتَٰمُهُۥ مِسْكٌ ۚ وَفِى ذَٰلِكَ فَلْيَتَنَافَسِ ٱلْمُتَنَٰفِسُونَ <span class="verse-num">۝٢٦</span></span>
+<span class="verse-row" title="Verse 27">وَمِزَاجُهُۥ مِن تَسْنِيمٍ <span class="verse-num">۝٢٧</span></span>
+<span class="verse-row" title="Verse 28">عَيْنًا يَشْرَبُ بِهَا ٱلْمُقَرَّبُونَ <span class="verse-num">۝٢٨</span></span>
+<span class="verse-row" title="Verse 29">إِنَّ ٱلَّذِينَ أَجْرَمُوا۟ كَانُوا۟ مِنَ ٱلَّذِينَ ءَامَنُوا۟ يَضْحَكُونَ <span class="verse-num">۝٢٩</span></span>
+<span class="verse-row" title="Verse 30">وَإِذَا مَرُّوا۟ بِهِمْ يَتَغَامَزُونَ <span class="verse-num">۝٣٠</span></span>
+<span class="verse-row" title="Verse 31">وَإِذَا ٱنقَلَبُوٓا۟ إِلَىٰٓ أَهْلِهِمُ ٱنقَلَبُوا۟ فَكِهِينَ <span class="verse-num">۝٣١</span></span>
+<span class="verse-row" title="Verse 32">وَإِذَا رَأَوْهُمْ قَالُوٓا۟ إِنَّ هَٰٓؤُلَآءِ لَضَآلُّونَ <span class="verse-num">۝٣٢</span></span>
+<span class="verse-row" title="Verse 33">وَمَآ أُرْسِلُوا۟ عَلَيْهِمْ حَٰفِظِينَ <span class="verse-num">۝٣٣</span></span>
+<span class="verse-row" title="Verse 34">فَٱلْيَوْمَ ٱلَّذِينَ ءَامَنُوا۟ مِنَ ٱلْكُفَّارِ يَضْحَكُونَ <span class="verse-num">۝٣٤</span></span>
+<span class="verse-row" title="Verse 35">عَلَى ٱلْأَرَآئِكِ يَنظُرُونَ <span class="verse-num">۝٣٥</span></span>
+<span class="verse-row" title="Verse 36">هَلْ ثُوِّبَ ٱلْكُفَّارُ مَا كَانُوا۟ يَفْعَلُونَ <span class="verse-num">۝٣٦</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AYAT FLASHCARDS ============ -->
+  <section class="panel" id="panel-ayat">
+    <h2 class="section" data-i18n="section-ayat">Ayat Flashcards</h2>
+    <p class="sub" data-i18n="sub-ayat">Tap any card to flip — see translation, tafseer, and word-by-word meanings.</p>
+    <div class="deck-controls">
+      <button class="btn" id="flipAll"><span data-i18n="btn-flipall">🔄 Flip All</span></button>
+      <button class="btn" id="resetCards"><span data-i18n="btn-reset-cards">↺ Reset</span></button>
+    </div>
+    <div class="deck" id="deck"></div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section class="panel" id="panel-story">
+    <h2 class="section" data-i18n="section-story">The Story · Context & Revelation</h2>
+    <p class="sub" data-i18n="sub-story">How Al-Mutaffifeen was revealed, its themes, and its place in the Quran.</p>
+    <div class="story-list" id="storyList"></div>
+  </section>
+
+  <!-- ============ CHARACTERS ============ -->
+  <section class="panel" id="panel-characters">
+    <h2 class="section" data-i18n="section-chars">Landmarks of the Surah</h2>
+    <p class="sub" data-i18n="sub-chars">The concepts, groups, and places referred to in Al-Mutaffifeen.</p>
+    <div class="grid-3" id="charList"></div>
+  </section>
+
+  <!-- ============ VOCABULARY ============ -->
+  <section class="panel" id="panel-vocab">
+    <h2 class="section" data-i18n="section-vocab">Word-by-Word Glossary</h2>
+    <p class="sub" data-i18n="sub-vocab">Every key Quranic word explained — root, meaning, and context.</p>
+    <div class="vocab-table-wrap">
+    <table class="vocab-table">
+      <thead>
+        <tr>
+          <th data-i18n="th-word">Word</th>
+          <th class="vocab-tl-col" data-i18n="th-translit">Transliteration</th>
+          <th data-i18n="th-meaning">Meaning</th>
+          <th data-i18n="th-notes">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="panel" id="panel-lessons">
+    <h2 class="section" data-i18n="section-lessons">Lessons for Modern Youth</h2>
+    <p class="sub" data-i18n="sub-lessons">Timeless principles drawn from Surah Al-Mutaffifeen.</p>
+    <div class="lesson-grid" id="lessonGrid"></div>
+  </section>
+
+  <!-- ============ EXERCISES ============ -->
+  <section class="panel" id="panel-exercises">
+    <div class="card">
+    <h2 class="section" data-i18n="section-exercises">Deep Practice</h2>
+    <p class="sub" data-i18n="sub-exercises">Multiple-choice, matching, fill-in-the-blank, and chronological ordering.</p>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-mcq-title">① Comprehension — Multiple Choice</h3>
+      <p class="desc" data-i18n="quiz-mcq-desc">Choose the most accurate answer based on the Surah and its tafseer.</p>
+      <div id="mcqContainer"></div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-match-title">② Word Matching</h3>
+      <p class="desc" data-i18n="quiz-match-desc">Tap an Arabic word, then tap its English meaning.</p>
+      <div class="card">
+        <div class="match-wrap">
+          <div class="match-col">
+            <h4 data-i18n="match-arabic">Arabic</h4>
+            <div id="matchAr"></div>
+          </div>
+          <div class="match-col">
+            <h4 data-i18n="match-english">English</h4>
+            <div id="matchEn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-fill-title">③ Fill in the Blanks</h3>
+      <p class="desc" data-i18n="quiz-fill-desc">Complete the verses with the correct word.</p>
+      <div id="fillContainer"></div>
+      <button class="btn primary" id="checkFill"><span data-i18n="btn-check-answers">Check Answers</span></button>
+    </div>
+
+    <div class="quiz-section">
+      <h3 data-i18n="quiz-order-title">④ Order the Themes</h3>
+      <p class="desc" data-i18n="quiz-order-desc">Drag the summaries into the correct order of the Surah.</p>
+      <div class="card">
+        <div class="order-list" id="orderList"></div>
+        <button class="btn primary" id="checkOrder"><span data-i18n="btn-check-order">Check Order</span></button>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <div>
+        <div class="lbl" data-i18n="score-label">Your Score</div>
+        <div class="v"><span id="scoreVal">0</span> / <span id="scoreMax">0</span></div>
+      </div>
+      <button class="btn gold" id="resetQuiz"><span data-i18n="btn-reset-quiz">↺ Reset All</span></button>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============ MUDHAKKIRAH (مذكرة تدبري) ============ -->
+  <section class="panel" id="panel-mudhakkirah">
+    <h2 class="section" data-i18n="mudh-title" style="font-family:'Amiri','Playfair Display',serif;">📝 مذكرة تدبري للقرآن</h2>
+    <p class="sub" data-i18n="mudh-sub" style="font-family:'Amiri',serif;font-size:15px;">تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.</p>
+
+    <!-- Student Name (only on Tadabbur page) -->
+    <div class="mudhakkirah-question" style="margin-bottom:22px;">
+      <label><span class="q-icon">👤</span> <span data-i18n="student-label">Student Name:</span></label>
+      <input type="text" id="studentName" data-placeholder-en="Enter your name..." data-placeholder-ar="اكتب اسمك هنا..." placeholder="Enter your name..."
+        style="width:100%;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:16px;font-family:'Amiri','Inter',serif;color:var(--ink);background:#faf9f6;outline:none;direction:rtl;text-align:right;" />
+    </div>
+
+    <!-- Section 1 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-1">١</span> <span data-i18n="mudh-h1">أولاً: المحور العام (الفهم والتدبر)</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">📖</span> <span data-i18n="mudh-q1-label">ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</span></label>
+        <textarea id="mudh-q1" data-placeholder-ar="اكتب خلاصة الآيات بأسلوبك الخاص هنا..." data-placeholder-en="Write a summary of the verses in your own words..." placeholder="اكتب خلاصة الآيات بأسلوبك الخاص هنا..."></textarea>
+      </div>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">💡</span> <span data-i18n="mudh-q2-label">ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</span></label>
+        <textarea id="mudh-q2" data-placeholder-ar="اكتب أهم درس وكيف ستطبقه..." data-placeholder-en="Write the most important lesson and how you will apply it..." placeholder="اكتب أهم درس وكيف ستطبقه..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-2">٢</span> <span data-i18n="mudh-h2">ثانياً: المحور الوجداني والشخصي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">❤️</span> <span data-i18n="mudh-q3-label">هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</span></label>
+        <textarea id="mudh-q3" data-placeholder-ar="اكتب عن الآية التي أثرت فيك ولماذا..." data-placeholder-en="Write about the verse that touched you and why..." placeholder="اكتب عن الآية التي أثرت فيك ولماذا..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="mudhakkirah-section">
+      <h3><span class="num-badge" data-i18n="mudh-num-3">٣</span> <span data-i18n="mudh-h3">ثالثاً: المحور التطبيقي</span></h3>
+
+      <div class="mudhakkirah-question">
+        <label><span class="q-icon">🎯</span> <span data-i18n="mudh-q4-label">حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</span></label>
+        <textarea id="mudh-q4" data-placeholder-ar="اكتب هدفك العملي أو عهدك مع نفسك..." data-placeholder-en="Write your practical goal or commitment to yourself..." placeholder="اكتب هدفك العملي أو عهدك مع نفسك..."></textarea>
+      </div>
+    </div>
+
+    <!-- Export Bar -->
+    <div class="export-bar">
+      <div class="export-title">
+        <span>📤</span>
+        <span data-i18n="export-title">Share Your Work</span>
+      </div>
+      <button class="btn whatsapp" id="btnWhatsApp">
+        <span style="font-size:20px">💬</span>
+        <span data-i18n="btn-whatsapp">Send to my Teacher</span>
+      </button>
+      <button class="btn pdf-btn" id="btnPDF">
+        <span style="font-size:20px">📄</span>
+        <span data-i18n="btn-pdf">Download PDF</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="footer" data-i18n="footer">Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Hidden PDF render container -->
+<div id="pdfContainer"></div>
+
+<script>
+/* ============= LANGUAGE DATA ============= */
+let currentLang = 'en';
+
+const I18N = {
+  'brand-title':       { en: 'Surah Al-Mutaffifeen · Interactive Portal',   ar: 'سورة المطففين · بوابة تعليمية تفاعلية' },
+  'brand-sub':         { en: 'The Defrauders · Tafseer & Tadabbur for Young Learners', ar: 'المطففين · تفسير وتدبر للناشئة' },
+  'pill-chapter':      { en: 'Chapter 83',    ar: 'السورة ٨٣' },
+  'pill-verses':       { en: '36 Verses',     ar: '٣٦ آية' },
+  'pill-period':       { en: 'Makkiyyah',     ar: 'مكّيّة' },
+  'student-label':     { en: 'Student Name:',  ar: 'اسم الطالب:' },
+  'tab-intro':         { en: 'Introduction',   ar: 'المقدمة' },
+  'tab-ayat':          { en: 'Ayat Flashcards', ar: 'بطاقات الآيات' },
+  'tab-story':         { en: 'The Story',      ar: 'القصة' },
+  'tab-chars':         { en: 'Landmarks of the Surah', ar: 'معالم السورة' },
+  'tab-vocab':         { en: 'Vocabulary',     ar: 'المفردات' },
+  'tab-lessons':       { en: 'Lessons',        ar: 'الدروس' },
+  'tab-exercises':     { en: 'Exercises',      ar: 'التمارين' },
+  'tab-mudh':          { en: 'Reflection Journal', ar: 'مذكرة تدبري' },
+  'kicker':            { en: 'SURAH AL-MUTAFFIFEEN · ٱلْمُطَفِّفِين', ar: 'سورة المطففين · ٱلْمُطَفِّفِين' },
+  'hero-title':        { en: 'The Defrauders — A Warning About Honesty and the Day of Reckoning', ar: 'المطففون — تحذير من الغش وموعظة في يوم الحساب' },
+  'hero-lead':         { en: 'Surah Al-Mutaffifeen opens with a severe warning — "Woe to those who give short measure" — condemning those who demand full measure for themselves yet cheat others. From this seemingly small sin, the Surah expands into the great realities of the Hereafter: two records (Sijjeen for the wicked, ʿIlliyyeen for the righteous), the veiling of the deniers from their Lord, and the eternal delight of the Abrār in Paradise. It closes by reversing the mockery of the disbelievers: the believers, who were laughed at in the world, will laugh on the Day of Judgment.', ar: 'تفتتح سورة المطففين بتحذير شديد — «وَيْلٌ لِّلْمُطَفِّفِينَ» — توبيخاً لمن يستوفي حقه من الناس ويبخس حقهم. ومن هذه المعصية تتسع السورة إلى حقائق الآخرة الكبرى: كتابان (سجين للفجار، وعليون للأبرار)، وحجاب الكفار عن ربهم، ونعيم الأبرار الدائم في الجنة. وتُختم بقلب سخرية الكفار: فالمؤمنون الذين سُخر منهم في الدنيا يضحكون منهم في الآخرة.' },
+  'fact-revealed':     { en: 'Revealed in',       ar: 'مكان النزول' },
+  'fact-revealed-val': { en: 'Makkah',            ar: 'مكة المكرمة' },
+  'fact-order':        { en: 'Order of Revelation', ar: 'ترتيب النزول' },
+  'fact-order-val':    { en: '86th',              ar: 'السادسة والثمانون' },
+  'fact-verses':       { en: 'Verses',             ar: 'الآيات' },
+  'fact-verses-val':   { en: '36 Ayat',            ar: '٣٦ آية' },
+  'fact-theme':        { en: 'Theme',              ar: 'الموضوع' },
+  'fact-theme-val':    { en: 'Honesty, Accountability & the Hereafter', ar: 'الأمانة والحساب والآخرة' },
+  'section-ayat':      { en: 'Ayat Flashcards',    ar: 'بطاقات الآيات' },
+  'sub-ayat':          { en: 'Tap any card to flip — see translation, tafseer, and word-by-word meanings.', ar: 'اضغط على أي بطاقة لقلبها — شاهد الشرح والتفسير ومعاني الكلمات.' },
+  'btn-flipall':       { en: '🔄 Flip All',        ar: '🔄 اقلب الكل' },
+  'btn-reset-cards':   { en: '↺ Reset',            ar: '↺ إعادة ضبط' },
+  'section-story':     { en: 'The Story · Context & Revelation', ar: 'القصة · سبب النزول والسياق' },
+  'sub-story':         { en: 'How Al-Mutaffifeen was revealed, its themes, and its place in the Quran.', ar: 'كيف نزلت سورة المطففين وموضوعاتها ومكانتها في القرآن.' },
+  'section-chars':     { en: 'Landmarks of the Surah', ar: 'معالم السورة' },
+  'sub-chars':         { en: 'The concepts, groups, and places referred to in Al-Mutaffifeen.', ar: 'المفاهيم والفئات والأماكن المُشار إليها في السورة.' },
+  'section-vocab':     { en: 'Word-by-Word Glossary', ar: 'معجم الكلمات' },
+  'sub-vocab':         { en: 'Every key Quranic word explained — root, meaning, and context.', ar: 'شرح كل كلمة قرآنية مهمة — الجذر والمعنى والسياق.' },
+  'th-word':           { en: 'Word',            ar: 'الكلمة' },
+  'th-translit':       { en: 'Transliteration', ar: 'النطق' },
+  'th-meaning':        { en: 'Meaning',         ar: 'المعنى' },
+  'th-notes':          { en: 'Notes',           ar: 'ملاحظات' },
+  'section-lessons':   { en: 'Lessons for Modern Youth', ar: 'دروس للشباب المعاصر' },
+  'sub-lessons':       { en: 'Timeless principles drawn from Surah Al-Mutaffifeen.', ar: 'مبادئ خالدة من سورة المطففين.' },
+  'section-exercises': { en: 'Deep Practice',   ar: 'تمارين تطبيقية' },
+  'sub-exercises':     { en: 'Multiple-choice, matching, fill-in-the-blank, and ordering.', ar: 'اختيار من متعدد، مطابقة، ملء الفراغات، وترتيب.' },
+  'quiz-mcq-title':    { en: '① Comprehension — Multiple Choice', ar: '① الفهم — اختيار من متعدد' },
+  'quiz-mcq-desc':     { en: 'Choose the most accurate answer based on the Surah and its tafseer.', ar: 'اختر الإجابة الأدق بناءً على السورة وتفسيرها.' },
+  'quiz-match-title':  { en: '② Word Matching',  ar: '② مطابقة الكلمات' },
+  'quiz-match-desc':   { en: 'Tap an Arabic word, then tap its English meaning.', ar: 'اضغط على الكلمة العربية ثم اضغط على معناها.' },
+  'match-arabic':      { en: 'Arabic',           ar: 'عربي' },
+  'match-english':     { en: 'English',          ar: 'المعنى' },
+  'quiz-fill-title':   { en: '③ Fill in the Blanks', ar: '③ أكمل الفراغات' },
+  'quiz-fill-desc':    { en: 'Complete the verses with the correct word.', ar: 'أكمل الآيات بالكلمة الصحيحة.' },
+  'btn-check-answers': { en: 'Check Answers',     ar: 'تحقق من الإجابات' },
+  'quiz-order-title':  { en: '④ Order the Themes', ar: '④ رتّب موضوعات السورة' },
+  'quiz-order-desc':   { en: 'Drag the summaries into the correct order of the Surah.', ar: 'اسحب الملخصات ورتّبها كترتيب السورة.' },
+  'btn-check-order':   { en: 'Check Order',       ar: 'تحقق من الترتيب' },
+  'score-label':       { en: 'Your Score',        ar: 'درجتك' },
+  'btn-reset-quiz':    { en: '↺ Reset All',       ar: '↺ إعادة ضبط الكل' },
+  'export-title':      { en: 'Share Your Work',   ar: 'شارك عملك' },
+  'btn-whatsapp':      { en: 'Send to my Teacher', ar: 'أرسل للمعلم' },
+  'btn-pdf':           { en: 'Download PDF',      ar: 'تحميل PDF' },
+  'footer':            { en: 'Completed with the success granted by Allah, in accordance with the references of the exegetes among the scholars of Ahl al-Sunnah. Praise be to Allah, Lord of the Worlds.', ar: 'تَمَّ بِتَوْفِقٍ مِنَ اللهِ وِفْقَ مَرَاجِعِ المُفَسِّرِينَ مِنْ عُلَمَاءِ أهْلِ السُّنَّةِ، وَالْحَمْدُ للهِ رَبِّ العَالَمِينَ.' },
+  'mudh-title':        { en: '📝 Quran Reflection Journal', ar: '📝 مذكرة تدبري للقرآن' },
+  'mudh-sub':          { en: 'Written reflections that help the student understand the verses and apply them in daily life.', ar: 'تأملات وتدبرات كتابية تساعد الطالب على فهم الآيات وتطبيقها في حياته اليومية.' },
+  'mudh-num-1':        { en: '1', ar: '١' },
+  'mudh-num-2':        { en: '2', ar: '٢' },
+  'mudh-num-3':        { en: '3', ar: '٣' },
+  'mudh-h1':           { en: 'First: General Axis (Understanding & Reflection)', ar: 'أولاً: المحور العام (الفهم والتدبر)' },
+  'mudh-h2':           { en: 'Second: Emotional & Personal Axis', ar: 'ثانياً: المحور الوجداني والشخصي' },
+  'mudh-h3':           { en: 'Third: Practical Axis', ar: 'ثالثاً: المحور التطبيقي' },
+  'mudh-q1-label':     { en: 'What is the summary of the verses in your own simple words?', ar: 'ما خلاصة الآيات في رأيك بأسلوبك البسيط؟' },
+  'mudh-q2-label':     { en: 'What is the most important lesson from the verses, and how will you apply it in your daily life?', ar: 'ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟' },
+  'mudh-q3-label':     { en: 'Is there a particular verse that touched your heart or affected you deeply, and why?', ar: 'هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟' },
+  'mudh-q4-label':     { en: 'Set a small practical goal or commitment to yourself to apply the verses.', ar: 'حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.' },
+};
+
+/* ============= CONTENT DATA ============= */
+/* NOTE: The Arabic word meanings inside AYAT.words[].en.ar are VERBATIM copies
+   of the corresponding "meaning" column entries in the VOCAB glossary below. */
+
+const AYAT = [
+  { n:1, ar:"وَيْلٌ لِّلْمُطَفِّفِينَ",
+    tr:{ en:"Woe to those who give short measure —", ar:"وعيد شديد وهلاك للذين يبخسون الكيل والميزان." },
+    tafsir:{ en:"The Surah opens with 'Wayl' — a word of severe threat that, as Ibn Abbas said, signifies a valley in Hellfire or, more generally, intense ruin. Al-Mutaffifeen are those who cheat in measure and weight by giving people less than their due. The Prophet ﷺ arrived in Madinah where the people were among the worst in this practice, so this Surah was revealed and they reformed themselves. (Al-Baghawi, Al-Qurtubi, Al-Razi)", ar:"تفتتح السورة بـ «ويل» — وهي كلمة وعيد شديد، قال ابن عباس: واد في جهنم، وقيل: الهلاك والخزي. والمطففون هم الذين يبخسون الكيل والميزان فينقصون حقوق الناس. قَدِم النبي ﷺ المدينة وكان أهلها من أسوأ الناس كيلاً، فأنزل الله هذه السورة فأحسنوا الكيل بعد ذلك. (البغوي، القرطبي، الرازي)" },
+    words:[
+      {ar:"وَيْلٌ", tl:"Waylun", en:{en:"Woe / Severe ruin", ar:"كلمة وعيد وعذاب شديد، وقيل: وادٍ في جهنم"}},
+      {ar:"ٱلْمُطَفِّفِينَ", tl:"Al-mutafifiina", en:{en:"Those who give short measure", ar:"الذين يَبخسون الكيل والميزان ويُنقصون حقوق الناس"}}
+    ] },
+
+  { n:2, ar:"ٱلَّذِينَ إِذَا ٱكْتَالُوا۟ عَلَى ٱلنَّاسِ يَسْتَوْفُونَ",
+    tr:{ en:"who, when they take a measure from people, take it in full,", ar:"الذين إذا أخذوا الكيل من الناس استوفوه كاملاً تاماً." },
+    tafsir:{ en:"They demand their full right when receiving — not a grain less. This exposes the double standard: zeal for one's own rights, indifference to others'. (Al-Tahrir wa al-Tanwir, Al-Wasit)", ar:"يطلبون حقهم كاملاً حين يأخذون لا يقبلون نقصاً ذرّة. وهذا يكشف ازدواج المعيار: حرص على حق النفس، وتفريط في حق الغير. (التحرير والتنوير، الوسيط)" },
+    words:[
+      {ar:"ٱكْتَالُوا۟", tl:"Ktaaluu", en:{en:"They take by measure", ar:"أخذوا الكيل لأنفسهم من غيرهم"}},
+      {ar:"يَسْتَوْفُونَ", tl:"Yastawfuuna", en:{en:"They take in full", ar:"يأخذون حقهم كاملاً تاماً لا يَقبلون نقصاً"}}
+    ] },
+
+  { n:3, ar:"وَإِذَا كَالُوهُمْ أَو وَّزَنُوهُمْ يُخْسِرُونَ",
+    tr:{ en:"but when they measure or weigh for others, they give less.", ar:"وإذا كالوا للناس أو وزنوا لهم نقصوا الكيل والوزن." },
+    tafsir:{ en:"The sin lies in the inequality: full for self, deficient for others. Imam Al-Razi notes this is a universal principle — any time we want from people what we are unwilling to give them, we resemble Al-Mutaffifeen. (Mafatih al-Ghayb)", ar:"الإثم في عدم المساواة: التمام للنفس والنقص للغير. ذكر الإمام الرازي أن هذا أصل عام — كل من طلب من الناس ما لا يبذله لهم فقد شابه المطففين. (مفاتيح الغيب)" },
+    words:[
+      {ar:"كَالُوهُمْ", tl:"Kaaluuhum", en:{en:"They measured for them", ar:"كالوا للناس"}},
+      {ar:"وَّزَنُوهُمْ", tl:"Wazanuuhum", en:{en:"They weighed for them", ar:"وزنوا للناس"}},
+      {ar:"يُخْسِرُونَ", tl:"Yukhsiruuna", en:{en:"They give less / cause loss", ar:"ينقصون الكيل والوزن ويُلحقون الخسارة بالناس"}}
+    ] },
+
+  { n:4, ar:"أَلَا يَظُنُّ أُو۟لَٰٓئِكَ أَنَّهُم مَّبْعُوثُونَ",
+    tr:{ en:"Do these not think that they will be resurrected", ar:"ألا يتيقن هؤلاء أنهم مبعوثون من قبورهم للحساب." },
+    tafsir:{ en:"A rebuke phrased as a rhetorical question. 'Yazunnu' here carries the strong sense of 'know with certainty' (as in Al-Baqarah 2:46). The root of all dishonesty is forgetting the Day of accountability. (Tafsir Al-Maraghi, Al-Muntakhab)", ar:"توبيخ في صورة استفهام إنكاري. «يظن» هنا بمعنى «يتيقن» كما في قوله: «الذين يظنون أنهم ملاقو ربهم» (البقرة ٤٦). أصل كل غش: نسيان يوم الحساب. (تفسير المراغي، المنتخب)" },
+    words:[
+      {ar:"يَظُنُّ", tl:"Yazunu", en:{en:"Think / know with certainty", ar:"يتيقن ويعلم علم اليقين"}},
+      {ar:"مَّبْعُوثُونَ", tl:"Mab'uuthuuna", en:{en:"Resurrected", ar:"مُخرَجون من قبورهم أحياء للحساب"}}
+    ] },
+
+  { n:5, ar:"لِيَوْمٍ عَظِيمٍ",
+    tr:{ en:"for a tremendous Day —", ar:"ليوم عظيم الشأن والهول، يوم القيامة." },
+    tafsir:{ en:"Its greatness is in its horrors, its length, its accountability, and Who presides over it: the Lord of the worlds. (Al-Baghawi)", ar:"عظمته في أهواله وطوله وحسابه ومَن يقوم عليه: رب العالمين. (البغوي)" },
+    words:[
+      {ar:"يَوْمٍ عَظِيمٍ", tl:"Yawmin aziimin", en:{en:"A tremendous Day", ar:"يوم القيامة، عظيم الشأن والهول"}}
+    ] },
+
+  { n:6, ar:"يَوْمَ يَقُومُ ٱلنَّاسُ لِرَبِّ ٱلْعَٰلَمِينَ",
+    tr:{ en:"the Day when mankind will stand before the Lord of the worlds.", ar:"يوم يقوم الناس من قبورهم لحساب رب جميع الخلائق." },
+    tafsir:{ en:"All people will rise barefoot, naked, uncircumcised, in a single standing before Allah — kings and slaves alike. Ibn Umar narrates the Prophet ﷺ said about this verse: 'They will stand in their sweat to the middle of their ears.' (Bukhari & Muslim)", ar:"يقوم الناس حفاةً عراةً غُرلاً في موقفٍ واحد بين يدي الله — الملوك والعبيد سواء. روى ابن عمر عن النبي ﷺ في هذه الآية: «يقوم أحدهم في رشحه إلى أنصاف أذنيه». (البخاري ومسلم)" },
+    words:[
+      {ar:"يَقُومُ", tl:"Yaquumu", en:{en:"They will stand", ar:"يقفون من قبورهم للحساب"}},
+      {ar:"رَبِّ ٱلْعَٰلَمِينَ", tl:"Rabi al-'aalamiina", en:{en:"Lord of the Worlds", ar:"خالق ومُدبّر جميع الخلائق من إنس وجن وملائكة وغيرهم"}}
+    ] },
+
+  { n:7, ar:"كَلَّآ إِنَّ كِتَٰبَ ٱلْفُجَّارِ لَفِى سِجِّينٍ",
+    tr:{ en:"Nay! Indeed, the record of the wicked is in Sijjeen.", ar:"حقاً، إن كتاب أعمال الفجار مُثبت في سجين." },
+    tafsir:{ en:"'Kalla' is a word of rebuke and emphatic affirmation — 'Truly, beyond doubt.' Al-Fujjar are those who exceed Allah's limits in disbelief and sin. Sijjeen is described as the lowest pit of the earth or the seventh, where the books of the wicked are recorded — a place of narrow constraint and humiliation. (Al-Qurtubi, Al-Baghawi)", ar:"«كلا» للردع والتحقيق — حقاً وبلا شك. الفجار هم الخارجون عن طاعة الله بالكفر والمعاصي. وسجين موضع في أسفل الأرض أو في الأرض السابعة، تُسجل فيه كتب الفجار، وهو مكان ضيق ومُهين. (القرطبي، البغوي)" },
+    words:[
+      {ar:"كَلَّآ", tl:"Kalaa", en:{en:"Nay / Truly", ar:"كلمة ردع وتحقيق، بمعنى: حقاً وبلا شك"}},
+      {ar:"كِتَٰبَ", tl:"Kitaaba", en:{en:"Record / Book", ar:"كتاب أعمالهم المُسجَّل عليهم"}},
+      {ar:"ٱلْفُجَّارِ", tl:"Al-fujari", en:{en:"The wicked", ar:"الخارجون عن طاعة الله بالكفر والمعاصي"}},
+      {ar:"سِجِّينٍ", tl:"Sijiynin", en:{en:"Sijjeen", ar:"موضع في أسفل الأرض تُحفظ فيه كتب الفجار، وهو مكان ضيق ومُهين"}}
+    ] },
+
+  { n:8, ar:"وَمَآ أَدْرَىٰكَ مَا سِجِّينٌ",
+    tr:{ en:"And what can make you know what Sijjeen is?", ar:"وأي شيء أعلمك يا محمد ما هو سجين؟" },
+    tafsir:{ en:"A rhetorical magnification of its dread — what is in it cannot be grasped except through revelation. (Al-Razi)", ar:"استفهام لتعظيم هوله — لا يُدرَك ما فيه إلا بالوحي. (الرازي)" },
+    words:[
+      {ar:"أَدْرَىٰكَ", tl:"Adraaka", en:{en:"Made you know", ar:"أعلمك"}}
+    ] },
+
+  { n:9, ar:"كِتَٰبٌ مَّرْقُومٌ",
+    tr:{ en:"A record inscribed.", ar:"كتاب مكتوب مُحكم لا يُمحى ولا يُزاد فيه ولا يُنقص." },
+    tafsir:{ en:"Marqoom means clearly written and sealed — no addition, no omission, no alteration possible. (Al-Wasit, Al-Tahrir wa al-Tanwir)", ar:"مرقوم: مكتوب كتابةً واضحة مختومة — لا زيادة ولا نقص ولا تبديل. (الوسيط، التحرير والتنوير)" },
+    words:[
+      {ar:"مَّرْقُومٌ", tl:"Marquumun", en:{en:"Inscribed / sealed", ar:"مكتوب بإحكام لا يُمحى ولا يُغيَّر"}}
+    ] },
+
+  { n:10, ar:"وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+    tr:{ en:"Woe, that Day, to the deniers —", ar:"هلاك وعذاب شديد يومئذ للمكذبين بالبعث والحساب." },
+    tafsir:{ en:"The refrain of warning is repeated, now aimed at those who deny the Day of Recompense. (Al-Baghawi)", ar:"يتكرر الوعيد، ويُوجَّه الآن لمن يُكذِّب بيوم الجزاء. (البغوي)" },
+    words:[
+      {ar:"ٱلْمُكَذِّبِينَ", tl:"Al-mukadhibiina", en:{en:"The deniers", ar:"الذين يُكذِّبون بالبعث ويوم الحساب"}}
+    ] },
+
+  { n:11, ar:"ٱلَّذِينَ يُكَذِّبُونَ بِيَوْمِ ٱلدِّينِ",
+    tr:{ en:"those who deny the Day of Recompense.", ar:"الذين يُكذبون بيوم الجزاء والحساب." },
+    tafsir:{ en:"'Yawm al-Deen' is the Day of Recompense, when every deed is weighed in absolute justice. (Al-Qurtubi)", ar:"يوم الدين هو يوم الجزاء، حين تُوزن الأعمال بالعدل التام. (القرطبي)" },
+    words:[
+      {ar:"يَوْمِ ٱلدِّينِ", tl:"Yawmi ad-diyni", en:{en:"Day of Recompense", ar:"يوم الجزاء والحساب على الأعمال"}}
+    ] },
+
+  { n:12, ar:"وَمَا يُكَذِّبُ بِهِۦٓ إِلَّا كُلُّ مُعْتَدٍ أَثِيمٍ",
+    tr:{ en:"And none denies it except every sinful transgressor.", ar:"وما يُكذِّب بيوم الجزاء إلا كل متجاوز للحق غارق في الإثم." },
+    tafsir:{ en:"Two qualities lie beneath denial: muʿtad — one who transgresses limits in deed, and athim — one who is enveloped in sin. Disbelief is rarely intellectual alone; it is fed by stubbornness and persistent sin. (Al-Razi, Al-Maraghi)", ar:"وراء التكذيب صفتان: «معتدٍ» مُتجاوز للحدود في الفعل، و«أثيم» غارق في الإثم. الكفر نادراً ما يكون فكرياً محضاً؛ بل يُغذيه العناد ومداومة الذنب. (الرازي، المراغي)" },
+    words:[
+      {ar:"مُعْتَدٍ", tl:"Mu'tadin", en:{en:"Transgressor", ar:"مُتجاوز للحدود ظلماً وبغياً"}},
+      {ar:"أَثِيمٍ", tl:"Athiimin", en:{en:"Sinful", ar:"مُنغمس في الإثم ومُتمادٍ فيه"}}
+    ] },
+
+  { n:13, ar:"إِذَا تُتْلَىٰ عَلَيْهِ ءَايَٰتُنَا قَالَ أَسَٰطِيرُ ٱلْأَوَّلِينَ",
+    tr:{ en:"When Our verses are recited to him, he says, 'Tales of the ancients.'", ar:"إذا تُليت عليه آيات القرآن قال: هذه أكاذيب الأولين وحكاياتهم." },
+    tafsir:{ en:"He dismisses revelation as old folklore. The same accusation was leveled at every Prophet by the disbelievers of his time. (Al-Baghawi)", ar:"يصرف الوحي على أنه فولكلور قديم. وهي تهمة وُجِّهت لكل نبي من مكذبي قومه. (البغوي)" },
+    words:[
+      {ar:"تُتْلَىٰ", tl:"Tutlaa", en:{en:"Recited", ar:"تُقرأ"}},
+      {ar:"أَسَٰطِيرُ", tl:"Asaatiiru", en:{en:"Tales / fables", ar:"أكاذيب وحكايات مكتوبة"}},
+      {ar:"ٱلْأَوَّلِينَ", tl:"Al-awaliina", en:{en:"The ancients", ar:"الأقوام السابقين"}}
+    ] },
+
+  { n:14, ar:"كَلَّا ۖ بَلْ رَانَ عَلَىٰ قُلُوبِهِم مَّا كَانُوا۟ يَكْسِبُونَ",
+    tr:{ en:"Nay! Rather, the stain has covered their hearts of what they used to earn.", ar:"حقاً، بل غطّى على قلوبهم وعلاها صدأ بسبب كثرة ذنوبهم." },
+    tafsir:{ en:"'Rāna' means rust or stain that covers a polished surface. The Prophet ﷺ said: 'When the servant sins, a black dot appears on his heart. If he repents, it is wiped away; if he persists, it spreads until it covers his heart — that is the rān Allah mentions.' (Tirmidhi). Sin accumulates and finally blinds the heart to truth. (Al-Qurtubi)", ar:"الرَّان: الصدأ أو الغطاء الذي يعلو السطح الأملس. قال النبي ﷺ: «إن العبد إذا أذنب نُكتت في قلبه نكتة سوداء، فإن تاب صُقلت، وإن عاد زِيد فيها حتى تعلوَ قلبه، وهو الران الذي ذكر الله». (الترمذي). الذنوب تتراكم فتُعمي القلب عن الحق. (القرطبي)" },
+    words:[
+      {ar:"رَانَ", tl:"Raana", en:{en:"Covered as rust", ar:"غطّى وعلا كالصدأ بسبب الذنوب"}},
+      {ar:"يَكْسِبُونَ", tl:"Yaksibuuna", en:{en:"They used to earn", ar:"يَفعلون من الذنوب والمعاصي"}}
+    ] },
+
+  { n:15, ar:"كَلَّآ إِنَّهُمْ عَن رَّبِّهِمْ يَوْمَئِذٍ لَّمَحْجُوبُونَ",
+    tr:{ en:"Nay! Indeed, from their Lord, that Day, they will be veiled.", ar:"حقاً إنهم عن رؤية ربهم يوم القيامة محجوبون ممنوعون." },
+    tafsir:{ en:"Imam Ash-Shafiʿi used this verse to prove that the believers WILL see Allah on the Day of Judgment — for if veiling the disbelievers is presented here as a special punishment, it must mean others are not so veiled. The greatest loss of the disbeliever is being shut out from the vision of his Lord. (Al-Razi, Al-Qurtubi)", ar:"استدلَّ الإمام الشافعي بهذه الآية على أن المؤمنين يرون ربهم يوم القيامة — لأن حجب الكفار جُعل هنا عقوبةً خاصةً، فدلَّ على أن غيرهم غير محجوبين. وأعظم خسارة الكافر: حُرمانه رؤية ربه. (الرازي، القرطبي)" },
+    words:[
+      {ar:"لَّمَحْجُوبُونَ", tl:"Lamahjuubuuna", en:{en:"Veiled / shut out", ar:"ممنوعون من رؤية الله محرومون من النظر إليه"}}
+    ] },
+
+  { n:16, ar:"ثُمَّ إِنَّهُمْ لَصَالُوا۟ ٱلْجَحِيمِ",
+    tr:{ en:"Then indeed, they will [enter and] burn in Hellfire.", ar:"ثم إنهم بعد الحجاب لداخلون الجحيم يقاسون حرّها." },
+    tafsir:{ en:"After the spiritual punishment of being veiled from Allah comes the physical punishment of the Fire. (Al-Baghawi)", ar:"بعد العقوبة الروحية بالحجب عن الله، تأتي العقوبة الجسدية بالنار. (البغوي)" },
+    words:[
+      {ar:"لَصَالُوا۟", tl:"Lasaaluu", en:{en:"They will surely burn / enter", ar:"داخلون يُقاسون حرَّها"}},
+      {ar:"ٱلْجَحِيمِ", tl:"Al-jahiimi", en:{en:"The Blazing Fire", ar:"النار الشديدة المُتأجِّجة"}}
+    ] },
+
+  { n:17, ar:"ثُمَّ يُقَالُ هَٰذَا ٱلَّذِى كُنتُم بِهِۦ تُكَذِّبُونَ",
+    tr:{ en:"Then it will be said, 'This is what you used to deny.'", ar:"ثم يقال لهم توبيخاً: هذا العذاب هو الذي كنتم به تكذِّبون في الدنيا." },
+    tafsir:{ en:"A rebuke that doubles the torment: not only the Fire, but the realization that they were warned and refused. (Al-Wasit)", ar:"توبيخ يُضاعف العذاب: ليس النار فحسب، بل إدراك أنهم حُذِّروا فأبَوا. (الوسيط)" },
+    words:[
+      {ar:"تُكَذِّبُونَ", tl:"Tukadhibuuna", en:{en:"You used to deny", ar:"تُكذِّبون به وتُنكِرونه"}}
+    ] },
+
+  { n:18, ar:"كَلَّآ إِنَّ كِتَٰبَ ٱلْأَبْرَارِ لَفِى عِلِّيِّينَ",
+    tr:{ en:"Nay! Indeed, the record of the righteous is in ʿIlliyyeen.", ar:"حقاً، إن كتاب أعمال الأبرار مرفوع في عليين، أعلى الأمكنة في الجنة." },
+    tafsir:{ en:"Al-Abrār are the truthful, the righteous — those whose hearts are pure and whose deeds are upright. ʿIlliyyīn is the elevated place where their books are kept, in the highest level of Paradise; some scholars said it is the seventh heaven beneath the Throne. The contrast with Sijjeen (low) is striking. (Al-Qurtubi, Al-Razi)", ar:"الأبرار هم الصادقون الصالحون — الذين طهرت قلوبهم واستقامت أعمالهم. وعليون هو المكان المرتفع الذي تُحفظ فيه كتبهم، في أعلى الجنة؛ وقيل: السماء السابعة تحت العرش. والتباين مع سجين (الأسفل) ظاهر. (القرطبي، الرازي)" },
+    words:[
+      {ar:"ٱلْأَبْرَارِ", tl:"Al-abraari", en:{en:"The righteous", ar:"الصادقون الصالحون أهل الطاعة وصفاء القلب"}},
+      {ar:"عِلِّيِّينَ", tl:"Iliyiyna", en:{en:"ʿIlliyyeen — the elevated place", ar:"أعلى الجنة، موضع كتب الأبرار، وقيل: في السماء السابعة تحت العرش"}}
+    ] },
+
+  { n:19, ar:"وَمَآ أَدْرَىٰكَ مَا عِلِّيُّونَ",
+    tr:{ en:"And what can make you know what ʿIlliyyeen is?", ar:"وأي شيء أعلمك يا محمد ما هو عليون؟" },
+    tafsir:{ en:"A magnification of its honor: its splendor surpasses human imagination. (Al-Razi)", ar:"تعظيم لشأنه: جلاله يفوق التصور البشري. (الرازي)" },
+    words:[
+      {ar:"أَدْرَىٰكَ", tl:"Adraaka", en:{en:"Made you know", ar:"أعلمك"}}
+    ] },
+
+  { n:20, ar:"كِتَٰبٌ مَّرْقُومٌ",
+    tr:{ en:"A record inscribed,", ar:"كتاب مكتوب مُحكم لا يُمحى ولا يُغيَّر." },
+    tafsir:{ en:"The same description as Sijjeen — a sealed, perfect record, but here for the righteous. (Al-Baghawi)", ar:"الوصف نفسه كسجين — كتاب مختوم مُحكم، ولكنه هنا للأبرار. (البغوي)" },
+    words:[
+      {ar:"مَّرْقُومٌ", tl:"Marquumun", en:{en:"Inscribed / sealed", ar:"مكتوب بإحكام لا يُمحى ولا يُغيَّر"}}
+    ] },
+
+  { n:21, ar:"يَشْهَدُهُ ٱلْمُقَرَّبُونَ",
+    tr:{ en:"witnessed by those brought near [to Allah].", ar:"يحضره ويشهده الملائكة المقربون عند الله." },
+    tafsir:{ en:"Al-Muqarraboon are the highest angels and the elite of creation. Their witnessing the record of the Abrār is itself an honor for the righteous. (Al-Qurtubi)", ar:"المقربون: علية الملائكة وخواصُّ الخلق. شهادتهم لكتاب الأبرار شرف لهم. (القرطبي)" },
+    words:[
+      {ar:"يَشْهَدُهُ", tl:"Yashhaduhu", en:{en:"Witnessed by", ar:"يحضره ويشهد كتابته"}},
+      {ar:"ٱلْمُقَرَّبُونَ", tl:"Al-muqarabuuna", en:{en:"Those brought near", ar:"خواص الملائكة المقربون عند الله"}}
+    ] },
+
+  { n:22, ar:"إِنَّ ٱلْأَبْرَارَ لَفِى نَعِيمٍ",
+    tr:{ en:"Indeed, the righteous will be in pleasure", ar:"إن الأبرار في نعيم دائم لا ينقطع في الجنة." },
+    tafsir:{ en:"After establishing their honored book, Allah unveils their reward: a continuous, comprehensive bliss. (Al-Wasit)", ar:"بعد بيان شرف كتابهم، يكشف الله عن جزائهم: نعيم دائم شامل. (الوسيط)" },
+    words:[
+      {ar:"نَعِيمٍ", tl:"Na'iimin", en:{en:"Pleasure / bliss", ar:"نعيم دائم متصل في الجنة"}}
+    ] },
+
+  { n:23, ar:"عَلَى ٱلْأَرَآئِكِ يَنظُرُونَ",
+    tr:{ en:"on adorned couches, observing.", ar:"على الأسرَّة المُزيَّنة بالستائر ينظرون إلى ما أنعم الله به عليهم." },
+    tafsir:{ en:"Al-Arāʾik are luxurious thrones/couches with canopies. They look at the bounties of Paradise — and many scholars hold that the noblest object of their gaze is the Face of Allah, the highest pleasure of Paradise. (Al-Qurtubi)", ar:"الأرائك: الأسرَّة المُزيَّنة الفاخرة ذات الحجال. ينظرون إلى ما أنعم الله به عليهم — وقال كثير من العلماء: أشرف ما ينظرون إليه وجه الله الكريم، وهو أعظم نعيم الجنة. (القرطبي)" },
+    words:[
+      {ar:"ٱلْأَرَآئِكِ", tl:"Al-araa'iki", en:{en:"Adorned couches", ar:"الأسرَّة المُزيَّنة الفاخرة ذات الستائر"}},
+      {ar:"يَنظُرُونَ", tl:"Yanzuruuna", en:{en:"They observe", ar:"ينظرون إلى ما أنعم الله به عليهم، وقيل: إلى وجه ربهم"}}
+    ] },
+
+  { n:24, ar:"تَعْرِفُ فِى وُجُوهِهِمْ نَضْرَةَ ٱلنَّعِيمِ",
+    tr:{ en:"You will recognize in their faces the radiance of pleasure.", ar:"ترى في وجوههم بَهجة وحُسناً ورونقَ النعيم." },
+    tafsir:{ en:"The inner bliss spills out as physical radiance. The beauty of righteousness lights up the face — both in this world and the next. (Al-Baghawi)", ar:"يفيض النعيم الباطن نوراً على الوجوه. جمال البر يُشرق في الوجه — في الدنيا والآخرة. (البغوي)" },
+    words:[
+      {ar:"نَضْرَةَ", tl:"Nadraha", en:{en:"Radiance / freshness", ar:"بهجة وحُسن ورونق وإشراق"}}
+    ] },
+
+  { n:25, ar:"يُسْقَوْنَ مِن رَّحِيقٍ مَّخْتُومٍ",
+    tr:{ en:"They will be given to drink of a pure wine, sealed,", ar:"يُسقَون من خمر صافية لا غش فيها، مختومة الأواني." },
+    tafsir:{ en:"Raheeq is the purest, choicest wine — utterly free of the harms of worldly wine. It is sealed, never touched, kept solely for them. (Al-Qurtubi, Al-Razi)", ar:"الرحيق: أصفى الخمر وأخلصها — خالية من مفاسد خمر الدنيا. مختومة لم تُمسَّ، مُدَّخرة لهم. (القرطبي، الرازي)" },
+    words:[
+      {ar:"رَّحِيقٍ", tl:"Rahiiqin", en:{en:"Pure wine", ar:"خمر صافية خالصة لا غش فيها ولا أذى"}},
+      {ar:"مَّخْتُومٍ", tl:"Makhtuumin", en:{en:"Sealed", ar:"مختوم الإناء، مُدَّخر لم يُمسَّ"}}
+    ] },
+
+  { n:26, ar:"خِتَٰمُهُۥ مِسْكٌ ۚ وَفِى ذَٰلِكَ فَلْيَتَنَافَسِ ٱلْمُتَنَٰفِسُونَ",
+    tr:{ en:"its seal is musk — so for this let the competitors compete.", ar:"خاتمه مسك، وفي هذا النعيم فليتسابق المتسابقون بالأعمال الصالحة." },
+    tafsir:{ en:"Its seal — what one finds at its end — is musk. Then Allah urges: this is the prize worth racing for. Worldly people compete for fading things; the wise compete for the eternal. (Al-Wasit, Al-Tahrir wa al-Tanwir)", ar:"خاتمه — ما يجده في آخره — مسك. ثم يحثُّ الله: هذا الجائزة التي تستحق السباق. أهل الدنيا يتنافسون في الفاني، والعقلاء يتنافسون في الباقي. (الوسيط، التحرير والتنوير)" },
+    words:[
+      {ar:"خِتَٰمُهُۥ", tl:"Khitaamuhu", en:{en:"Its seal / end", ar:"آخره وما يُختم به"}},
+      {ar:"مِسْكٌ", tl:"Miskun", en:{en:"Musk", ar:"طِيب فاخر معروف بطيب رائحته"}},
+      {ar:"فَلْيَتَنَافَسِ", tl:"Falyatanaafasi", en:{en:"Let them compete", ar:"فليتسابق ويتباذل في طلبه"}}
+    ] },
+
+  { n:27, ar:"وَمِزَاجُهُۥ مِن تَسْنِيمٍ",
+    tr:{ en:"And its mixture is of Tasneem —", ar:"وما يُمزج به هذا الشراب من عين عالية تُسمى تسنيم." },
+    tafsir:{ en:"Tasneem is the highest spring of Paradise — its name from 'sanam' (height). Its water is mixed into the drink of the Abrār to perfect their pleasure. (Al-Baghawi)", ar:"تسنيم أعلى عين في الجنة — من «السنام» (الارتفاع). يُمزج ماؤها بشراب الأبرار ليكتمل لذتُهم. (البغوي)" },
+    words:[
+      {ar:"مِزَاجُهُۥ", tl:"Mizaajuhu", en:{en:"Its mixture", ar:"ما يُخلط به ويُمزج"}},
+      {ar:"تَسْنِيمٍ", tl:"Tasniimin", en:{en:"Tasneem", ar:"أعلى عين في الجنة، من التسنُّم وهو العلو"}}
+    ] },
+
+  { n:28, ar:"عَيْنًا يَشْرَبُ بِهَا ٱلْمُقَرَّبُونَ",
+    tr:{ en:"a spring from which those brought near [to Allah] drink.", ar:"عيناً يشرب منها صرفاً المقربون، وتُمزج لأصحاب اليمين." },
+    tafsir:{ en:"The Muqarraboon — the elite of believers — drink Tasneem pure; for others among the Abrār it is mixed. Levels in Paradise differ. (Al-Razi)", ar:"المقربون — صفوة المؤمنين — يشربون تسنيم صرفاً؛ ولغيرهم من الأبرار تُمزج. درجات الجنة متفاوتة. (الرازي)" },
+    words:[
+      {ar:"عَيْنًا", tl:"Aynan", en:{en:"A spring", ar:"ينبوع ماء"}},
+      {ar:"ٱلْمُقَرَّبُونَ", tl:"Al-muqarabuuna", en:{en:"Those brought near", ar:"صفوة المؤمنين أعلى أهل الجنة منزلةً"}}
+    ] },
+
+  { n:29, ar:"إِنَّ ٱلَّذِينَ أَجْرَمُوا۟ كَانُوا۟ مِنَ ٱلَّذِينَ ءَامَنُوا۟ يَضْحَكُونَ",
+    tr:{ en:"Indeed, those who committed crimes used to laugh at those who believed,", ar:"إن الذين كفروا وأجرموا كانوا في الدنيا يستهزئون بالمؤمنين ويضحكون عليهم." },
+    tafsir:{ en:"The Surah now turns to the worldly suffering of the believers. Disbelievers — like Abu Jahl and others in Makkah — mocked Bilāl, ʿAmmār, and the poor Muslims for their faith. (Al-Wasit, Al-Maraghi)", ar:"تنتقل السورة إلى ما لاقاه المؤمنون في الدنيا. كان الكفار — كأبي جهل وغيره في مكة — يستهزئون ببلال وعمار وفقراء المسلمين بسبب إيمانهم. (الوسيط، المراغي)" },
+    words:[
+      {ar:"أَجْرَمُوا۟", tl:"Ajramuu", en:{en:"Committed crimes", ar:"كفروا واقترفوا الذنوب"}},
+      {ar:"يَضْحَكُونَ", tl:"Yadhakuuna", en:{en:"They used to laugh", ar:"يستهزئون ويسخرون"}}
+    ] },
+
+  { n:30, ar:"وَإِذَا مَرُّوا۟ بِهِمْ يَتَغَامَزُونَ",
+    tr:{ en:"and when they passed by them, they would exchange winks,", ar:"وإذا مر المؤمنون بالكفار غَمزَ بعضُهم بعضاً سُخريةً واحتقاراً." },
+    tafsir:{ en:"They would signal to one another with eyes and gestures — the universal language of mockery and contempt. (Al-Qurtubi)", ar:"يتغامز بعضهم لبعض بأعينهم وإشاراتهم — لغة السخرية والاحتقار العالمية. (القرطبي)" },
+    words:[
+      {ar:"مَرُّوا۟", tl:"Maruw", en:{en:"They passed by", ar:"مرَّ المؤمنون بالكفار"}},
+      {ar:"يَتَغَامَزُونَ", tl:"Yataghaamazuuna", en:{en:"They would wink at one another", ar:"يُشير بعضهم لبعض بالأعين والحواجب سخريةً واستهزاءً"}}
+    ] },
+
+  { n:31, ar:"وَإِذَا ٱنقَلَبُوٓا۟ إِلَىٰٓ أَهْلِهِمُ ٱنقَلَبُوا۟ فَكِهِينَ",
+    tr:{ en:"and when they returned to their families, they would return amused,", ar:"وإذا رجع الكفار إلى أهلهم رجعوا مُعجبين بأنفسهم متفاكهين بسخريتهم." },
+    tafsir:{ en:"They went home boasting of their mockery — entertainment at the believers' expense. (Al-Baghawi)", ar:"يرجعون إلى أهلهم متفاخرين بسخريتهم — تسلية على حساب المؤمنين. (البغوي)" },
+    words:[
+      {ar:"ٱنقَلَبُوٓا۟", tl:"Nqalabuu", en:{en:"They returned", ar:"رجعوا"}},
+      {ar:"فَكِهِينَ", tl:"Fakihiina", en:{en:"Amused / merry", ar:"مُعجَبين بسخريتهم متفاكهين بها"}}
+    ] },
+
+  { n:32, ar:"وَإِذَا رَأَوْهُمْ قَالُوٓا۟ إِنَّ هَٰٓؤُلَآءِ لَضَآلُّونَ",
+    tr:{ en:"and when they saw them, they said, 'Indeed, these are surely astray.'", ar:"وإذا رأى الكفار المؤمنين قالوا: إن هؤلاء لضالُّون عن طريقهم وعاداتهم." },
+    tafsir:{ en:"They called the people of guidance 'astray.' Truth and falsehood often invert their labels in the eyes of the proud. (Al-Razi)", ar:"وصفوا أهل الهداية بالضلال. كثيراً ما يقلب أهل الكِبر مسميات الحق والباطل. (الرازي)" },
+    words:[
+      {ar:"رَأَوْهُمْ", tl:"Raawhum", en:{en:"They saw them", ar:"رأى الكفار المؤمنين"}},
+      {ar:"ضَآلُّونَ", tl:"Daaluwna", en:{en:"Astray", ar:"بعيدون عن طريقهم وعاداتهم في زعمهم"}}
+    ] },
+
+  { n:33, ar:"وَمَآ أُرْسِلُوا۟ عَلَيْهِمْ حَٰفِظِينَ",
+    tr:{ en:"But they had not been sent as guardians over them.", ar:"وما أُرسل الكفار على المؤمنين رقباء يحفظون أعمالهم." },
+    tafsir:{ en:"Who appointed them judges over the believers? No one assigned them to watch and rule on others' destinies. (Al-Wasit, Al-Tahrir wa al-Tanwir)", ar:"من جعلهم حُكَّاماً على المؤمنين؟ لم يُكَلَّفوا بحفظ أعمال الناس ولا الحكم على مصائرهم. (الوسيط، التحرير والتنوير)" },
+    words:[
+      {ar:"حَٰفِظِينَ", tl:"Haafiziina", en:{en:"Guardians / watchers", ar:"رقباء على أعمالهم يحفظونها ويحكمون عليهم"}}
+    ] },
+
+  { n:34, ar:"فَٱلْيَوْمَ ٱلَّذِينَ ءَامَنُوا۟ مِنَ ٱلْكُفَّارِ يَضْحَكُونَ",
+    tr:{ en:"So today the believers are laughing at the disbelievers,", ar:"فاليوم — يوم القيامة — يضحك المؤمنون من الكفار جزاءً وفاقاً." },
+    tafsir:{ en:"The great reversal. The believers, mocked in the world, now laugh at the disbelievers' state in the Fire — a recompense by perfect divine justice. (Al-Qurtubi)", ar:"الانقلاب العظيم. المؤمنون الذين سُخر منهم في الدنيا يضحكون اليوم من حال الكفار في النار — جزاءً من العدل الإلهي التام. (القرطبي)" },
+    words:[
+      {ar:"ٱلْيَوْمَ", tl:"Al-yawma", en:{en:"Today / that Day", ar:"يوم القيامة"}},
+      {ar:"يَضْحَكُونَ", tl:"Yadhakuuna", en:{en:"They laugh", ar:"يضحك المؤمنون من حال الكفار جزاءً"}}
+    ] },
+
+  { n:35, ar:"عَلَى ٱلْأَرَآئِكِ يَنظُرُونَ",
+    tr:{ en:"on adorned couches, observing.", ar:"على الأسرَّة المُزيَّنة ينظرون إلى ما أعدَّ الله لهم وإلى عذاب الكفار." },
+    tafsir:{ en:"From their thrones of honor they witness the justice of Allah. The verse repeats verse 23 — same scene, now in the context of the final reckoning. (Al-Baghawi)", ar:"من فوق أسرَّتهم الكريمة يشاهدون عدل الله. وتكرَّر مضمون الآية ٢٣ — المشهد نفسه، الآن في سياق الحساب الختامي. (البغوي)" },
+    words:[
+      {ar:"ٱلْأَرَآئِكِ", tl:"Al-araa'iki", en:{en:"Adorned couches", ar:"الأسرَّة المُزيَّنة الفاخرة ذات الستائر"}}
+    ] },
+
+  { n:36, ar:"هَلْ ثُوِّبَ ٱلْكُفَّارُ مَا كَانُوا۟ يَفْعَلُونَ",
+    tr:{ en:"Have the disbelievers been rewarded for what they used to do?", ar:"هل جُوزي الكفار جزاءً موافقاً لأعمالهم في الدنيا من الكفر والسخرية؟" },
+    tafsir:{ en:"A closing rhetorical question: yes — they have been recompensed in full, exactly as their deeds deserved. The Surah ends as it began: justice. Whoever cheats people of their right will themselves be repaid with perfect precision. (Al-Razi, Al-Maraghi)", ar:"استفهام ختامي تقريري: نعم — جُوزوا جزاءً تاماً بقدر أعمالهم. تنتهي السورة كما بدأت: بالعدل. من بَخس الناس حقوقهم بُخس بعدل تام. (الرازي، المراغي)" },
+    words:[
+      {ar:"ثُوِّبَ", tl:"Thuwiba", en:{en:"Been rewarded / recompensed", ar:"جُوزي بجزاء موافق لعمله"}},
+      {ar:"يَفْعَلُونَ", tl:"Yaf'aluuna", en:{en:"They used to do", ar:"يصنعون من الكفر والاستهزاء بالمؤمنين"}}
+    ] },
+];
+
+const STORY = [
+  {t:{en:"Revealed in Madinah's Marketplaces",ar:"نزولها وأسواق المدينة"}, d:{en:"Although classified as Makki by the majority, Ibn Abbas and others narrate that Al-Mutaffifeen was the first or one of the first Surahs revealed in Madinah. The people of Madinah were notorious for cheating in measure and weight. When the Surah was revealed they reformed and became among the most honest in trade. (Reported by An-Nasaʾi and Ibn Majah)",ar:"على الرغم من تصنيفها مكية عند الجمهور، فإن ابن عباس وغيره يَروون أن المطففين أول أو من أوائل ما نزل بالمدينة. كان أهل المدينة من أسوأ الناس كيلاً ووزناً. فلما نزلت السورة أحسنوا الكيل حتى صاروا من أصدق الناس في التجارة. (رواه النسائي وابن ماجه)"}, tags:{en:["Sabab Nuzool","Marketplace","Reform"], ar:["سبب النزول","الأسواق","الإصلاح"]}},
+  {t:{en:"The Sin That Destroyed Madyan",ar:"الذنب الذي أهلك مدين"}, d:{en:"Cheating in measure was the very sin for which Prophet Shuʿayb ﷺ called his people to repent — and they refused, so Allah destroyed them (Surah Hud 84-95). Al-Mutaffifeen reminds the Ummah of Muhammad ﷺ that small acts of commercial dishonesty can incur tremendous divine displeasure. (Al-Qurtubi)",ar:"كان التطفيف هو الذنب الذي دعا إليه شعيبٌ ﷺ قومه فأبَوا، فأهلكهم الله (هود ٨٤-٩٥). فتُذكِّر سورة المطففين أمة محمد ﷺ بأن أعمال الغش الصغيرة في التجارة قد تستوجب غضباً عظيماً. (القرطبي)"}, tags:{en:["Shuʿayb","Madyan","Warning"], ar:["شعيب","مدين","الوعيد"]}},
+  {t:{en:"Two Records, Two Destinies",ar:"كتابان ومصيران"}, d:{en:"The Surah introduces two contrasting books: Sijjeen — a sealed record of the wicked, kept in a low and humiliating place; and ʿIlliyyīn — a sealed record of the righteous, kept in the highest reaches, witnessed by the angels closest to Allah. The same word marqoom describes both — Allah's justice does not miss a deed in either direction. (Al-Razi, Al-Baghawi)",ar:"تُقدِّم السورة كتابين متضادَّين: سجين — كتاب الفجار المختوم في موضع سُفلي مُهين؛ وعليون — كتاب الأبرار المختوم في أعلى المنازل، يشهده أقرب الملائكة إلى الله. والوصف نفسه «مرقوم» يجمعهما — عدل الله لا يَفُوته عمل في الاتجاهين. (الرازي، البغوي)"}, tags:{en:["Sijjeen","ʿIlliyyeen","Records"], ar:["سجين","عليون","الكتب"]}},
+  {t:{en:"The Hadith of the Black Dot",ar:"حديث النكتة السوداء"}, d:{en:"Commenting on verse 14 — 'rather the stain has covered their hearts' — the Prophet ﷺ said: 'When the servant sins, a black dot appears on his heart. If he repents and seeks forgiveness, his heart is polished. If he persists, the dot grows until it covers his heart entirely — that is the rān Allah mentioned.' (Tirmidhi, Sahih) Sin, left without repentance, slowly blinds the heart to truth.",ar:"في تفسير الآية ١٤ — «بل ران على قلوبهم» — قال النبي ﷺ: «إن العبد إذا أذنب نُكتت في قلبه نكتة سوداء، فإن تاب واستغفر صُقل قلبه، وإن عاد زِيد فيها حتى تعلوَ قلبه، وهو الران الذي ذكر الله في القرآن». (الترمذي، صحيح) الذنوب بلا توبة تُعمي القلب عن الحق شيئاً فشيئاً."}, tags:{en:["Hadith","Tirmidhi","The Heart"], ar:["الحديث","الترمذي","القلب"]}},
+  {t:{en:"The Believers See, the Deniers Are Veiled",ar:"المؤمنون يرَون والكفار محجوبون"}, d:{en:"Verse 15 — 'from their Lord, that Day, they will be veiled' — became one of the key proofs Imam Ash-Shafiʿi used to affirm the great honor of the believers: the vision of Allah on the Day of Judgment. The veiling of disbelievers is highlighted as a singular punishment precisely because the believers will not be veiled. (Al-Razi, Al-Qurtubi)",ar:"الآية ١٥ — «إنهم عن ربهم يومئذ لمحجوبون» — من أبرز ما استدلَّ به الإمام الشافعي على شرف المؤمنين العظيم: رؤية الله يوم القيامة. حُجب الكفار جُعل عقوبةً مميزة، لأن المؤمنين لن يُحجبوا. (الرازي، القرطبي)"}, tags:{en:["Ru'yah","Ash-Shafiʿi","Honor"], ar:["الرؤية","الشافعي","الشرف"]}},
+  {t:{en:"The Great Reversal",ar:"الانقلاب العظيم"}, d:{en:"The Surah closes with a striking inversion: the disbelievers who laughed at Bilāl, ʿAmmār, and the poor believers in Makkah will themselves be laughed at on the Day of Judgment, while the believers sit on adorned couches and behold the justice of Allah. Whatever they suffered in this world is repaid with eternal honor. (Al-Maraghi, Al-Wasit)",ar:"تُختم السورة بانقلاب لافت: الكفار الذين ضحكوا من بلال وعمار وفقراء المؤمنين في مكة، سيُضحَك منهم يوم القيامة، والمؤمنون على الأرائك ينظرون إلى عدل الله. كل ما لاقَوه في الدنيا يُجزَون عنه بشرف أبدي. (المراغي، الوسيط)"}, tags:{en:["Justice","Reversal","Reward"], ar:["العدل","الانقلاب","الجزاء"]}},
+];
+
+const CHARS = [
+  {e:"⚖️", role:{en:"The Defrauders",ar:"المطففون"}, name:{en:"Al-Mutaffifeen",ar:"المطففون"}, d:{en:"Those who take their right in full from people but give people less when it is their turn to measure or weigh. The Surah's name and central warning. The Prophet ﷺ taught that honesty in trade and weight is a sign of true faith — and dishonesty in it brings ruin in this world and the next.",ar:"الذين يأخذون حقهم كاملاً من الناس ويُنقصون للناس حقهم حين يكيلون أو يزنون لهم. اسم السورة وموضوع الوعيد الأساسي. علَّم النبي ﷺ أن الصدق في التجارة والميزان من علامات الإيمان الصادق — وأن التطفيف فيه هلاك في الدنيا والآخرة."}},
+  {e:"📕", role:{en:"The Wicked & Their Record",ar:"الفجار وكتابهم"}, name:{en:"Al-Fujjār & Sijjeen",ar:"الفجار وسجين"}, d:{en:"Al-Fujjār are those who exceed Allah's limits with disbelief and persistent sin. Their deeds are recorded in Sijjeen — described as a sealed register in the lowest part of existence, a place of constraint and shame. The name derives from the root of imprisonment.",ar:"الفجار هم الخارجون عن حدود الله بالكفر ومداومة المعصية. وأعمالهم مُسجَّلة في سجين — كتاب مختوم في أسفل الوجود، مكان ضيق ومُذِل. واسمه من جذر «السجن»."}},
+  {e:"📗", role:{en:"The Righteous & Their Record",ar:"الأبرار وكتابهم"}, name:{en:"Al-Abrār & ʿIlliyyīn",ar:"الأبرار وعليون"}, d:{en:"Al-Abrār are the truthful and righteous — those whose inner state and outer deeds align with the pleasure of Allah. Their record is in ʿIlliyyīn, the highest of places, witnessed by the angels closest to Allah. The name derives from height and elevation.",ar:"الأبرار هم الصادقون الصالحون — الذين تتفق سرائرهم وأفعالهم على مرضاة الله. كتابهم في عليين، أعلى المنازل، يشهده أقرب الملائكة إلى الله. واسمه من العلو والارتفاع."}},
+  {e:"🥂", role:{en:"The Sealed Drink",ar:"الشراب المختوم"}, name:{en:"Raheeq & Tasneem",ar:"الرحيق وتسنيم"}, d:{en:"The reward of the Abrār includes a pure, sealed wine (raheeq) whose seal is musk and whose mixture is from Tasneem — the highest spring of Paradise, drunk pure by the Muqarraboon. A bliss whose every detail Allah refines with care, that we may compete for it instead of for fading worldly pleasures.",ar:"من جزاء الأبرار شراب رحيق صافٍ مختوم بالمسك، مزاجه من تسنيم — أعلى عيون الجنة، يشربها المقربون صرفاً. نعيم يُتقن الله كل تفصيل فيه، لنتنافس فيه بدل التنافس في زائل الدنيا."}},
+  {e:"😔", role:{en:"The Veil from Allah",ar:"الحجاب عن الله"}, name:{en:"Lamaḥjūbūn",ar:"محجوبون"}, d:{en:"The greatest punishment of the disbelievers, even before the Fire, is to be veiled from the vision of their Lord. Imam Ash-Shafiʿi held this verse to be a clear proof that the believers will see Allah — for veiling is only a punishment if others are honored with the sight.",ar:"أعظم عقوبة للكفار، قبل النار، أن يُحجبوا عن رؤية ربهم. وعدَّ الإمام الشافعي هذه الآية برهاناً واضحاً على رؤية المؤمنين لله — إذ لا يكون الحجب عقوبة إلا إذا أُكرم غيرهم بالرؤية."}},
+  {e:"🔄", role:{en:"The Great Reversal",ar:"الانقلاب العظيم"}, name:{en:"Yawm al-Inqilāb",ar:"يوم الانقلاب"}, d:{en:"In the world the disbelievers mocked the believers, winked at them, and called them astray. On the Day of Judgment the believers, from thrones of honor, will be the ones who laugh — not in spite, but as a witness to Allah's perfect justice. Every smile of mockery in the dunya is answered.",ar:"في الدنيا كان الكفار يستهزئون بالمؤمنين ويغمزون ويقولون: «إن هؤلاء لضالُّون». ويوم القيامة، يضحك المؤمنون من فوق أسرَّتهم — لا شَماتةً، بل شهادةً على عدل الله التام. كل ابتسامة سخرية في الدنيا يُجزى عليها."}},
+];
+
+const VOCAB = [
+  {ar:"وَيْلٌ", tl:"Waylun", m:{en:"Woe / Severe ruin",ar:"كلمة وعيد وعذاب شديد، وقيل: وادٍ في جهنم"}, n:{en:"A word of severe threat. Ibn Abbas said it is a valley in Hellfire.",ar:"كلمة وعيد شديد، قال ابن عباس: واد في جهنم، وقيل: الهلاك والخزي."}},
+  {ar:"ٱلْمُطَفِّفِينَ", tl:"Al-mutafifiina", m:{en:"Those who give short measure",ar:"الذين يَبخسون الكيل والميزان ويُنقصون حقوق الناس"}, n:{en:"From taffafa — to cheat in measure and weight, even by a small amount.",ar:"من «طفّف»: أنقص في الكيل والوزن ولو قليلاً."}},
+  {ar:"ٱكْتَالُوا۟", tl:"Ktaaluu", m:{en:"They take by measure",ar:"أخذوا الكيل لأنفسهم من غيرهم"}, n:{en:"Form VIII of kāla — to take a measured quantity for oneself.",ar:"وزن «افتعل» من كال — أي أخذ مكيلاً لنفسه."}},
+  {ar:"يَسْتَوْفُونَ", tl:"Yastawfuuna", m:{en:"They take in full",ar:"يأخذون حقهم كاملاً تاماً لا يَقبلون نقصاً"}, n:{en:"They demand complete and full measure for themselves.",ar:"يَطلبون استيفاء حقهم تاماً كاملاً."}},
+  {ar:"يُخْسِرُونَ", tl:"Yukhsiruuna", m:{en:"They give less / cause loss",ar:"ينقصون الكيل والوزن ويُلحقون الخسارة بالناس"}, n:{en:"They diminish what is due to others.",ar:"يُنقصون ما يجب لغيرهم."}},
+  {ar:"مَّبْعُوثُونَ", tl:"Mab'uuthuuna", m:{en:"Resurrected",ar:"مُخرَجون من قبورهم أحياء للحساب"}, n:{en:"Brought back to life after death for judgment.",ar:"يُخرَجون من القبور بعد الموت أحياءً للحساب."}},
+  {ar:"يَوْمٍ عَظِيمٍ", tl:"Yawmin aziimin", m:{en:"A tremendous Day",ar:"يوم القيامة، عظيم الشأن والهول"}, n:{en:"The Day of Judgment — great in horror, length, and accountability.",ar:"يوم القيامة، عظيم في هوله وطوله وحسابه."}},
+  {ar:"رَبِّ ٱلْعَٰلَمِينَ", tl:"Rabi al-'aalamiina", m:{en:"Lord of the Worlds",ar:"خالق ومُدبّر جميع الخلائق من إنس وجن وملائكة وغيرهم"}, n:{en:"The Creator and Sustainer of every world — human, jinn, angelic.",ar:"الخالق المدبر لكل العوالم — الإنس والجن والملائكة."}},
+  {ar:"كَلَّآ", tl:"Kalaa", m:{en:"Nay / Truly",ar:"كلمة ردع وتحقيق، بمعنى: حقاً وبلا شك"}, n:{en:"A particle of rebuke followed by emphatic affirmation.",ar:"حرف ردع، ثم تحقيق وتوكيد."}},
+  {ar:"ٱلْفُجَّارِ", tl:"Al-fujari", m:{en:"The wicked",ar:"الخارجون عن طاعة الله بالكفر والمعاصي"}, n:{en:"From fajara — to break out of obedience by disbelief or sin.",ar:"من «فجر»: خرج عن الطاعة بالكفر أو المعصية."}},
+  {ar:"سِجِّينٍ", tl:"Sijiynin", m:{en:"Sijjeen",ar:"موضع في أسفل الأرض تُحفظ فيه كتب الفجار، وهو مكان ضيق ومُهين"}, n:{en:"A sealed register in the lowest depths; its root suggests imprisonment.",ar:"كتاب مختوم في أسفل الأمكنة؛ جذره يدل على السجن."}},
+  {ar:"مَّرْقُومٌ", tl:"Marquumun", m:{en:"Inscribed / sealed",ar:"مكتوب بإحكام لا يُمحى ولا يُغيَّر"}, n:{en:"A finely written, sealed record allowing no change.",ar:"مكتوب محكم مختوم لا تبديل فيه."}},
+  {ar:"ٱلْمُكَذِّبِينَ", tl:"Al-mukadhibiina", m:{en:"The deniers",ar:"الذين يُكذِّبون بالبعث ويوم الحساب"}, n:{en:"Those who reject the Day of Recompense.",ar:"المُكذِّبون بيوم الجزاء."}},
+  {ar:"يَوْمِ ٱلدِّينِ", tl:"Yawmi ad-diyni", m:{en:"Day of Recompense",ar:"يوم الجزاء والحساب على الأعمال"}, n:{en:"The Day when every deed is weighed with perfect justice.",ar:"اليوم الذي تُوزن فيه الأعمال بالعدل التام."}},
+  {ar:"مُعْتَدٍ", tl:"Mu'tadin", m:{en:"Transgressor",ar:"مُتجاوز للحدود ظلماً وبغياً"}, n:{en:"One who crosses Allah's bounds by oppression.",ar:"من تجاوز حدود الله ظلماً."}},
+  {ar:"أَثِيمٍ", tl:"Athiimin", m:{en:"Sinful",ar:"مُنغمس في الإثم ومُتمادٍ فيه"}, n:{en:"One enveloped in and persistent on sin.",ar:"غارق في الإثم متمادٍ في فعله."}},
+  {ar:"أَسَٰطِيرُ", tl:"Asaatiiru", m:{en:"Tales / fables",ar:"أكاذيب وحكايات مكتوبة"}, n:{en:"Plural of usṭurah — fanciful stories without truth.",ar:"جمع أُسطورة — حكايات بلا حقيقة."}},
+  {ar:"رَانَ", tl:"Raana", m:{en:"Covered as rust",ar:"غطّى وعلا كالصدأ بسبب الذنوب"}, n:{en:"Sin accumulates on the heart like rust on iron, blinding it to truth.",ar:"يَركم الذنب على القلب كالصدأ على الحديد، فيَعمى عن الحق."}},
+  {ar:"يَكْسِبُونَ", tl:"Yaksibuuna", m:{en:"They used to earn",ar:"يَفعلون من الذنوب والمعاصي"}, n:{en:"What a person earns of deeds — good or evil.",ar:"ما يَكسبه الإنسان من العمل، خيراً أو شراً."}},
+  {ar:"لَّمَحْجُوبُونَ", tl:"Lamahjuubuuna", m:{en:"Veiled / shut out",ar:"ممنوعون من رؤية الله محرومون من النظر إليه"}, n:{en:"Imam Ash-Shafiʿi held this verse proves believers WILL see Allah.",ar:"احتجَّ الإمام الشافعي بهذه الآية على أن المؤمنين يَرون الله."}},
+  {ar:"لَصَالُوا۟", tl:"Lasaaluu", m:{en:"They will surely burn / enter",ar:"داخلون يُقاسون حرَّها"}, n:{en:"To enter and suffer the heat of the Fire.",ar:"يدخلون النار ويُقاسون حرَّها."}},
+  {ar:"ٱلْجَحِيمِ", tl:"Al-jahiimi", m:{en:"The Blazing Fire",ar:"النار الشديدة المُتأجِّجة"}, n:{en:"One of the names of Hell — emphasizes its raging blaze.",ar:"من أسماء جهنم — يُؤكد شدة لهبها."}},
+  {ar:"ٱلْأَبْرَارِ", tl:"Al-abraari", m:{en:"The righteous",ar:"الصادقون الصالحون أهل الطاعة وصفاء القلب"}, n:{en:"Those whose inner truth and outer deeds align in obedience.",ar:"الذين توافقت سرائرهم وأعمالهم على الطاعة."}},
+  {ar:"عِلِّيِّينَ", tl:"Iliyiyna", m:{en:"ʿIlliyyeen — the elevated place",ar:"أعلى الجنة، موضع كتب الأبرار، وقيل: في السماء السابعة تحت العرش"}, n:{en:"From ʿuluw (height) — the highest, opposite of Sijjeen.",ar:"من العلو — أعلى الأمكنة، ضد سجين."}},
+  {ar:"ٱلْمُقَرَّبُونَ", tl:"Al-muqarabuuna", m:{en:"Those brought near",ar:"خواص الملائكة المقربون عند الله"}, n:{en:"The elite of creation, closest to Allah in honor.",ar:"صفوة الخلق، أقربهم إلى الله منزلةً."}},
+  {ar:"نَعِيمٍ", tl:"Na'iimin", m:{en:"Pleasure / bliss",ar:"نعيم دائم متصل في الجنة"}, n:{en:"Continuous bliss in Paradise that never fades.",ar:"نعيم متصل في الجنة لا ينقطع."}},
+  {ar:"ٱلْأَرَآئِكِ", tl:"Al-araa'iki", m:{en:"Adorned couches",ar:"الأسرَّة المُزيَّنة الفاخرة ذات الستائر"}, n:{en:"Thrones with canopies — symbols of comfort and honor.",ar:"أَسِرَّة فاخرة ذات حِجال — رمز للراحة والشرف."}},
+  {ar:"نَضْرَةَ", tl:"Nadraha", m:{en:"Radiance / freshness",ar:"بهجة وحُسن ورونق وإشراق"}, n:{en:"The visible glow of inner delight.",ar:"إشراق النعيم الداخلي على الوجه."}},
+  {ar:"رَّحِيقٍ", tl:"Rahiiqin", m:{en:"Pure wine",ar:"خمر صافية خالصة لا غش فيها ولا أذى"}, n:{en:"The purest, choicest drink — utterly free of intoxication's harm.",ar:"أصفى الشراب وأخلصه — خالٍ من أذى خمر الدنيا."}},
+  {ar:"مَّخْتُومٍ", tl:"Makhtuumin", m:{en:"Sealed",ar:"مختوم الإناء، مُدَّخر لم يُمسَّ"}, n:{en:"Sealed at its mouth, reserved for the righteous alone.",ar:"مختوم الفم، مُدَّخر للأبرار وحدهم."}},
+  {ar:"مِسْكٌ", tl:"Miskun", m:{en:"Musk",ar:"طِيب فاخر معروف بطيب رائحته"}, n:{en:"The finest perfume — its scent is the seal of the drink of Paradise.",ar:"أفخر الطيب — رائحته خاتم شراب الجنة."}},
+  {ar:"فَلْيَتَنَافَسِ", tl:"Falyatanaafasi", m:{en:"Let them compete",ar:"فليتسابق ويتباذل في طلبه"}, n:{en:"Wise competition — the Quran encourages competing for the eternal.",ar:"التنافس الراشد — يُشجِّع القرآن التنافس في الباقي."}},
+  {ar:"تَسْنِيمٍ", tl:"Tasniimin", m:{en:"Tasneem",ar:"أعلى عين في الجنة، من التسنُّم وهو العلو"}, n:{en:"From sanam (height) — the most elevated spring of Paradise.",ar:"من «السنام» (العلو) — أعلى عين في الجنة."}},
+  {ar:"أَجْرَمُوا۟", tl:"Ajramuu", m:{en:"Committed crimes",ar:"كفروا واقترفوا الذنوب"}, n:{en:"From jurm — to commit a serious crime, especially disbelief.",ar:"من الجُرم — اقتراف ذنب عظيم، خاصةً الكفر."}},
+  {ar:"يَتَغَامَزُونَ", tl:"Yataghaamazuuna", m:{en:"They wink at one another",ar:"يُشير بعضهم لبعض بالأعين والحواجب سخريةً واستهزاءً"}, n:{en:"To exchange mocking signs with eyes and brows.",ar:"يتبادلون الإشارة بالأعين والحواجب سخريةً."}},
+  {ar:"فَكِهِينَ", tl:"Fakihiina", m:{en:"Amused / merry",ar:"مُعجَبين بسخريتهم متفاكهين بها"}, n:{en:"Pleased with themselves, joking about their mockery.",ar:"معجبون بسخريتهم متفاكهون بها."}},
+  {ar:"حَٰفِظِينَ", tl:"Haafiziina", m:{en:"Guardians / watchers",ar:"رقباء على أعمالهم يحفظونها ويحكمون عليهم"}, n:{en:"None appointed the disbelievers as monitors over believers.",ar:"لم يُكلَّف الكفار بحفظ أعمال المؤمنين."}},
+  {ar:"ثُوِّبَ", tl:"Thuwiba", m:{en:"Been rewarded / recompensed",ar:"جُوزي بجزاء موافق لعمله"}, n:{en:"Recompensed with exactly what the deed deserved.",ar:"جُوزي بقدر ما عمل تماماً."}},
+];
+
+const LESSONS = [
+  {ic:"⚖️", t:{en:"Honesty in Small Things Builds Big Faith",ar:"الأمانة في الصغائر تبني إيماناً عظيماً"}, d:{en:"The Surah opens with a 'small' commercial sin — short measure by grams — and links it to denying the Day of Judgment. The message: integrity in trivial matters is a sign of fearing Allah. A young Muslim who returns a borrowed pencil intact is already practicing the values of Al-Mutaffifeen.",ar:"تفتتح السورة بـ «ذنب صغير» في التجارة — بخس بالغرامات — وتربطه بتكذيب يوم القيامة. الرسالة: الأمانة في الأمور التافهة من علامات تقوى الله. الطالب الذي يُعيد قلماً مُستعاراً سليماً يطبِّق قيم سورة المطففين."}},
+  {ic:"❤️‍🩹", t:{en:"Watch the Heart — Sin Stains It",ar:"احرس قلبك — الذنب يصدِئه"}, d:{en:"'Rather, the rān has covered their hearts of what they used to earn.' Each sin leaves a black mark; each repentance polishes it. Never say 'just this once.' Repeated small sins build into the rust that finally blinds the heart to truth. Repent quickly and often.",ar:"«بل ران على قلوبهم ما كانوا يكسبون». كل ذنب يُحدِث نقطةً سوداء؛ وكل توبة تَصقُل. لا تقل «مرة واحدة فقط». تكرار الذنوب الصغيرة يبني صدأ يعمي القلب أخيراً عن الحق. تب سريعاً وكثيراً."}},
+  {ic:"📜", t:{en:"Two Records — Live Knowing They Are Open",ar:"كتابان — عش وأنت تَعلم أنهما مفتوحان"}, d:{en:"Every action — small or large — is written either in Sijjeen or ʿIlliyyīn. Imagine a record opening above you as you act. This consciousness is exactly what tafseer teachers call murāqabah: living in the awareness that Allah and His angels see.",ar:"كل فعل — صغير أو كبير — يُكتب إما في سجين أو عليين. تَخيَّل كتاباً يُفتح فوقك حين تَعمل. هذا الوعي هو ما يُسميه أهل التفسير «المراقبة»: العيش بشعور أن الله وملائكته يَرَون."}},
+  {ic:"🏆", t:{en:"Compete for What Lasts, Not What Fades",ar:"تنافَس في الباقي لا في الفاني"}, d:{en:"'For this let the competitors compete.' The world tells us to race for marks, money, likes, and brands. The Quran redirects: compete for Tasneem, for ʿIlliyyīn, for closeness to Allah. Same energy, infinitely better prize. Decide today what you are racing toward.",ar:"«وفي ذلك فليتنافس المتنافسون». يقول العالم: تسابقوا في الدرجات والمال والإعجابات والماركات. يُوجِّه القرآن: تنافسوا على تسنيم، على عليين، على القرب من الله. الجهد ذاته، الجائزة أعظم. قرّر اليوم نحو ماذا تَتسابق."}},
+  {ic:"🙅", t:{en:"Don't Be the One Who Mocks the Pious",ar:"لا تكن ممن يستهزئ بأهل الصلاح"}, d:{en:"Verses 29–32 describe how disbelievers winked, laughed, and labeled the early believers 'astray.' Today the same dynamic plays out: someone who prays on time, dresses modestly, or refuses haram is mocked as 'extra.' Be careful which side of that scene you stand on.",ar:"تَصِف الآيات ٢٩-٣٢ كيف غمز الكفار وضحكوا ووصفوا المؤمنين الأوائل بـ «الضالين». اليوم تتكرر الديناميكية نفسها: من يصلي في وقته أو يلبس باللون المحتشم أو يَرفض الحرام يُسخَر منه. احذر على أي جانب من المشهد تَقف."}},
+  {ic:"🌅", t:{en:"Allah's Justice Always Arrives",ar:"عدل الله آتٍ لا محالة"}, d:{en:"Whatever pain you suffer for your faith — laughter, rejection, exclusion — is recorded. On the Day, the scene reverses: the believers, from thrones, watch and laugh. Hold the line in the dunya. The pen of Allah does not skip a single tear.",ar:"كل أذى تَتلقاه من أجل دينك — سخرية، رفض، إقصاء — مكتوب. في ذلك اليوم، يَنقلب المشهد: المؤمنون من فوق الأسرَّة يَنظرون ويَضحكون. ثَبِّت قدمك في الدنيا. قلم الله لا يَفُوته دمعة واحدة."}},
+];
+
+const MCQ = [
+  {q:{en:"What does 'Al-Mutaffifeen' refer to?",ar:"إلى من تُشير كلمة «المطففين»؟"}, o:{en:["People who pray late","People who cheat in measure and weight","People who deny prophecy","People of Madyan only"],ar:["الذين يُؤخِّرون الصلاة","الذين يَبخسون الكيل والميزان","الذين يُنكرون النبوة","قوم مدين فقط"]}, a:1, ex:{en:"Al-Mutaffifeen are those who give people short measure — taking full when they receive, giving less when they hand over.",ar:"المطففون هم الذين يَبخسون الكيل والميزان — يَستوفون حين يأخذون، ويُنقصون حين يُعطون."}},
+  {q:{en:"What does Sijjeen describe?",ar:"ماذا يَصف سجين؟"}, o:{en:["A river in Paradise","A sealed register of the wicked in a low place","The highest level of Paradise","A type of weighing scale"],ar:["نهر في الجنة","كتاب مختوم للفجار في موضع سُفلي","أعلى منازل الجنة","نوع من الميزان"]}, a:1, ex:{en:"Sijjeen is described as a sealed, written register where the deeds of the wicked are recorded, in a low and confining place.",ar:"سجين كتاب مختوم مكتوب تُسجَّل فيه أعمال الفجار، في موضع سُفلي ضيق."}},
+  {q:{en:"What does ʿIlliyyīn describe?",ar:"ماذا يَصف عليون؟"}, o:{en:["The register of the righteous in the highest place","A spring of Paradise","A name of an angel","A tribe of Madinah"],ar:["كتاب الأبرار في أعلى المنازل","عين في الجنة","اسم ملَك","قبيلة من المدينة"]}, a:0, ex:{en:"ʿIlliyyīn is the elevated place where the record of the Abrār is kept, witnessed by the angels closest to Allah.",ar:"عليون هو الموضع الرفيع الذي يُحفظ فيه كتاب الأبرار، يَشهده أقرب الملائكة إلى الله."}},
+  {q:{en:"What did the Prophet ﷺ teach about the word 'rān' in verse 14?",ar:"ماذا علَّم النبي ﷺ عن كلمة «ران» في الآية ١٤؟"}, o:{en:["It means a type of pottery","Sin leaves a black dot on the heart that grows with persistence","It refers to a kind of rain","It is a forgotten language"],ar:["إنها نوع من الفخار","الذنب يُحدِث نقطةً سوداء على القلب تَكبُر بالاستمرار","إشارة إلى نوع من المطر","لغة منسية"]}, a:1, ex:{en:"The Prophet ﷺ said that each sin leaves a black mark; persistence in sin causes it to spread until it covers the heart — that is the rān.",ar:"قال النبي ﷺ إن كل ذنب يُحدِث نقطة سوداء؛ والاستمرار في الذنب يَنشُرها حتى تُغطي القلب — وهذا هو الران."}},
+  {q:{en:"Why did Imam Ash-Shafiʿi cite verse 15 ('They will be veiled from their Lord')?",ar:"لماذا استدلَّ الإمام الشافعي بالآية ١٥ («إنهم عن ربهم يومئذ لمحجوبون»)؟"}, o:{en:["To prove the disbelievers will be forgiven","To prove the believers WILL see Allah on the Day of Judgment","To deny the Hereafter","To explain Surah Al-Fatiha"],ar:["لإثبات أن الكفار سيُغفر لهم","لإثبات أن المؤمنين يَرون الله يوم القيامة","لنفي الآخرة","لشرح سورة الفاتحة"]}, a:1, ex:{en:"Veiling is presented as a special punishment for the disbelievers — proving that the believers, by contrast, will be honored with the vision of Allah.",ar:"جُعل الحجاب عقوبةً خاصة للكفار — مما يَدل على أن المؤمنين على العكس يُكرَمون بالنظر إلى الله."}},
+  {q:{en:"What is the seal of the drink of Paradise (Raheeq) in verse 26?",ar:"ما خاتم شراب الجنة (الرحيق) في الآية ٢٦؟"}, o:{en:["Gold","Musk","Silver","Pearl"],ar:["ذهب","مسك","فضة","لؤلؤ"]}, a:1, ex:{en:"'Its seal is musk' — Allah perfects every detail of the bliss of the Abrār, including its finishing scent.",ar:"«ختامه مسك» — يُتقن الله كل تفاصيل نعيم الأبرار، بما في ذلك خاتم رائحته."}},
+  {q:{en:"What is the great reversal at the end of the Surah?",ar:"ما الانقلاب العظيم في ختام السورة؟"}, o:{en:["The earth becomes the sky","The believers, mocked in the world, laugh at the disbelievers on the Day","The angels become humans","Day becomes night"],ar:["تَنقلب الأرض سماءً","المؤمنون الذين سُخر منهم في الدنيا يَضحكون من الكفار يوم القيامة","تَصير الملائكة بشراً","يَنقلب النهار ليلاً"]}, a:1, ex:{en:"In the world, disbelievers laughed at the believers; on the Day of Judgment, the believers laugh from adorned couches as Allah's justice is realized.",ar:"في الدنيا، ضحك الكفار من المؤمنين؛ ويوم القيامة، يَضحك المؤمنون من فوق الأرائك بتحقق عدل الله."}},
+];
+
+const MATCH = [
+  {ar:"ٱلْمُطَفِّفِينَ", tl:"Al-mutafifiina", en:{en:"Those who give short measure",ar:"الذين يَبخسون الكيل"}},
+  {ar:"سِجِّينٍ", tl:"Sijiynin", en:{en:"Sealed record of the wicked",ar:"كتاب الفجار المختوم"}},
+  {ar:"عِلِّيِّينَ", tl:"Iliyiyna", en:{en:"Elevated record of the righteous",ar:"كتاب الأبرار في أعلى المنازل"}},
+  {ar:"رَانَ", tl:"Raana", en:{en:"Covered as rust on the heart",ar:"غطّى كالصدأ على القلب"}},
+  {ar:"لَّمَحْجُوبُونَ", tl:"Lamahjuubuuna", en:{en:"Veiled from their Lord",ar:"محجوبون عن ربهم"}},
+  {ar:"رَّحِيقٍ مَّخْتُومٍ", tl:"Rahiiqin makhtuumin", en:{en:"Sealed pure wine",ar:"شراب صافٍ مختوم"}},
+  {ar:"تَسْنِيمٍ", tl:"Tasniimin", en:{en:"The highest spring of Paradise",ar:"أعلى عيون الجنة"}},
+];
+
+const FILL = [
+  {parts:["وَيْلٌ لِّلْ",""], a:"مُطَفِّفِينَ"},
+  {parts:["وَإِذَا كَالُوهُمْ أَو وَّزَنُوهُمْ ",""], a:"يُخْسِرُونَ"},
+  {parts:["إِنَّ كِتَٰبَ ٱلْفُجَّارِ لَفِى ",""], a:"سِجِّينٍ"},
+  {parts:["بَلْ رَانَ عَلَىٰ ",""], a:"قُلُوبِهِم"},
+  {parts:["إِنَّ كِتَٰبَ ٱلْأَبْرَارِ لَفِى ",""], a:"عِلِّيِّينَ"},
+  {parts:["خِتَٰمُهُۥ ",""], a:"مِسْكٌ"},
+];
+
+const ORDER_EN = [
+  "Opening warning: Woe to those who give short measure.",
+  "Rebuke: do they not know they will be resurrected for a tremendous Day?",
+  "The record of the wicked is in Sijjeen — sealed.",
+  "Their hearts are covered by the rust of their sins, and they are veiled from their Lord.",
+  "The record of the righteous is in ʿIlliyyīn — sealed and witnessed by the angels nearest to Allah.",
+  "The Abrār recline on adorned couches and drink a sealed wine whose mixture is Tasneem.",
+  "The great reversal: the believers, once mocked, now laugh at the disbelievers from their thrones.",
+];
+const ORDER_AR = [
+  "افتتاح الوعيد: ويلٌ للمطففين الذين يَبخسون الكيل.",
+  "توبيخ: ألا يتيقَّن هؤلاء أنهم مبعوثون ليومٍ عظيم؟",
+  "كتاب الفجار في سجين — مختوم.",
+  "ران على قلوبهم بذنوبهم، وهم عن ربهم محجوبون.",
+  "كتاب الأبرار في عليين — مختوم يَشهده المقربون من الملائكة.",
+  "الأبرار على الأرائك يُسقَون رحيقاً مختوماً مزاجه من تسنيم.",
+  "الانقلاب العظيم: المؤمنون الذين سُخر منهم يَضحكون اليوم من الكفار من فوق أسرَّتهم.",
+];
+
+function getOrder(){ return currentLang === 'ar' ? ORDER_AR : ORDER_EN; }
+
+/* ============= CHIME ============= */
+let AC;
+function chime(type){
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    const now = AC.currentTime;
+    if(type==='ok'){
+      o.frequency.setValueAtTime(660, now);
+      o.frequency.exponentialRampToValueAtTime(990, now+.15);
+    } else if(type==='err'){
+      o.frequency.setValueAtTime(220, now);
+      o.frequency.exponentialRampToValueAtTime(140, now+.2);
+    } else {
+      o.frequency.setValueAtTime(520, now);
+      o.frequency.exponentialRampToValueAtTime(720, now+.08);
+    }
+    g.gain.setValueAtTime(.12, now);
+    g.gain.exponentialRampToValueAtTime(.001, now+.25);
+    o.start(now); o.stop(now+.3);
+  }catch(e){}
+}
+
+/* ============= TABS ============= */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* ============= TOAST ============= */
+const toastEl = document.getElementById('toast');
+function toast(msg, kind=''){
+  toastEl.textContent = msg;
+  toastEl.className = 'toast show '+kind;
+  setTimeout(()=>toastEl.className='toast '+kind, 1800);
+}
+
+/* ============= RENDER FUNCTIONS ============= */
+function renderFlashcards(){
+  const deck = document.getElementById('deck');
+  deck.innerHTML = '';
+  AYAT.forEach(a=>{
+    const L = currentLang;
+    const card = document.createElement('div');
+    card.className = 'flip';
+    card.innerHTML = `
+      <div class="flip-inner">
+        <div class="face front">
+          <div class="ayah-num">${a.n}</div>
+          <div class="ayah-ar">${a.ar}</div>
+          <div class="flip-hint">${L==='ar'?'اضغط للقلب ↻':'Tap to flip ↻'}</div>
+        </div>
+        <div class="face back">
+          <h4>${L==='ar'?'الآية '+a.n+' · الشرح':'Ayah '+a.n+' · Explanation'}</h4>
+          <p class="trans">"${typeof a.tr==='object'?a.tr[L]:a.tr}"</p>
+          <h4>${L==='ar'?'التفسير':'Tafseer'}</h4>
+          <p class="tafsir">${typeof a.tafsir==='object'?a.tafsir[L]:a.tafsir}</p>
+          <h4>${L==='ar'?'معاني الكلمات':'Word-by-Word'}</h4>
+          <div class="words">
+            ${a.words.map(w=>`<span class="word"><span class="ar">${w.ar}</span><span class="en">${typeof w.en==='object'?w.en[L]:w.en}</span></span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=>{
+      card.classList.toggle('flipped');
+      chime('flip');
+    });
+    deck.appendChild(card);
+  });
+}
+
+function renderStory(){
+  const sl = document.getElementById('storyList');
+  sl.innerHTML = '';
+  const L = currentLang;
+  STORY.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'story-item';
+    const title = typeof s.t==='object'?s.t[L]:s.t;
+    const desc = typeof s.d==='object'?s.d[L]:s.d;
+    const tags = typeof s.tags==='object'&&!Array.isArray(s.tags)?s.tags[L]:s.tags;
+    el.innerHTML = `
+      <div class="step-no">${i+1}</div>
+      <div>
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <div class="badge-row">${tags.map(t=>`<span class="badge">${t}</span>`).join('')}</div>
+      </div>`;
+    sl.appendChild(el);
+  });
+}
+
+function renderCharacters(){
+  const cl = document.getElementById('charList');
+  cl.innerHTML = '';
+  const L = currentLang;
+  CHARS.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'char-card';
+    const name = typeof c.name==='object'?c.name[L]:c.name;
+    const role = typeof c.role==='object'?c.role[L]:c.role;
+    const desc = typeof c.d==='object'?c.d[L]:c.d;
+    el.innerHTML = `<div class="char-emoji">${c.e}</div><div class="role">${role}</div><h3>${name}</h3><p>${desc}</p>`;
+    cl.appendChild(el);
+  });
+}
+
+function renderVocab(){
+  const tbody = document.getElementById('vocabBody');
+  tbody.innerHTML = '';
+  const L = currentLang;
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m[L]:v.m;
+    const n = typeof v.n==='object'?v.n[L]:v.n;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="vocab-ar">${v.ar}</td><td class="vocab-tl-col">${v.tl||""}</td><td>${m}</td><td>${n}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderLessons(){
+  const lg = document.getElementById('lessonGrid');
+  lg.innerHTML = '';
+  const L = currentLang;
+  LESSONS.forEach(l=>{
+    const el = document.createElement('div');
+    el.className = 'lesson';
+    const t = typeof l.t==='object'?l.t[L]:l.t;
+    const d = typeof l.d==='object'?l.d[L]:l.d;
+    el.innerHTML = `<div class="ic">${l.ic}</div><h4>${t}</h4><p>${d}</p>`;
+    lg.appendChild(el);
+  });
+}
+
+/* ============= SCORE ============= */
+let score = 0, maxScore = 0;
+function updateScore(){ document.getElementById('scoreVal').textContent = score; document.getElementById('scoreMax').textContent = maxScore; }
+
+/* ============= MCQ ============= */
+function renderMCQ(){
+  const container = document.getElementById('mcqContainer');
+  container.innerHTML = '';
+  const L = currentLang;
+  MCQ.forEach((q,qi)=>{
+    maxScore++;
+    const div = document.createElement('div');
+    div.className = 'mcq';
+    const qText = typeof q.q==='object'?q.q[L]:q.q;
+    const opts = typeof q.o==='object'&&!Array.isArray(q.o)?q.o[L]:q.o;
+    const ex = typeof q.ex==='object'?q.ex[L]:q.ex;
+    div.innerHTML = `<p class="q">${qi+1}. ${qText}</p><div class="opts">${opts.map((o,i)=>`<div class="opt" data-qi="${qi}" data-i="${i}">${o}</div>`).join('')}</div><div class="feedback" id="fb-${qi}">${ex}</div>`;
+    container.appendChild(div);
+  });
+  updateScore();
+  container.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click', function(){
+      const qi = +this.dataset.qi, i = +this.dataset.i;
+      const parent = this.closest('.mcq');
+      if(parent.querySelector('.correct')) return;
+      if(i === MCQ[qi].a){ this.classList.add('correct'); score++; chime('ok'); }
+      else { this.classList.add('wrong'); chime('err'); parent.querySelectorAll('.opt')[MCQ[qi].a].classList.add('correct'); }
+      parent.querySelector('#fb-'+qi).classList.add('show');
+      updateScore();
+    });
+  });
+}
+
+/* ============= MATCHING ============= */
+let selAr = null, selEn = null;
+function renderMatch(){
+  const arDiv = document.getElementById('matchAr'), enDiv = document.getElementById('matchEn');
+  arDiv.innerHTML = ''; enDiv.innerHTML = '';
+  const L = currentLang;
+  const shuffledEn = [...MATCH].sort(()=>Math.random()-.5);
+  maxScore += MATCH.length;
+  MATCH.forEach(m=>{
+    const a = document.createElement('div');
+    a.className = 'match-item match-ar';
+    a.textContent = m.ar; a.dataset.key = m.ar;
+    a.addEventListener('click', ()=>handleMatchClick(a, 'ar'));
+    arDiv.appendChild(a);
+  });
+  shuffledEn.forEach(m=>{
+    const e = document.createElement('div');
+    e.className = 'match-item';
+    const enText = typeof m.en==='object'?m.en[L]:m.en;
+    e.textContent = enText; e.dataset.key = m.ar;
+    e.addEventListener('click', ()=>handleMatchClick(e, 'en'));
+    enDiv.appendChild(e);
+  });
+  updateScore();
+}
+
+function handleMatchClick(el, side){
+  if(el.classList.contains('matched')) return;
+  if(side==='ar'){ if(selAr){ selAr.classList.remove('selected'); } selAr=el; el.classList.add('selected'); }
+  else { if(selEn){ selEn.classList.remove('selected'); } selEn=el; el.classList.add('selected'); }
+  if(selAr && selEn){
+    if(selAr.dataset.key === selEn.dataset.key){
+      selAr.classList.remove('selected'); selEn.classList.remove('selected');
+      selAr.classList.add('matched'); selEn.classList.add('matched');
+      score++; chime('ok'); updateScore();
+    } else {
+      selAr.classList.add('error'); selEn.classList.add('error');
+      setTimeout(()=>{ selAr.classList.remove('selected','error'); selEn.classList.remove('selected','error'); selAr=null; selEn=null; }, 700);
+      chime('err'); return;
+    }
+    selAr=null; selEn=null;
+  }
+}
+
+/* ============= FILL IN BLANKS ============= */
+function renderFill(){
+  const container = document.getElementById('fillContainer');
+  container.innerHTML = '';
+  FILL.forEach((f,i)=>{
+    const div = document.createElement('div');
+    div.className = 'fill-card';
+    div.innerHTML = `<div class="fill-q arabic" style="direction:rtl;text-align:right;font-size:22px">${f.parts[0]}<input type="text" id="fill-${i}" class="arabic" style="font-size:22px;width:160px">${f.parts[1]}</div>`;
+    container.appendChild(div);
+    maxScore++;
+  });
+  updateScore();
+}
+
+document.getElementById('checkFill').addEventListener('click', ()=>{
+  FILL.forEach((f,i)=>{
+    const inp = document.getElementById('fill-'+i);
+    if(!inp.classList.contains('correct') && !inp.classList.contains('wrong')){
+      const val = inp.value.trim();
+      if(val === f.a){ inp.classList.add('correct'); score++; chime('ok'); }
+      else { inp.classList.add('wrong'); chime('err'); }
+      updateScore();
+    }
+  });
+});
+
+/* ============= ORDER ============= */
+let dragSrc = null;
+function renderOrder(){
+  const ol = document.getElementById('orderList');
+  ol.innerHTML = '';
+  const order = getOrder();
+  const shuffled = [...order].sort(()=>Math.random()-.5);
+  maxScore++;
+  shuffled.forEach(item=>{
+    const div = document.createElement('div');
+    div.className = 'order-item';
+    div.draggable = true;
+    div.dataset.val = item;
+    div.innerHTML = `<span class="order-handle">⠿</span>${item}`;
+    div.addEventListener('dragstart', ()=>{ dragSrc=div; div.classList.add('dragging'); });
+    div.addEventListener('dragend', ()=>div.classList.remove('dragging'));
+    div.addEventListener('dragover', e=>e.preventDefault());
+    div.addEventListener('drop', ()=>{
+      if(dragSrc && dragSrc!==div){
+        const items=[...ol.children];
+        const si=items.indexOf(dragSrc), di=items.indexOf(div);
+        if(si<di) ol.insertBefore(dragSrc, div.nextSibling); else ol.insertBefore(dragSrc, div);
+      }
+    });
+    ol.appendChild(div);
+  });
+  updateScore();
+}
+
+document.getElementById('checkOrder').addEventListener('click', ()=>{
+  const ol = document.getElementById('orderList');
+  const order = getOrder();
+  const items = [...ol.children].map(x=>x.dataset.val);
+  const correct = items.every((v,i)=>v===order[i]);
+  if(correct){ score++; chime('ok'); toast(currentLang==='ar'?'ترتيب صحيح! 🎉':'Correct order! 🎉','success'); }
+  else { chime('err'); toast(currentLang==='ar'?'ترتيب خاطئ — حاول مجدداً':'Wrong order — try again','error'); }
+  updateScore();
+});
+
+document.getElementById('resetQuiz').addEventListener('click', ()=>{
+  score=0; maxScore=0;
+  renderMCQ(); selAr=null; selEn=null; renderMatch();
+  renderFill(); renderOrder();
+  chime('flip');
+});
+
+document.getElementById('flipAll').addEventListener('click', ()=>{
+  const allFlipped = [...document.querySelectorAll('.flip')].every(c=>c.classList.contains('flipped'));
+  document.querySelectorAll('.flip').forEach(c=>{ allFlipped?c.classList.remove('flipped'):c.classList.add('flipped'); });
+  chime('flip');
+});
+
+document.getElementById('resetCards').addEventListener('click', ()=>{
+  document.querySelectorAll('.flip').forEach(c=>c.classList.remove('flipped'));
+  chime('flip');
+});
+
+/* ============= i18n ============= */
+const langToggle = document.getElementById('langToggle');
+const langLabel = document.getElementById('langLabel');
+
+function applyI18N(lang){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(I18N[key]) el.innerHTML = I18N[key][lang] || el.innerHTML;
+  });
+  const nameInput = document.getElementById('studentName');
+  if(nameInput){
+    nameInput.placeholder = lang==='ar' ? nameInput.dataset.placeholderAr : nameInput.dataset.placeholderEn;
+  }
+  document.querySelectorAll('textarea[data-placeholder-ar]').forEach(t=>{
+    t.placeholder = lang==='ar' ? t.dataset.placeholderAr : t.dataset.placeholderEn;
+  });
+}
+
+function setLanguage(lang){
+  currentLang = lang;
+  const html = document.documentElement;
+  if(lang === 'ar'){
+    html.setAttribute('lang','ar');
+    html.setAttribute('dir','rtl');
+    document.body.setAttribute('dir','rtl');
+    langLabel.textContent = 'English';
+  } else {
+    html.setAttribute('lang','en');
+    html.setAttribute('dir','ltr');
+    document.body.setAttribute('dir','ltr');
+    langLabel.textContent = 'العربية';
+  }
+  applyI18N(lang);
+  score = 0; maxScore = 0;
+  renderFlashcards();
+  renderStory();
+  renderCharacters();
+  renderVocab();
+  renderLessons();
+  renderMCQ();
+  renderMatch();
+  renderFill();
+  renderOrder();
+}
+
+langToggle.addEventListener('click', ()=>{
+  setLanguage(currentLang === 'en' ? 'ar' : 'en');
+  chime('flip');
+});
+
+/* ============= WHATSAPP EXPORT ============= */
+document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  let text = '';
+  text += '📖 *سورة المطففين — مذكرة تدبري للقرآن*\n';
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `👤 *اسم الطالب:* ${studentName}\n`;
+  text += `📅 *التاريخ:* ${dateStr}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  const q4 = document.getElementById('mudh-q4').value.trim();
+
+  text += '*أولاً: المحور العام (الفهم والتدبر)*\n\n';
+  text += '❓ *ما خلاصة الآيات في رأيك بأسلوبك البسيط؟*\n';
+  text += (q1 || '(لم يُجب)') + '\n\n';
+  text += '❓ *ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟*\n';
+  text += (q2 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثانياً: المحور الوجداني والشخصي*\n\n';
+  text += '❓ *هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟*\n';
+  text += (q3 || '(لم يُجب)') + '\n\n';
+
+  text += '*ثالثاً: المحور التطبيقي*\n\n';
+  text += '❓ *حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.*\n';
+  text += (q4 || '(لم يُجب)') + '\n\n';
+
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+  text += `📊 *النتيجة في التمارين:* ${score} / ${maxScore}\n`;
+  text += '━━━━━━━━━━━━━━━━━━━━\n';
+
+  const encoded = encodeURIComponent(text);
+  window.open('https://wa.me/?text=' + encoded, '_blank');
+});
+
+/* ============= PDF EXPORT ============= */
+document.getElementById('btnPDF').addEventListener('click', ()=>{
+  const studentName = document.getElementById('studentName').value.trim() || (currentLang==='ar'?'(لم يُحدد)':'(Not specified)');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  const container = document.getElementById('pdfContainer');
+  container.style.direction = 'rtl';
+
+  let html = '';
+  html += '<h1 style="text-align:center;font-family:Amiri,serif">📖 سورة المطففين — بوابة تعليمية تفاعلية</h1>';
+  html += `<div class="pdf-meta">👤 اسم الطالب: <strong>${studentName}</strong> &nbsp;|&nbsp; 📅 التاريخ: ${dateStr}</div>`;
+
+  html += '<h2 style="font-family:Amiri,serif">نص السورة الكريمة</h2>';
+  html += '<div class="arabic-block" style="font-family:\'Amiri Quran\',Amiri,serif">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
+  AYAT.forEach(a=>{
+    html += `<div class="arabic-block" style="font-family:'Amiri Quran',Amiri,serif;font-size:18px">${a.ar} ﴿${a.n}﴾</div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">الشرح والتفسير</h2>';
+  AYAT.forEach(a=>{
+    const tr = typeof a.tr==='object'?a.tr.ar:a.tr;
+    const tf = typeof a.tafsir==='object'?a.tafsir.ar:a.tafsir;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">الآية ${a.n}</h3>`;
+    html += `<p><em>${tr}</em></p>`;
+    html += `<p>${tf}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">القصة — نزول السورة وموضوعاتها</h2>';
+  STORY.forEach((s,i)=>{
+    const title = typeof s.t==='object'?s.t.ar:s.t;
+    const desc = typeof s.d==='object'?s.d.ar:s.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${i+1}. ${title}</h3><p>${desc}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">المفردات</h2>';
+  html += '<table><tr><th style="font-family:Amiri,serif">الكلمة</th><th>المعنى</th><th>ملاحظات</th></tr>';
+  VOCAB.forEach(v=>{
+    const m = typeof v.m==='object'?v.m.ar:v.m;
+    const n = typeof v.n==='object'?v.n.ar:v.n;
+    html += `<tr><td style="font-family:Amiri,serif;font-size:16px">${v.ar}</td><td>${m}</td><td>${n}</td></tr>`;
+  });
+  html += '</table>';
+
+  html += '<h2 style="font-family:Amiri,serif">الدروس المستفادة</h2>';
+  LESSONS.forEach(l=>{
+    const t = typeof l.t==='object'?l.t.ar:l.t;
+    const d = typeof l.d==='object'?l.d.ar:l.d;
+    html += `<div class="pdf-section"><h3 style="font-family:Amiri,serif">${l.ic} ${t}</h3><p>${d}</p></div>`;
+  });
+
+  html += '<h2 style="font-family:Amiri,serif">📝 مذكرة تدبري للقرآن</h2>';
+  html += '<h3 style="font-family:Amiri,serif">أولاً: المحور العام (الفهم والتدبر)</h3>';
+  const q1 = document.getElementById('mudh-q1').value.trim();
+  const q2 = document.getElementById('mudh-q2').value.trim();
+  html += `<div class="pdf-qa"><label>ما خلاصة الآيات في رأيك بأسلوبك البسيط؟</label><div class="answer">${q1||'(لم يُجب)'}</div></div>`;
+  html += `<div class="pdf-qa"><label>ما هو أهم درس مستفاد من الآيات، وكيف ستطبقه في حياتك اليومية؟</label><div class="answer">${q2||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثانياً: المحور الوجداني والشخصي</h3>';
+  const q3 = document.getElementById('mudh-q3').value.trim();
+  html += `<div class="pdf-qa"><label>هل توجد آية معينة لمست قلبك أو أثرت فيك بشكل خاص، ولماذا؟</label><div class="answer">${q3||'(لم يُجب)'}</div></div>`;
+
+  html += '<h3 style="font-family:Amiri,serif">ثالثاً: المحور التطبيقي</h3>';
+  const q4 = document.getElementById('mudh-q4').value.trim();
+  html += `<div class="pdf-qa"><label>حدد هدفاً عملياً صغيراً أو عهداً تقطعه مع نفسك لتطبيق الآيات.</label><div class="answer">${q4||'(لم يُجب)'}</div></div>`;
+
+  html += `<div style="text-align:center;margin-top:20px;font-size:16px;font-weight:700">📊 النتيجة في التمارين: ${score} / ${maxScore}</div>`;
+
+  container.innerHTML = html;
+
+  const opt = {
+    margin:       [10, 10, 10, 10],
+    filename:     `سورة_المطففين_${studentName}_${now.toISOString().slice(0,10)}.pdf`,
+    image:        { type: 'jpeg', quality: 0.95 },
+    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['avoid-all','css','legacy'] }
+  };
+
+  toast(currentLang==='ar'?'جاري إنشاء الملف...':'Generating PDF...','');
+
+  html2pdf().set(opt).from(container).save().then(()=>{
+    toast(currentLang==='ar'?'تم تحميل الملف بنجاح!':'PDF downloaded!','success');
+    chime('ok');
+  }).catch(()=>{
+    toast(currentLang==='ar'?'حدث خطأ في إنشاء الملف':'PDF generation failed','error');
+    chime('err');
+  });
+});
+
+/* ============= INITIAL RENDER ============= */
+applyI18N(currentLang);
+renderFlashcards();
+renderStory();
+renderCharacters();
+renderVocab();
+renderLessons();
+renderMCQ();
+renderMatch();
+renderFill();
+renderOrder();
+
+
+/* ===== Verse Highlight on Click ===== */
+document.querySelectorAll('.verse-row').forEach(row => {
+  row.addEventListener('click', () => {
+    const wasActive = row.classList.contains('active');
+    document.querySelectorAll('.verse-row').forEach(r => r.classList.remove('active'));
+    if (!wasActive) row.classList.add('active');
+  });
+});
+
+</script>
+</body>
+</html>
