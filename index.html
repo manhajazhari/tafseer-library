@@ -814,9 +814,9 @@ function closeViewer() {
 //  SECURITY — Smart Protection with Dev Bypass
 // ══════════════════════════════════════════════
 let isDevMode = false;
-
-// اضغط على زرار حرف (د) أو (d) في الكيبورد 5 مرات ورا بعض لفتح وضع المطور وإلغاء الحماية فوراً
 let dCount = 0;
+
+// لقط الضغطة فوراً قبل أي منع
 document.addEventListener('keydown', e => {
   if (e.key.toLowerCase() === 'd' || e.key === 'ي') {
     dCount++;
@@ -830,25 +830,17 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// تفعيل الحماية فقط إذا لم يكن وضع المطور نشطاً
-document.addEventListener('contextmenu', e => {
-  if (!isDevMode) e.preventDefault();
-});
+// المنع مش هيشتغل إلا لو وضع المطور مقفول (false)
+document.addEventListener('contextmenu', e => { if (!isDevMode) e.preventDefault(); });
+document.addEventListener('selectstart', e => { if (!isDevMode) e.preventDefault(); });
+document.addEventListener('dragstart', e => { if (!isDevMode) e.preventDefault(); });
 
 document.addEventListener('keydown', e => {
-  if (isDevMode) return; // سيب كل الاختصارات تشتتغل لو في وضع المطور
+  if (isDevMode) return; // لو وضع المطور شغال، سيب الزراير براحتها
 
   if (e.key === 'F12') e.preventDefault();
   if (e.ctrlKey && ['u','s','a','p'].includes(e.key.toLowerCase())) e.preventDefault();
   if (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())) e.preventDefault();
-});
-
-document.addEventListener('selectstart', e => {
-  if (!isDevMode) e.preventDefault();
-});
-
-document.addEventListener('dragstart', e => {
-  if (!isDevMode) e.preventDefault();
 });
 </script>
 </body>
